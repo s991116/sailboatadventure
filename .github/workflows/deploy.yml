@@ -1,0 +1,51 @@
+name: Deploy to one.com
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-onecom
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+        run: npm run build
+
+      - name: Start ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ONECOM_SSH_PRIVATE_KEY }}
+
+      - name: Trust one.com host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ssh.sailboatadventure.dk >> ~/.ssh/known_hosts
+
+      - name: Deploy (rsync)
+        env:
+          ONECOM_HOST: ssh.sailboatadventure.dk
+          ONECOM_USER: sailboatadventure.dk
+          ONECOM_PATH: ~/httpd.www/
+        run: |
+          rsync -az --delete --human-readable --stats \
+            --exclude ".well-known/" \
+            --exclude ".htaccess" \
+            ./dist/ "${ONECOM_USER}@${ONECOM_HOST}:${ONECOM_PATH}"
