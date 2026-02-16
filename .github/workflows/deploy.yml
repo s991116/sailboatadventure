@@ -43,7 +43,7 @@ jobs:
         env:
           ONECOM_HOST: ssh.sailboatadventure.dk
           ONECOM_USER: sailboatadventure.dk
-          ONECOM_PATH: ~/httpd.www/
+          ONECOM_PATH: ../httpd.www/
         run: |
           rsync -az --delete --human-readable --stats \
             --exclude ".well-known/" \
