@@ -1,0 +1,13 @@
+<IfModule mod_headers.c>
+  # HTML: never cache (avoid stale Varnish/edge cache)
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # Assets: cache hard (Astro emits hashed filenames)
+  <FilesMatch "\.(css|js|mjs|png|jpg|jpeg|gif|svg|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
