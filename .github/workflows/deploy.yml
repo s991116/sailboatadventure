@@ -45,6 +45,10 @@ jobs:
           ONECOM_USER: sailboatadventure.dk
           ONECOM_PATH: httpd.www/
         run: |
-          rsync -az --delete --itemize-changes --human-readable --stats ./dist/ "${ONECOM_USER}@${ONECOM_HOST}:${ONECOM_PATH}"
+          set -euxo pipefail
+          echo "Deploying to ${ONECOM_USER}@${ONECOM_HOST}:${ONECOM_PATH}"
+          rsync --version | head -n 2
+          ls -la ./dist | head -n 50
+          rsync -az --delete --itemize-changes --human-readable --stats \
             --exclude ".well-known/" \
             ./dist/ "${ONECOM_USER}@${ONECOM_HOST}:${ONECOM_PATH}"
