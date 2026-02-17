@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.toSorted((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Layout title="Blog">
+	<section class="space-y-6">
+		<header class="space-y-2">
+			<h1 class="text-4xl font-bold tracking-tight">Blog</h1>
+			<p class="text-lg text-slate-300">Seneste poster fra logbogen.</p>
+		</header>
+
+		<ul class="space-y-4">
+			{sortedPosts.map((post) => (
+				<li>
+					<a class="underline underline-offset-4" href={`/blog/${post.slug}/`}>
+						{post.data.title}
+					</a>
+					<div class="text-sm text-slate-400">
+						<time datetime={post.data.pubDate.toISOString()}>
+							{post.data.pubDate.toLocaleDateString('da-DK', { year: 'numeric', month: 'long', day: 'numeric' })}
+						</time>
+					</div>
+					{post.data.description ? <p class="text-slate-300">{post.data.description}</p> : null}
+				</li>
+			))}
+		</ul>
+	</section>
+</Layout>
