@@ -43,7 +43,7 @@ jobs:
         env:
           ONECOM_HOST: ssh.sailboatadventure.dk
           ONECOM_USER: sailboatadventure.dk
-          ONECOM_PATH: httpd.www/
+          ONECOM_PATH: /httpd.www/
         run: |
           set -euxo pipefail
           echo "Deploying to ${ONECOM_USER}@${ONECOM_HOST}:${ONECOM_PATH}"
