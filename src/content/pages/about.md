@@ -8,6 +8,7 @@ description: "Who we are and why we are sailing."
 ## Louise and Philip
 
 Vi dokumenterer vores sejlads-eventyr med korte poster og praktisk info.
+Håber du kan bruge det vi deler.
 
 ## Hvad du finder her
 
