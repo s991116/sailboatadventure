@@ -1,9 +1,11 @@
 ---
-title: "Om"
-description: "Hvem vi er, og hvorfor vi sejler."
+title: "About"
+description: "Who we are and why we are sailing."
 ---
 
-# Om
+# About
+
+## Louise and Philip
 
 Vi dokumenterer vores sejlads-eventyr med korte poster og praktisk info.
 
