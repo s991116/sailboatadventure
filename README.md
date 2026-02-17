@@ -1,31 +1,49 @@
-# Astro Starter Kit: Minimal
+# Sailboat Adventure (Astro)
 
-```sh
-npm create astro@latest -- --template minimal
-```
+This is a static Astro site with content stored as **Markdown/MDX** using **Astro Content Collections**.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project structure
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+Key folders/files:
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  content/
+    config.ts
+    posts/
+      first-post.mdx
+    pages/
+      about.md
+      contact.mdx
+  layouts/
+    Layout.astro
+  pages/
+    index.astro
+    [slug].astro
+    blog/
+      index.astro
+      [slug].astro
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Routes
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- **Home**: `/`
+- **About**: `/about/` (from `src/content/pages/about.md`)
+- **Contact**: `/contact/` (from `src/content/pages/contact.mdx`)
+- **Blog index**: `/blog/` (lists posts)
+- **Blog post**: `/blog/<slug>/` (from `src/content/posts/<slug>.mdx`)
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Content workflow
 
-## 🧞 Commands
+- **Add a new page**: create a file in `src/content/pages/` (English filenames), e.g. `faq.md` → `/faq/`
+- **Add a new blog post**: create a file in `src/content/posts/`, e.g. `my-trip.mdx` → `/blog/my-trip/`
+- **Drafts**: set `draft: true` in frontmatter to exclude from generated routes.
+
+## Navigation
+
+The main navigation is defined in `src/layouts/Layout.astro` and links to Home / About / Contact.
+
+## Commands
 
 All commands are run from the root of the project, from a terminal:
 
@@ -37,7 +55,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
