@@ -1,6 +1,4 @@
 ---
-import { XMLParser } from 'fast-xml-parser';
-
 type Props = {
   channelId?: string;
   limit?: number;
@@ -29,43 +27,40 @@ let errorMessage: string | null = null;
 if (!channelId) {
   errorMessage = 'Missing YouTube channel id. Set PUBLIC_YOUTUBE_CHANNEL_ID or pass channelId.';
 } else {
-    try {
-      const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
-      const res = await fetch(feedUrl, {
-        headers: {
-          accept: 'application/xml,text/xml;q=0.9,*/*;q=0.8',
-          'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-          'accept-language': 'en-US,en;q=0.9',
-        },
-      });
+  try {
+    const apiKey = import.meta.env.YOUTUBE_API_KEY;
+    if (!apiKey) {
+      throw new Error('Missing YOUTUBE_API_KEY. Set it in the build environment (GitHub Environment secret).');
+    }
 
-    if (!res.ok) throw new Error(`YouTube feed request failed (${res.status})`);
+    const maxResults = Math.min(50, Math.max(1, limit));
+    const apiUrl =
+      'https://www.googleapis.com/youtube/v3/search' +
+      `?part=snippet&channelId=${encodeURIComponent(channelId)}` +
+      `&maxResults=${maxResults}` +
+      `&order=date&type=video` +
+      `&key=${encodeURIComponent(apiKey)}`;
 
-    const xml = await res.text();
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-      attributeNamePrefix: '@_',
-      trimValues: true,
-      parseTagValue: true,
-    });
-    const data = parser.parse(xml);
+    const res = await fetch(apiUrl, { headers: { accept: 'application/json' } });
+    if (!res.ok) throw new Error(`YouTube API request failed (${res.status})`);
 
-    const entries = data?.feed?.entry
-      ? Array.isArray(data.feed.entry)
-        ? data.feed.entry
-        : [data.feed.entry]
-      : [];
+    const data = await res.json();
+    const items = Array.isArray(data?.items) ? data.items : [];
 
-    videos = entries
-      .map((entry: any) => {
-        const id = entry?.['yt:videoId'] ?? entry?.['videoId'];
-        const title = entry?.title ?? 'YouTube video';
-        const published = entry?.published ?? '';
-        const url = entry?.link?.['@_href'] ?? (id ? `https://www.youtube.com/watch?v=${id}` : '#');
-        const thumbnailUrl = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
+    videos = items
+      .map((item: any) => {
+        const id = item?.id?.videoId;
+        const snippet = item?.snippet;
+        const title = snippet?.title ?? 'YouTube video';
+        const published = snippet?.publishedAt ?? '';
+        const url = id ? `https://www.youtube.com/watch?v=${id}` : '#';
+        const thumbnailUrl =
+          snippet?.thumbnails?.high?.url ??
+          snippet?.thumbnails?.medium?.url ??
+          snippet?.thumbnails?.default?.url ??
+          '';
 
-        if (!id) return null;
+        if (!id || !thumbnailUrl) return null;
         return { id, title, published, url, thumbnailUrl } satisfies Video;
       })
       .filter(Boolean)
