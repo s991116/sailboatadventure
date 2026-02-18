@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
+import OptimizedPhoto from '../components/OptimizedPhoto.astro';
+import heroPhoto from '../assets/photos/home/louise-on-deck.png';
 ---
 
 <Layout title="Sailboat Adventure">
@@ -12,6 +14,14 @@ import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard—calm colors,
 			plenty of breathing room, and a hint of saltwater.
 		</p>
+	</section>
+
+	<section class="mt-10">
+		<OptimizedPhoto
+			src={heroPhoto}
+			alt="Louise sitting on the deck with the sea behind her and a Danish flag in the foreground."
+			preset="homeHero"
+		/>
 	</section>
 
 	<section class="mt-10">

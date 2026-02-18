@@ -1,0 +1,83 @@
+---
+import { Picture, type LocalImageProps } from 'astro:assets';
+
+type CropPreset = {
+	/** CSS `object-position` and `transform-origin` value, e.g. `50% 35%` */
+	position: string;
+	/** Visual zoom factor applied via CSS transform. */
+	zoom: number;
+};
+
+const presets = {
+	homeHero: { position: '55% 35%', zoom: 1.08 },
+	center: { position: '50% 50%', zoom: 1 },
+} satisfies Record<string, CropPreset>;
+
+type Props = Omit<LocalImageProps, 'alt'> & {
+	alt: string;
+	/** Named crop/zoom preset. */
+	preset?: keyof typeof presets;
+	/** Banner aspect ratio. Default is a wide hero. */
+	aspectRatio?: `${number}/${number}`;
+	/** Override preset position, e.g. `60% 30%`. */
+	position?: string;
+	/** Override preset zoom, e.g. `1.1`. */
+	zoom?: number;
+};
+
+const {
+	alt,
+	preset = 'center',
+	aspectRatio = '21/9',
+	position,
+	zoom,
+	class: className,
+	...imageProps
+} = Astro.props as Props;
+
+const resolvedPreset = presets[preset] ?? presets.center;
+const resolvedPosition = position ?? resolvedPreset.position;
+const resolvedZoom = zoom ?? resolvedPreset.zoom;
+---
+
+<div
+	class:list={[
+		'optimized-photo',
+		'overflow-hidden rounded-2xl',
+		'[border:1px_solid_var(--color-border)] bg-[var(--color-surface)]',
+		className,
+	]}
+	style={`--photo-aspect:${aspectRatio};--photo-pos:${resolvedPosition};--photo-zoom:${resolvedZoom};`}
+>
+	<Picture
+		{...imageProps}
+		alt={alt}
+		layout="none"
+		formats={['avif', 'webp']}
+		fallbackFormat="jpg"
+		sizes="(min-width: 64rem) 56rem, (min-width: 40rem) calc(100vw - 2.5rem), calc(100vw - 2.5rem)"
+		widths={[480, 768, 1024, 1280, 1536, 1792]}
+		class="optimized-photo__img"
+	/>
+</div>
+
+<style>
+	.optimized-photo {
+		aspect-ratio: var(--photo-aspect);
+	}
+
+	.optimized-photo :global(picture),
+	.optimized-photo :global(img) {
+		height: 100%;
+		width: 100%;
+	}
+
+	.optimized-photo :global(img) {
+		display: block;
+		object-fit: cover;
+		object-position: var(--photo-pos);
+		transform: scale(var(--photo-zoom));
+		transform-origin: var(--photo-pos);
+	}
+</style>
+
