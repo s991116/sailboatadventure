@@ -13,6 +13,40 @@ const {
   class: className,
 } = Astro.props as Props;
 
+function decodeHtmlEntities(input: string) {
+  return input.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, (full, entity) => {
+    const name = String(entity);
+    if (name[0] === '#') {
+      const isHex = name[1]?.toLowerCase() === 'x';
+      const raw = isHex ? name.slice(2) : name.slice(1);
+      const codePoint = Number.parseInt(raw, isHex ? 16 : 10);
+      if (!Number.isFinite(codePoint)) return full;
+      try {
+        return String.fromCodePoint(codePoint);
+      } catch {
+        return full;
+      }
+    }
+
+    switch (name) {
+      case 'amp':
+        return '&';
+      case 'lt':
+        return '<';
+      case 'gt':
+        return '>';
+      case 'quot':
+        return '"';
+      case 'apos':
+        return "'";
+      case 'nbsp':
+        return ' ';
+      default:
+        return full;
+    }
+  });
+}
+
 type Video = {
   id: string;
   title: string;
@@ -51,7 +85,8 @@ if (!channelId) {
       .map((item: any) => {
         const id = item?.id?.videoId;
         const snippet = item?.snippet;
-        const title = snippet?.title ?? 'YouTube video';
+        const rawTitle = String(snippet?.title ?? 'YouTube video');
+        const title = decodeHtmlEntities(rawTitle);
         const published = snippet?.publishedAt ?? '';
         const url = id ? `https://www.youtube.com/watch?v=${id}` : '#';
         const thumbnailUrl =
@@ -96,15 +131,20 @@ if (!channelId) {
           aria-label={video.title}
           title={video.title}
         >
-          <img
-            class="ytc__img"
-            src={video.thumbnailUrl}
-            alt={video.title}
-            width="320"
-            height="180"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="ytc__thumb">
+            <img
+              class="ytc__img"
+              src={video.thumbnailUrl}
+              alt={video.title}
+              width="320"
+              height="180"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <span class="ytc__episodeTitle">
+            <span class="ytc__episodeTitleText">{video.title}</span>
+          </span>
         </a>
       ))}
     </div>
@@ -152,19 +192,28 @@ if (!channelId) {
   .ytc__item {
     flex: 0 0 auto;
     width: 220px;
-    height: 124px;
     border: 10px solid #ffffff;
     border-radius: 18px;
     box-shadow: 0 14px 30px rgba(20, 20, 20, 0.12);
     background: #ffffff;
     overflow: hidden;
     scroll-snap-align: start;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
   }
 
   .ytc__item:focus-visible {
     outline: 3px solid rgba(184, 132, 58, 0.55);
     outline-offset: 4px;
+  }
+
+  .ytc__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    flex: 0 0 auto;
   }
 
   .ytc__img {
@@ -174,10 +223,25 @@ if (!channelId) {
     display: block;
   }
 
+  .ytc__episodeTitle {
+    padding: 0.6rem 0.75rem 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  .ytc__episodeTitleText {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(1.25em * 2);
+  }
+
   @media (min-width: 640px) {
     .ytc__item {
       width: 260px;
-      height: 146px;
     }
   }
 </style>
