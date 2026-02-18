@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 ---
 
 <Layout title="Sailboat Adventure">
@@ -11,6 +12,10 @@ import Layout from '../layouts/Layout.astro';
 			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard—calm colors,
 			plenty of breathing room, and a hint of saltwater.
 		</p>
+	</section>
+
+	<section class="mt-10">
+		<YouTubeCarousel heading="From our YouTube channel" limit={12} />
 	</section>
 
 	<section class="surface-card mt-10 p-7 sm:p-10">

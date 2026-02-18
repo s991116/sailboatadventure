@@ -1,0 +1,188 @@
+---
+import { XMLParser } from 'fast-xml-parser';
+
+type Props = {
+  channelId?: string;
+  limit?: number;
+  heading?: string;
+  class?: string;
+};
+
+const {
+  channelId = import.meta.env.PUBLIC_YOUTUBE_CHANNEL_ID,
+  limit = 12,
+  heading = 'Latest videos',
+  class: className,
+} = Astro.props as Props;
+
+type Video = {
+  id: string;
+  title: string;
+  url: string;
+  published: string;
+  thumbnailUrl: string;
+};
+
+let videos: Video[] = [];
+let errorMessage: string | null = null;
+
+if (!channelId) {
+  errorMessage = 'Missing YouTube channel id. Set PUBLIC_YOUTUBE_CHANNEL_ID or pass channelId.';
+} else {
+    try {
+      const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
+      const res = await fetch(feedUrl, {
+        headers: {
+          accept: 'application/xml,text/xml;q=0.9,*/*;q=0.8',
+          'user-agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+          'accept-language': 'en-US,en;q=0.9',
+        },
+      });
+
+    if (!res.ok) throw new Error(`YouTube feed request failed (${res.status})`);
+
+    const xml = await res.text();
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      attributeNamePrefix: '@_',
+      trimValues: true,
+      parseTagValue: true,
+    });
+    const data = parser.parse(xml);
+
+    const entries = data?.feed?.entry
+      ? Array.isArray(data.feed.entry)
+        ? data.feed.entry
+        : [data.feed.entry]
+      : [];
+
+    videos = entries
+      .map((entry: any) => {
+        const id = entry?.['yt:videoId'] ?? entry?.['videoId'];
+        const title = entry?.title ?? 'YouTube video';
+        const published = entry?.published ?? '';
+        const url = entry?.link?.['@_href'] ?? (id ? `https://www.youtube.com/watch?v=${id}` : '#');
+        const thumbnailUrl = id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '';
+
+        if (!id) return null;
+        return { id, title, published, url, thumbnailUrl } satisfies Video;
+      })
+      .filter(Boolean)
+      .sort((a: Video, b: Video) => (b.published || '').localeCompare(a.published || ''))
+      .slice(0, Math.max(1, limit));
+  } catch (err) {
+    errorMessage = err instanceof Error ? err.message : 'Failed to load YouTube videos.';
+  }
+}
+---
+
+<section class:list={["ytc", className].filter(Boolean)} aria-label={heading}>
+  <div class="ytc__header">
+    <h2 class="ytc__title">{heading}</h2>
+    {channelId && (
+      <a class="ytc__more" href={`https://www.youtube.com/channel/${channelId}`} target="_blank" rel="noreferrer">
+        View channel
+      </a>
+    )}
+  </div>
+
+  {errorMessage ? (
+    <p class="ytc__error">{errorMessage}</p>
+  ) : (
+    <div class="ytc__track" role="list" aria-label={`${heading} carousel`}>
+      {videos.map((video) => (
+        <a
+          class="ytc__item"
+          role="listitem"
+          href={video.url}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={video.title}
+          title={video.title}
+        >
+          <img
+            class="ytc__img"
+            src={video.thumbnailUrl}
+            alt={video.title}
+            width="320"
+            height="180"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .ytc__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ytc__title {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  }
+
+  .ytc__more {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .ytc__more:hover {
+    color: var(--color-text);
+  }
+
+  .ytc__error {
+    margin-top: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .ytc__track {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.1rem;
+    overflow-x: auto;
+    padding: 0.25rem 0.25rem 0.75rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ytc__item {
+    flex: 0 0 auto;
+    width: 220px;
+    height: 124px;
+    border: 10px solid #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(20, 20, 20, 0.12);
+    background: #ffffff;
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: block;
+  }
+
+  .ytc__item:focus-visible {
+    outline: 3px solid rgba(184, 132, 58, 0.55);
+    outline-offset: 4px;
+  }
+
+  .ytc__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 640px) {
+    .ytc__item {
+      width: 260px;
+      height: 146px;
+    }
+  }
+</style>
