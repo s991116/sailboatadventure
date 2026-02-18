@@ -1,9 +1,9 @@
 ---
-title: "About"
+title: "Our Adventure"
 description: "Who we are and why we are sailing."
 ---
 
-# About
+# Our Adventure
 
 ## Louise and Philip
 
