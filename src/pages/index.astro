@@ -3,9 +3,19 @@ import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
 import heroPhoto from '../assets/photos/home/louise-on-deck.png';
+import headerImage from '../assets/photos/home/header-image.png';
 ---
 
 <Layout title="Sailboat Adventure">
+	<section class="mb-6 sm:mb-10">
+		<OptimizedPhoto
+			src={headerImage}
+			alt="Louise and Philip on the sailboat deck with the sea and blue sky behind them."
+			preset="center"
+			aspectRatio="16/9"
+		/>
+	</section>
+
 	<section class="py-6 sm:py-10">
 		<p class="eyebrow">Sailboat Adventure</p>
 		<h1 class="display-title mt-3">Our story at sea</h1>
