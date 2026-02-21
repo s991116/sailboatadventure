@@ -55,6 +55,19 @@ type Video = {
   thumbnailUrl: string;
 };
 
+function parseIso8601DurationSeconds(duration: string): number | null {
+  // YouTube uses ISO-8601 durations like "PT2M31S" / "PT1H4M" / "PT59S".
+  // We also support days just in case ("P1DT2H").
+  const match = /^P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(duration);
+  if (!match) return null;
+  const days = Number.parseInt(match[1] ?? '0', 10);
+  const hours = Number.parseInt(match[2] ?? '0', 10);
+  const minutes = Number.parseInt(match[3] ?? '0', 10);
+  const seconds = Number.parseInt(match[4] ?? '0', 10);
+  if (![days, hours, minutes, seconds].every(Number.isFinite)) return null;
+  return days * 86400 + hours * 3600 + minutes * 60 + seconds;
+}
+
 let videos: Video[] = [];
 let errorMessage: string | null = null;
 
@@ -67,7 +80,8 @@ if (!channelId) {
       throw new Error('Missing YOUTUBE_API_KEY. Set it in the build environment (GitHub Environment secret).');
     }
 
-    const maxResults = Math.min(50, Math.max(1, limit));
+    // We may filter out Shorts after the initial fetch, so grab a buffer of candidates.
+    const maxResults = Math.min(50, Math.max(1, Math.max(limit * 3, 25)));
     const apiUrl =
       'https://www.googleapis.com/youtube/v3/search' +
       `?part=snippet&channelId=${encodeURIComponent(channelId)}` +
@@ -81,7 +95,7 @@ if (!channelId) {
     const data = await res.json();
     const items = Array.isArray(data?.items) ? data.items : [];
 
-    videos = items
+    const candidates = items
       .map((item: any) => {
         const id = item?.id?.videoId;
         const snippet = item?.snippet;
@@ -99,8 +113,44 @@ if (!channelId) {
         return { id, title, published, url, thumbnailUrl } satisfies Video;
       })
       .filter(Boolean)
-      .sort((a: Video, b: Video) => (b.published || '').localeCompare(a.published || ''))
-      .slice(0, Math.max(1, limit));
+      .sort((a: Video, b: Video) => (b.published || '').localeCompare(a.published || ''));
+
+    // Filter out Shorts (<= 3 minutes) using the videos.list endpoint for durations.
+    let filtered = candidates;
+    try {
+      const ids = candidates.map((v) => v.id);
+      if (ids.length) {
+        const detailsUrl =
+          'https://www.googleapis.com/youtube/v3/videos' +
+          `?part=contentDetails&id=${encodeURIComponent(ids.join(','))}` +
+          `&key=${encodeURIComponent(apiKey)}`;
+
+        const detailsRes = await fetch(detailsUrl, { headers: { accept: 'application/json' } });
+        if (detailsRes.ok) {
+          const detailsData = await detailsRes.json();
+          const detailsItems = Array.isArray(detailsData?.items) ? detailsData.items : [];
+          const durationSecondsById = new Map<string, number>();
+          for (const item of detailsItems) {
+            const id = String(item?.id ?? '');
+            const raw = String(item?.contentDetails?.duration ?? '');
+            const seconds = parseIso8601DurationSeconds(raw);
+            if (id && seconds != null) durationSecondsById.set(id, seconds);
+          }
+
+          filtered = candidates.filter((v) => {
+            const seconds = durationSecondsById.get(v.id);
+            // If duration is missing/unparseable, keep the item to avoid false negatives.
+            if (seconds == null) return true;
+            return seconds > 180;
+          });
+        }
+      }
+    } catch {
+      // Ignore duration lookup errors; fall back to unfiltered candidates.
+      filtered = candidates;
+    }
+
+    videos = filtered.slice(0, Math.max(1, limit));
   } catch (err) {
     errorMessage = err instanceof Error ? err.message : 'Failed to load YouTube videos.';
   }
