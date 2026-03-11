@@ -28,4 +28,4 @@ I’m a software engineer who loves small technical projects, and boats are full
 
 I’m married to Philip, and we have two boys: Oliver and Mikkel.
 
-Unlike Philip, I’ve always felt comfortable on the water. My dad has sailed since he was a girl, and I grew up joining him on trips—mostly as a guest rather than crew, but always happy to be out there.
+Unlike Philip, I’ve always felt comfortable on the water. My dad has sailed since he was a boy, and I grew up joining him on trips—mostly as a guest rather than crew, but always happy to be out there.
