@@ -58,7 +58,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 ---
 
 <Layout title="History">
-	<div class="history-breakout history-timeline -mt-12 sm:-mt-16" data-history-timeline>
+	<div class="history-timeline -mt-12 sm:-mt-16" data-history-timeline>
 		<div class="history-timeline__inner">
 			<div class="history-track">
 				<div class="history-track__line" aria-hidden="true"></div>
@@ -155,9 +155,13 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 			setHeaderHeightVar();
 
 			const timelineEl = document.querySelector('[data-history-timeline]');
+			const trackEl = timelineEl?.querySelector('.history-track');
 			const markerEl = document.querySelector('[data-history-marker]');
 			const progressEl = document.querySelector('[data-history-progress]');
 			const tickEls = Array.from(document.querySelectorAll('[data-history-tick]'));
+			const tickDotEls = tickEls
+				.map((tick) => tick.querySelector('.history-tick__dot'))
+				.filter((el) => el instanceof HTMLElement);
 
 			const itemEls = Array.from(document.querySelectorAll('[data-history-item]'));
 			const items = itemEls
@@ -166,13 +170,10 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 					const content = el.querySelector('[data-history-content]');
 					return { el, media, content };
 				})
-				.filter((item) => item.el instanceof HTMLElement) as Array<{
-				el: HTMLElement;
-				media: Element | null;
-				content: Element | null;
-			}>;
+				.filter((item) => item.el instanceof HTMLElement);
 
-			let centers: number[] = [];
+			let centers = [];
+			let tickRange = { startX: 0, endX: 0 };
 			const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
 			const recalc = () => {
@@ -182,6 +183,24 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 					const rect = el.getBoundingClientRect();
 					return scrollTop + rect.top + rect.height / 2;
 				});
+
+				if (trackEl instanceof HTMLElement && tickDotEls.length) {
+					const trackRect = trackEl.getBoundingClientRect();
+					const firstDot = tickDotEls[0]?.getBoundingClientRect();
+					const lastDot = tickDotEls[tickDotEls.length - 1]?.getBoundingClientRect();
+					if (firstDot && lastDot) {
+						const startX = firstDot.left + firstDot.width / 2 - trackRect.left;
+						const endX = lastDot.left + lastDot.width / 2 - trackRect.left;
+						tickRange = {
+							startX: clamp(startX, 0, trackRect.width),
+							endX: clamp(endX, 0, trackRect.width),
+						};
+
+						const rangeEndInset = clamp(trackRect.width - tickRange.endX, 0, trackRect.width);
+						trackEl.style.setProperty('--range-start', `${tickRange.startX.toFixed(1)}px`);
+						trackEl.style.setProperty('--range-end', `${rangeEndInset.toFixed(1)}px`);
+					}
+				}
 			};
 
 			const scrollToIndex = (index) => {
@@ -234,8 +253,13 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 				const end = centers[centers.length - 1] ?? start + 1;
 				const progress = clamp((scrollCenter - start) / (end - start || 1), 0, 1);
 
-				if (markerEl instanceof HTMLElement) markerEl.style.setProperty('--x', `${(progress * 100).toFixed(3)}%`);
-				if (progressEl instanceof HTMLElement) progressEl.style.width = `${(progress * 100).toFixed(3)}%`;
+				const rangeStart = tickRange.startX ?? 0;
+				const rangeEnd = tickRange.endX ?? 0;
+				const range = Math.max(1, rangeEnd - rangeStart);
+				const markerX = rangeStart + progress * range;
+
+				if (markerEl instanceof HTMLElement) markerEl.style.setProperty('--x', `${markerX.toFixed(1)}px`);
+				if (progressEl instanceof HTMLElement) progressEl.style.width = `${Math.max(0, markerX - rangeStart).toFixed(1)}px`;
 
 				const activeTick = tickEls[activeIndex];
 				for (const tick of tickEls) tick.toggleAttribute('data-active', tick === activeTick);
@@ -293,6 +317,9 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 			position: sticky;
 			top: var(--site-header-h, 64px);
 			z-index: 40;
+			width: 100vw;
+			margin-left: calc(50% - 50vw);
+			margin-right: calc(50% - 50vw);
 			backdrop-filter: blur(10px);
 			background: rgba(251, 247, 239, 0.8);
 			border-bottom: 1px solid var(--color-border);
@@ -312,7 +339,9 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 
 		.history-track__line {
 			position: absolute;
-			inset: 24px 0 auto;
+			top: 24px;
+			left: var(--range-start, 0px);
+			right: var(--range-end, 0px);
 			height: 2px;
 			background: rgba(20, 20, 20, 0.12);
 			border-radius: 999px;
@@ -321,9 +350,10 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 
 		.history-track__progress {
 			position: absolute;
-			inset: 24px 0 auto;
+			top: 24px;
+			left: var(--range-start, 0px);
 			height: 2px;
-			width: 0%;
+			width: 0px;
 			background: linear-gradient(90deg, var(--history-red), rgba(209, 26, 42, 0.45));
 			border-radius: 999px;
 			z-index: 2;
