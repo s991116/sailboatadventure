@@ -54,7 +54,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 		} satisfies HistoryMoment;
 	})
 	.filter((m) => Boolean(m.image))
-	.sort((a, b) => b.id.localeCompare(a.id));
+	.sort((a, b) => a.id.localeCompare(b.id));
 ---
 
 <Layout title="History">
@@ -452,20 +452,20 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 			align-items: center;
 		}
 
-		.history-item__media,
-		.history-item__content {
-			will-change: transform, filter, opacity;
+		.history-item__media {
+			will-change: transform, opacity;
 			transform: translate3d(0, calc((1 - var(--p)) * 18px), 0)
 				scale(calc(0.9 + var(--p) * 0.16));
 			opacity: calc(0.22 + var(--p) * 0.78);
-			filter: blur(calc((1 - var(--p)) * 6px));
 			transition: opacity 120ms linear;
 		}
 
+		/* Tekstboksen: fast størrelse under scroll (ingen scale/translate) */
 		.history-item__content {
-			transform: translate3d(0, calc((1 - var(--p)) * 10px), 0)
-				scale(calc(0.94 + var(--p) * 0.1));
-			filter: blur(calc((1 - var(--p)) * 5px));
+			will-change: opacity;
+			transform: none;
+			opacity: calc(0.22 + var(--p) * 0.78);
+			transition: opacity 120ms linear;
 		}
 
 		@media (prefers-reduced-motion: reduce) {
