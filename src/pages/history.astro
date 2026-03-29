@@ -54,7 +54,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 		} satisfies HistoryMoment;
 	})
 	.filter((m) => Boolean(m.image))
-	.sort((a, b) => a.id.localeCompare(b.id));
+	.sort((a, b) => b.id.localeCompare(a.id));
 ---
 
 <Layout title="History">
