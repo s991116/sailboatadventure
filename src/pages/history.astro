@@ -460,7 +460,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 			transition: opacity 120ms linear;
 		}
 
-		/* Tekstboksen: fast størrelse under scroll (ingen scale/translate) */
+		/* Text panel: fixed size while scrolling (no scale/translate). */
 		.history-item__content {
 			will-change: opacity;
 			transform: none;

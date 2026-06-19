@@ -1,7 +1,21 @@
-export type JourneyWaypoint = {
+import passage1Route from './routes/passage-1.json';
+import passage2Route from './routes/passage-2.json';
+import passage3Route from './routes/passage-3.json';
+import passage4Route from './routes/passage-4.json';
+import passage5Route from './routes/passage-5.json';
+import passage6Route from './routes/passage-6.json';
+import { routeLabelFromStops } from './journey-utils';
+
+/** GeoJSON order: [longitude, latitude] */
+export type RouteCoordinate = [number, number];
+
+export type StopRole = 'start' | 'stop' | 'end';
+
+export type PassageStop = {
 	name: string;
-	/** GeoJSON order: [longitude, latitude] */
-	coordinates: [number, number];
+	coordinates: RouteCoordinate;
+	role: StopRole;
+	note?: string;
 };
 
 export type JourneyLeg = {
@@ -10,83 +24,113 @@ export type JourneyLeg = {
 	title: string;
 	routeLabel: string;
 	color: string;
-	waypoints: JourneyWaypoint[];
+	/** Full sailed line, including shaping points without a stop. */
+	route: RouteCoordinate[];
+	/** Named places only: departure, intermediate stops, and arrival. */
+	stops: PassageStop[];
 };
 
-/** Planned route legs from Denmark to the Caribbean. */
+type RouteFeature = {
+	geometry: {
+		type: 'LineString';
+		coordinates: RouteCoordinate[];
+	};
+};
+
+const routeFromFeature = (feature: RouteFeature) => feature.geometry.coordinates;
+
+const passage1Stops: PassageStop[] = [
+	{ name: 'Frederiksværk, Danmark', coordinates: [12.023, 55.97], role: 'start' },
+	{ name: 'Kristiansand', coordinates: [7.996, 58.147], role: 'stop' },
+	{ name: 'Stavanger', coordinates: [5.733, 58.97], role: 'end' },
+];
+
+const passage2Stops: PassageStop[] = [
+	{ name: 'Stavanger', coordinates: [5.733, 58.97], role: 'start' },
+	{ name: 'Inverness', coordinates: [-4.225, 57.478], role: 'stop' },
+	{ name: 'Loch Ness', coordinates: [-4.442, 57.324], role: 'stop' },
+	{ name: 'Loch Lochy', coordinates: [-4.933, 57.016], role: 'stop' },
+	{ name: 'Fort William', coordinates: [-5.105, 56.82], role: 'end' },
+];
+
+const passage3Stops: PassageStop[] = [
+	{ name: 'Fort William', coordinates: [-5.105, 56.82], role: 'start' },
+	{ name: 'Dublin', coordinates: [-6.26, 53.35], role: 'stop' },
+	{ name: 'Isles of Scilly', coordinates: [-6.313, 49.914], role: 'end' },
+];
+
+const passage4Stops: PassageStop[] = [
+	{ name: 'Isles of Scilly', coordinates: [-6.313, 49.914], role: 'start' },
+	{ name: 'Azores', coordinates: [-25.676, 37.741], role: 'end' },
+];
+
+const passage5Stops: PassageStop[] = [
+	{ name: 'Azores', coordinates: [-25.676, 37.741], role: 'start' },
+	{ name: 'Madeira', coordinates: [-16.924, 32.667], role: 'stop' },
+	{ name: 'Gran Canaria', coordinates: [-15.415, 28.1], role: 'end' },
+];
+
+const passage6Stops: PassageStop[] = [
+	{ name: 'Gran Canaria', coordinates: [-15.415, 28.1], role: 'start' },
+	{ name: 'Cape Verde', coordinates: [-24.98, 16.89], role: 'stop' },
+	{ name: 'Barbados', coordinates: [-59.611, 13.098], role: 'end' },
+];
+
+/** Planned passages from Denmark to the Caribbean. */
 export const journeyLegs: JourneyLeg[] = [
 	{
-		slug: 'togt-1',
+		slug: 'passage-1',
 		number: 1,
-		title: 'Togt 1',
-		routeLabel: 'Frederiksværk → Kristiansand → Stavanger',
+		title: 'Passage 1',
 		color: '#d11a2a',
-		waypoints: [
-			{ name: 'Frederiksværk, Danmark', coordinates: [12.023, 55.97] },
-			{ name: 'Kristiansand', coordinates: [7.996, 58.147] },
-			{ name: 'Stavanger', coordinates: [5.733, 58.97] },
-		],
+		stops: passage1Stops,
+		route: routeFromFeature(passage1Route),
+		routeLabel: routeLabelFromStops(passage1Stops),
 	},
 	{
-		slug: 'togt-2',
+		slug: 'passage-2',
 		number: 2,
-		title: 'Togt 2',
-		routeLabel: 'Stavanger → Inverness → Loch Ness → Loch Lochy → Fort William',
+		title: 'Passage 2',
 		color: '#b8843a',
-		waypoints: [
-			{ name: 'Stavanger', coordinates: [5.733, 58.97] },
-			{ name: 'Inverness', coordinates: [-4.225, 57.478] },
-			{ name: 'Loch Ness', coordinates: [-4.442, 57.324] },
-			{ name: 'Loch Lochy', coordinates: [-4.933, 57.016] },
-			{ name: 'Fort William', coordinates: [-5.105, 56.82] },
-		],
+		stops: passage2Stops,
+		route: routeFromFeature(passage2Route),
+		routeLabel: routeLabelFromStops(passage2Stops),
 	},
 	{
-		slug: 'togt-3',
+		slug: 'passage-3',
 		number: 3,
-		title: 'Togt 3',
-		routeLabel: 'Fort William → Dublin → Isles of Scilly',
+		title: 'Passage 3',
 		color: '#2a6fd1',
-		waypoints: [
-			{ name: 'Fort William', coordinates: [-5.105, 56.82] },
-			{ name: 'Dublin', coordinates: [-6.26, 53.35] },
-			{ name: 'Isles of Scilly', coordinates: [-6.313, 49.914] },
-		],
+		stops: passage3Stops,
+		route: routeFromFeature(passage3Route),
+		routeLabel: routeLabelFromStops(passage3Stops),
 	},
 	{
-		slug: 'togt-4',
+		slug: 'passage-4',
 		number: 4,
-		title: 'Togt 4',
-		routeLabel: 'Isles of Scilly → Azores',
+		title: 'Passage 4',
 		color: '#1a8f5c',
-		waypoints: [
-			{ name: 'Isles of Scilly', coordinates: [-6.313, 49.914] },
-			{ name: 'Azores', coordinates: [-25.676, 37.741] },
-		],
+		stops: passage4Stops,
+		route: routeFromFeature(passage4Route),
+		routeLabel: routeLabelFromStops(passage4Stops),
 	},
 	{
-		slug: 'togt-5',
+		slug: 'passage-5',
 		number: 5,
-		title: 'Togt 5',
-		routeLabel: 'Azores → Madeira → Gran Canaria',
+		title: 'Passage 5',
 		color: '#7a3ad1',
-		waypoints: [
-			{ name: 'Azores', coordinates: [-25.676, 37.741] },
-			{ name: 'Madeira', coordinates: [-16.924, 32.667] },
-			{ name: 'Gran Canaria', coordinates: [-15.415, 28.1] },
-		],
+		stops: passage5Stops,
+		route: routeFromFeature(passage5Route),
+		routeLabel: routeLabelFromStops(passage5Stops),
 	},
 	{
-		slug: 'togt-6',
+		slug: 'passage-6',
 		number: 6,
-		title: 'Togt 6',
-		routeLabel: 'Gran Canaria → Cape Verde → Barbados',
+		title: 'Passage 6',
 		color: '#d17a2a',
-		waypoints: [
-			{ name: 'Gran Canaria', coordinates: [-15.415, 28.1] },
-			{ name: 'Cape Verde', coordinates: [-24.98, 16.89] },
-			{ name: 'Barbados', coordinates: [-59.611, 13.098] },
-		],
+		stops: passage6Stops,
+		route: routeFromFeature(passage6Route),
+		routeLabel: routeLabelFromStops(passage6Stops),
 	},
 ];
 

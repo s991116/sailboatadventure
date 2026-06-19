@@ -2,51 +2,106 @@
 import Layout from '../../layouts/Layout.astro';
 import JourneyMap from '../../components/JourneyMap.astro';
 import { getCollection } from 'astro:content';
-import { journeyLegs } from '../../data/journey-legs';
+import { journeyLegs, journeyLegBySlug } from '../../data/journey-legs';
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
+
+const legPanels = await Promise.all(
+	sortedLegs.map(async (leg) => {
+		const { Content } = await leg.render();
+		return { leg, Content };
+	}),
+);
 ---
 
 <Layout title="The Journey">
-	<div class="journey-breakout -mt-12 sm:-mt-16">
-		<JourneyMap legs={journeyLegs} />
-	</div>
+	<div class="journey-page" data-journey-page>
+		<div class="journey-breakout -mt-12 sm:-mt-16">
+			<JourneyMap legs={journeyLegs} />
+		</div>
 
-	<section class="mt-10 space-y-4 sm:mt-12">
-		<p class="eyebrow">Planned route</p>
-		<h1 class="text-5xl leading-[0.95] sm:text-6xl">The Journey</h1>
-		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
-			Our planned passage from Denmark to the Caribbean, divided into six legs. Click a route on the map or choose a leg
-			below to read more.
-		</p>
-	</section>
+		<section class="journey-intro mt-10 space-y-4 sm:mt-12" data-journey-intro>
+			<p class="eyebrow">Planned route</p>
+			<h1 class="text-5xl leading-[0.95] sm:text-6xl">The Journey</h1>
+			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+				Our planned passage from Denmark to the Caribbean, divided into six passages. Hover a route on the map for a
+				preview, then click to zoom in and read more below.
+			</p>
+		</section>
 
-	<section class="mt-10 sm:mt-14">
-		<ol class="grid gap-5 sm:grid-cols-2">
-			{sortedLegs.map((leg) => {
-				const routeMeta = journeyLegs.find((item) => item.slug === leg.slug);
+		<div class="journey-panels mt-10 sm:mt-12">
+			{legPanels.map(({ leg, Content }) => {
+				const routeMeta = journeyLegBySlug[leg.slug];
 				return (
-					<li>
-						<a href={`/journey/${leg.slug}/`} class="journey-leg-card surface-card block p-6 sm:p-7">
-							<p class="eyebrow">Leg {leg.data.legNumber}</p>
-							<h2 class="mt-2 text-2xl sm:text-3xl">{leg.data.title}</h2>
-							<div class="accent-rule mt-5"></div>
-							<p class="mt-4 text-[color:var(--color-muted)]">{leg.data.routeLabel}</p>
+					<article class="journey-panel hidden space-y-6" data-journey-panel data-leg={leg.slug}>
+						<header class="space-y-3">
+							<div class="flex flex-wrap items-center justify-between gap-4">
+								<p class="eyebrow">Passage {leg.data.legNumber}</p>
+								<button type="button" class="journey-back" data-journey-back>
+									← Full route
+								</button>
+							</div>
+							<h2 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h2>
+							<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">{routeMeta?.routeLabel ?? leg.data.routeLabel}</p>
 							{routeMeta ? (
 								<span
-									class="journey-leg-card__swatch mt-5 inline-block h-1 w-16 rounded-full"
+									class="inline-block h-1 w-20 rounded-full"
 									style={`background:${routeMeta.color}`}
 									aria-hidden="true"
 								/>
 							) : null}
-						</a>
-					</li>
+						</header>
+
+						<div class="prose prose-slate max-w-none text-[color:var(--color-text)]">
+							<Content />
+						</div>
+					</article>
 				);
 			})}
-		</ol>
-	</section>
+		</div>
+	</div>
 </Layout>
+
+<script>
+	const intro = document.querySelector('[data-journey-intro]');
+	const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-panel]'));
+
+	const showLeg = (slug: string) => {
+		intro?.classList.add('hidden');
+		for (const panel of panels) {
+			panel.classList.toggle('hidden', panel.dataset.leg !== slug);
+		}
+		history.replaceState(null, '', `#${slug}`);
+	};
+
+	const showIntro = () => {
+		intro?.classList.remove('hidden');
+		for (const panel of panels) {
+			panel.classList.add('hidden');
+		}
+		history.replaceState(null, '', window.location.pathname);
+	};
+
+	window.addEventListener('journey-leg-select', ((event: CustomEvent<{ slug: string }>) => {
+		showLeg(event.detail.slug);
+	}) as EventListener);
+
+	window.addEventListener('journey-leg-clear', () => {
+		showIntro();
+	});
+
+	for (const button of document.querySelectorAll('[data-journey-back]')) {
+		button.addEventListener('click', () => {
+			window.dispatchEvent(new CustomEvent('journey-leg-clear'));
+		});
+	}
+
+	const hashSlug = window.location.hash.replace(/^#/, '');
+	if (hashSlug && panels.some((panel) => panel.dataset.leg === hashSlug)) {
+		showLeg(hashSlug);
+	}
+</script>
 
 <style>
 	.journey-breakout {
@@ -59,15 +114,20 @@ const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
 		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
 	}
 
-	.journey-leg-card {
-		color: inherit;
-		text-decoration: none;
-		transition: transform 180ms ease, box-shadow 180ms ease;
+	.journey-back {
+		appearance: none;
+		border: 0;
+		background: transparent;
+		padding: 0;
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--color-accent-strong);
+		cursor: pointer;
+		text-decoration: underline;
+		text-underline-offset: 0.18em;
 	}
 
-	.journey-leg-card:hover {
-		color: inherit;
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-soft);
+	.journey-back:hover {
+		color: var(--color-accent);
 	}
 </style>

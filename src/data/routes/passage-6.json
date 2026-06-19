@@ -1,0 +1,15 @@
+{
+	"type": "Feature",
+	"properties": {
+		"passage": "passage-6",
+		"note": "Replace coordinates by exporting a LineString from geojson.io."
+	},
+	"geometry": {
+		"type": "LineString",
+		"coordinates": [
+			[-15.415, 28.1],
+			[-24.98, 16.89],
+			[-59.611, 13.098]
+		]
+	}
+}
