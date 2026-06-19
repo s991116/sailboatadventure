@@ -1,0 +1,502 @@
+---
+import type { JourneyLeg } from '../data/journey-legs';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
+type Props = {
+	legs: JourneyLeg[];
+	activeSlug?: string;
+	fitToLeg?: boolean;
+};
+
+const { legs, activeSlug, fitToLeg = false } = Astro.props as Props;
+const mapTilerKey = import.meta.env.PUBLIC_MAPTILER_API_KEY ?? '';
+const mapId = `journey-map-${Math.random().toString(36).slice(2, 9)}`;
+const mapConfig = JSON.stringify({ legs, activeSlug, fitToLeg, mapTilerKey });
+---
+
+<div class="journey-map-wrap">
+	<div id={mapId} class="journey-map" data-journey-map data-map-config={mapConfig}></div>
+	{!mapTilerKey ? (
+		<p class="journey-map__notice">
+			Map preview requires a MapTiler API key. Set <code>PUBLIC_MAPTILER_API_KEY</code> in your environment.
+		</p>
+	) : null}
+</div>
+
+<script>
+	import maplibregl from 'maplibre-gl';
+
+	type MapWaypoint = {
+		name: string;
+		coordinates: [number, number];
+	};
+
+	type MapLeg = {
+		slug: string;
+		number: number;
+		title: string;
+		routeLabel: string;
+		color: string;
+		waypoints: MapWaypoint[];
+	};
+
+	type MapConfig = {
+		legs: MapLeg[];
+		activeSlug?: string;
+		fitToLeg?: boolean;
+		mapTilerKey: string;
+	};
+
+	const initJourneyMap = (container: HTMLElement) => {
+		const raw = container.dataset.mapConfig;
+		if (!raw) return;
+
+		const config = JSON.parse(raw) as MapConfig;
+		if (!config.mapTilerKey) return;
+
+		const { legs, activeSlug, fitToLeg } = config;
+		const sourceId = 'journey-routes';
+		const layerPrefix = 'journey-leg';
+
+		const features = legs.map((leg) => ({
+			type: 'Feature',
+			properties: {
+				slug: leg.slug,
+				title: leg.title,
+				routeLabel: leg.routeLabel,
+				color: leg.color,
+				number: leg.number,
+			},
+			geometry: {
+				type: 'LineString',
+				coordinates: leg.waypoints.map((waypoint) => waypoint.coordinates),
+			},
+		}));
+
+		const formatPlaceName = (name: string) => name.replace(/,\s*Danmark$/i, '').trim();
+
+		const getPointAlongRoute = (coordinates: [number, number][], fraction: number) => {
+			if (coordinates.length === 1) return coordinates[0];
+
+			let totalLength = 0;
+			const segmentLengths: number[] = [];
+
+			for (let i = 0; i < coordinates.length - 1; i++) {
+				const dx = coordinates[i + 1][0] - coordinates[i][0];
+				const dy = coordinates[i + 1][1] - coordinates[i][1];
+				const length = Math.hypot(dx, dy);
+				segmentLengths.push(length);
+				totalLength += length;
+			}
+
+			const target = totalLength * fraction;
+			let walked = 0;
+
+			for (let i = 0; i < coordinates.length - 1; i++) {
+				const segmentLength = segmentLengths[i];
+				if (walked + segmentLength >= target) {
+					const t = (target - walked) / segmentLength;
+					return [
+						coordinates[i][0] + t * (coordinates[i + 1][0] - coordinates[i][0]),
+						coordinates[i][1] + t * (coordinates[i + 1][1] - coordinates[i][1]),
+					] as [number, number];
+				}
+				walked += segmentLength;
+			}
+
+			return coordinates[coordinates.length - 1];
+		};
+
+		const getRouteMidpoint = (coordinates: [number, number][]) => getPointAlongRoute(coordinates, 0.5);
+
+		type LabelLayout = {
+			marker: maplibregl.Marker;
+			element: HTMLElement;
+			coordinates: [number, number][];
+			priority: number;
+		};
+
+		const rectsOverlap = (a: DOMRect, b: DOMRect, padding = 8) =>
+			!(
+				a.right + padding < b.left ||
+				a.left - padding > b.right ||
+				a.bottom + padding < b.top ||
+				a.top - padding > b.bottom
+			);
+
+		const buildOffsetCandidates = () => {
+			const candidates: [number, number][] = [[0, 0]];
+
+			for (const radius of [32, 64, 96, 128]) {
+				for (let angle = 0; angle < 360; angle += 30) {
+					const radians = (angle * Math.PI) / 180;
+					candidates.push([
+						Math.round(Math.cos(radians) * radius),
+						Math.round(Math.sin(radians) * radius),
+					]);
+				}
+			}
+
+			return candidates;
+		};
+
+		const layoutLabels = (labelLayouts: LabelLayout[]) => {
+			const offsetCandidates = buildOffsetCandidates();
+			const routeFractions = [0.5, 0.38, 0.62, 0.28, 0.72];
+			const placedRects: DOMRect[] = [];
+			const sortedLayouts = [...labelLayouts].sort((a, b) => a.priority - b.priority);
+
+			for (const layout of sortedLayouts) {
+				let placed = false;
+
+				for (const fraction of routeFractions) {
+					const lngLat = getPointAlongRoute(layout.coordinates, fraction);
+					layout.marker.setLngLat(lngLat);
+
+					for (const offset of offsetCandidates) {
+						layout.marker.setOffset(offset);
+						const rect = layout.element.getBoundingClientRect();
+						const overlaps = placedRects.some((placedRect) => rectsOverlap(rect, placedRect));
+
+						if (!overlaps) {
+							placedRects.push(rect);
+							placed = true;
+							break;
+						}
+					}
+
+					if (placed) break;
+				}
+
+				if (!placed) {
+					layout.marker.setOffset([0, 0]);
+					placedRects.push(layout.element.getBoundingClientRect());
+				}
+			}
+		};
+
+		const map = new maplibregl.Map({
+			container,
+			style: `https://api.maptiler.com/maps/backdrop/style.json?key=${config.mapTilerKey}`,
+			center: [-10, 48],
+			zoom: 3.2,
+			attributionControl: false,
+			dragPan: false,
+			dragRotate: false,
+			scrollZoom: false,
+			boxZoom: false,
+			doubleClickZoom: false,
+			touchZoomRotate: false,
+			touchPitch: false,
+			keyboard: false,
+		});
+
+		map.addControl(
+			new maplibregl.AttributionControl({
+				customAttribution: '© MapTiler © OpenStreetMap contributors',
+			}),
+		);
+
+		const fitToSlug = (slug: string, animate = true) => {
+			const leg = legs.find((item) => item.slug === slug);
+			if (!leg) return;
+
+			const lngs = leg.waypoints.map((waypoint) => waypoint.coordinates[0]);
+			const lats = leg.waypoints.map((waypoint) => waypoint.coordinates[1]);
+			const bounds: [[number, number], [number, number]] = [
+				[Math.min(...lngs), Math.min(...lats)],
+				[Math.max(...lngs), Math.max(...lats)],
+			];
+
+			map.fitBounds(bounds, {
+				padding: { top: 56, right: 56, bottom: 56, left: 56 },
+				duration: animate ? 900 : 0,
+				maxZoom: 7.5,
+			});
+		};
+
+		const fitAllLegs = (animate = true) => {
+			const allCoords = legs.flatMap((leg) => leg.waypoints.map((waypoint) => waypoint.coordinates));
+			const lngs = allCoords.map((coord) => coord[0]);
+			const lats = allCoords.map((coord) => coord[1]);
+
+			map.fitBounds(
+				[
+					[Math.min(...lngs), Math.min(...lats)],
+					[Math.max(...lngs), Math.max(...lats)],
+				],
+				{
+					padding: { top: 40, right: 40, bottom: 40, left: 40 },
+					duration: animate ? 900 : 0,
+				},
+			);
+		};
+
+		const refitMap = () => {
+			map.resize();
+			if (activeSlug && fitToLeg) {
+				fitToSlug(activeSlug, false);
+			} else {
+				fitAllLegs(false);
+			}
+		};
+
+		let labelLayouts: LabelLayout[] = [];
+		let labelLayoutFrame = 0;
+
+		const scheduleLabelLayout = () => {
+			if (!labelLayouts.length) return;
+
+			if (labelLayoutFrame) {
+				cancelAnimationFrame(labelLayoutFrame);
+			}
+
+			labelLayoutFrame = requestAnimationFrame(() => {
+				labelLayoutFrame = 0;
+				map.once('idle', () => {
+					layoutLabels(labelLayouts);
+				});
+			});
+		};
+
+		const setActiveLeg = (slug: string | null) => {
+			for (const leg of legs) {
+				const isActive = slug ? leg.slug === slug : true;
+				const lineOpacity = slug ? (isActive ? 0.95 : 0.2) : 0.9;
+				const lineWidth = slug && isActive ? 5 : 3;
+
+				if (map.getLayer(`${layerPrefix}-${leg.slug}-line`)) {
+					map.setPaintProperty(`${layerPrefix}-${leg.slug}-line`, 'line-opacity', lineOpacity);
+					map.setPaintProperty(`${layerPrefix}-${leg.slug}-line`, 'line-width', lineWidth);
+				}
+				if (map.getLayer(`${layerPrefix}-${leg.slug}-halo`)) {
+					map.setPaintProperty(`${layerPrefix}-${leg.slug}-halo`, 'line-opacity', slug && isActive ? 0.28 : 0.08);
+				}
+			}
+		};
+
+		map.on('load', () => {
+			map.addSource(sourceId, {
+				type: 'geojson',
+				data: {
+					type: 'FeatureCollection',
+					features,
+				},
+			});
+
+			for (const leg of legs) {
+				const filter: maplibregl.FilterSpecification = ['==', ['get', 'slug'], leg.slug];
+
+				map.addLayer({
+					id: `${layerPrefix}-${leg.slug}-halo`,
+					type: 'line',
+					source: sourceId,
+					filter,
+					layout: {
+						'line-cap': 'round',
+						'line-join': 'round',
+					},
+					paint: {
+						'line-color': leg.color,
+						'line-width': 10,
+						'line-opacity': 0.1,
+					},
+				});
+
+				map.addLayer({
+					id: `${layerPrefix}-${leg.slug}-line`,
+					type: 'line',
+					source: sourceId,
+					filter,
+					layout: {
+						'line-cap': 'round',
+						'line-join': 'round',
+					},
+					paint: {
+						'line-color': leg.color,
+						'line-width': 3,
+						'line-opacity': 0.9,
+					},
+				});
+
+				map.addLayer({
+					id: `${layerPrefix}-${leg.slug}-hit`,
+					type: 'line',
+					source: sourceId,
+					filter,
+					layout: {
+						'line-cap': 'round',
+						'line-join': 'round',
+					},
+					paint: {
+						'line-color': leg.color,
+						'line-width': 22,
+						'line-opacity': 0,
+					},
+				});
+			}
+
+			const navigateToLeg = (slug: string) => {
+				window.location.assign(`/journey/${slug}/`);
+			};
+
+			for (const leg of legs) {
+				for (const layerSuffix of ['line', 'halo', 'hit']) {
+					const layerId = `${layerPrefix}-${leg.slug}-${layerSuffix}`;
+					map.on('mouseenter', layerId, () => {
+						map.getCanvas().style.cursor = 'pointer';
+					});
+					map.on('mouseleave', layerId, () => {
+						map.getCanvas().style.cursor = '';
+					});
+					map.on('click', layerId, () => {
+						navigateToLeg(leg.slug);
+					});
+				}
+			}
+
+			for (const leg of legs) {
+				const coordinates = leg.waypoints.map((waypoint) => waypoint.coordinates);
+				const from = formatPlaceName(leg.waypoints[0].name);
+				const to = formatPlaceName(leg.waypoints[leg.waypoints.length - 1].name);
+
+				const labelButton = document.createElement('button');
+				labelButton.type = 'button';
+				labelButton.className = 'journey-map-label';
+				labelButton.style.setProperty('--leg-color', leg.color);
+
+				const labelText = document.createElement('span');
+				labelText.className = 'journey-map-label__text';
+				labelText.textContent = `${from} to ${to}`;
+				labelButton.append(labelText);
+				labelButton.addEventListener('click', (event) => {
+					event.preventDefault();
+					event.stopPropagation();
+					navigateToLeg(leg.slug);
+				});
+
+				const marker = new maplibregl.Marker({ element: labelButton, anchor: 'center' })
+					.setLngLat(getRouteMidpoint(coordinates))
+					.addTo(map);
+
+				labelLayouts.push({
+					marker,
+					element: labelButton,
+					coordinates,
+					priority: leg.number,
+				});
+			}
+
+			if (activeSlug && fitToLeg) {
+				setActiveLeg(activeSlug);
+				fitToSlug(activeSlug, false);
+			} else {
+				fitAllLegs(false);
+			}
+
+			scheduleLabelLayout();
+
+			const resizeObserver =
+				typeof ResizeObserver !== 'undefined'
+					? new ResizeObserver(() => {
+							refitMap();
+							scheduleLabelLayout();
+						})
+					: null;
+			resizeObserver?.observe(container);
+			window.addEventListener('resize', () => {
+				refitMap();
+				scheduleLabelLayout();
+			});
+		});
+
+		return map;
+	};
+
+	const containers = document.querySelectorAll<HTMLElement>('[data-journey-map]');
+	for (const container of containers) {
+		initJourneyMap(container);
+	}
+</script>
+
+<style>
+	.journey-map-wrap {
+		position: relative;
+		width: 100%;
+	}
+
+	.journey-map {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 1rem;
+		overflow: hidden;
+		border: 1px solid var(--color-border);
+		background: #e8edf2;
+	}
+
+	.journey-map :global(.maplibregl-canvas) {
+		cursor: default;
+	}
+
+	.journey-map :global(.journey-map-label) {
+		appearance: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		max-width: min(16rem, 42vw);
+		padding: 0.35rem 0.65rem;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		background: rgba(251, 247, 239, 0.94);
+		color: var(--color-text);
+		font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+		font-size: 0.68rem;
+		font-weight: 500;
+		line-height: 1.25;
+		letter-spacing: 0.01em;
+		box-shadow: 0 8px 18px rgba(20, 20, 20, 0.12);
+		cursor: pointer;
+		pointer-events: auto;
+		text-align: left;
+		transition: transform 160ms ease, box-shadow 160ms ease;
+	}
+
+	.journey-map :global(.journey-map-label::before) {
+		content: '';
+		flex: 0 0 auto;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 999px;
+		background: var(--leg-color);
+	}
+
+	.journey-map :global(.journey-map-label__text) {
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.journey-map :global(.journey-map-label:hover) {
+		transform: translateY(-1px);
+		box-shadow: 0 10px 22px rgba(20, 20, 20, 0.16);
+	}
+
+	.journey-map :global(.journey-map-label:focus-visible) {
+		outline: 2px solid rgba(184, 132, 58, 0.55);
+		outline-offset: 2px;
+	}
+
+	@media (min-width: 40rem) {
+		.journey-map :global(.journey-map-label) {
+			font-size: 0.72rem;
+			max-width: 18rem;
+		}
+	}
+
+	.journey-map__notice {
+		margin-top: 0.75rem;
+		font-size: 0.875rem;
+		color: var(--color-muted);
+	}
+</style>

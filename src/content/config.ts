@@ -21,4 +21,17 @@ const pages = defineCollection({
 	}),
 });
 
-export const collections = { posts, pages };
+const journey = defineCollection({
+	type: 'content',
+	schema: ({ image }) =>
+		z.object({
+			title: z.string(),
+			legNumber: z.number().int().min(1),
+			routeLabel: z.string(),
+			description: z.string().optional(),
+			coverImage: image(),
+			draft: z.boolean().default(false),
+		}),
+});
+
+export const collections = { posts, pages, journey };

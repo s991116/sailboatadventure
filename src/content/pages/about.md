@@ -1,15 +1,15 @@
 ---
-title: "Our Adventure"
+title: "About us"
 description: "Who we are and why we are sailing."
 ---
 
-# Our Adventure
+# About us
 
 ## Louise and Philip
 
 We built this site to document our sailing adventure and share what we learn along the way. Our goal is long-distance cruising—and maybe crossing the Atlantic to the Caribbean one day.
 
-Follow the journey here: *(insert link)*  
+Follow the journey here: [/journey/](/journey/)  
 We share most updates on YouTube: *Sailing with Louise* *(insert link)*
 
 We’re not experts. This isn’t a “perfect how-to”—it’s simply how we’re doing it, including the mistakes.

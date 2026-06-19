@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JourneyMap from '../../components/JourneyMap.astro';
+import { getCollection } from 'astro:content';
+import { journeyLegs } from '../../data/journey-legs';
+
+const legs = await getCollection('journey', ({ data }) => !data.draft);
+const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
+---
+
+<Layout title="The Journey">
+	<div class="journey-breakout -mt-12 sm:-mt-16">
+		<JourneyMap legs={journeyLegs} />
+	</div>
+
+	<section class="mt-10 space-y-4 sm:mt-12">
+		<p class="eyebrow">Planned route</p>
+		<h1 class="text-5xl leading-[0.95] sm:text-6xl">The Journey</h1>
+		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			Our planned passage from Denmark to the Caribbean, divided into six legs. Click a route on the map or choose a leg
+			below to read more.
+		</p>
+	</section>
+
+	<section class="mt-10 sm:mt-14">
+		<ol class="grid gap-5 sm:grid-cols-2">
+			{sortedLegs.map((leg) => {
+				const routeMeta = journeyLegs.find((item) => item.slug === leg.slug);
+				return (
+					<li>
+						<a href={`/journey/${leg.slug}/`} class="journey-leg-card surface-card block p-6 sm:p-7">
+							<p class="eyebrow">Leg {leg.data.legNumber}</p>
+							<h2 class="mt-2 text-2xl sm:text-3xl">{leg.data.title}</h2>
+							<div class="accent-rule mt-5"></div>
+							<p class="mt-4 text-[color:var(--color-muted)]">{leg.data.routeLabel}</p>
+							{routeMeta ? (
+								<span
+									class="journey-leg-card__swatch mt-5 inline-block h-1 w-16 rounded-full"
+									style={`background:${routeMeta.color}`}
+									aria-hidden="true"
+								/>
+							) : null}
+						</a>
+					</li>
+				);
+			})}
+		</ol>
+	</section>
+</Layout>
+
+<style>
+	.journey-breakout {
+		position: relative;
+		left: 50%;
+		right: 50%;
+		margin-left: -50vw;
+		margin-right: -50vw;
+		width: 100vw;
+		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
+	}
+
+	.journey-leg-card {
+		color: inherit;
+		text-decoration: none;
+		transition: transform 180ms ease, box-shadow 180ms ease;
+	}
+
+	.journey-leg-card:hover {
+		color: inherit;
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-soft);
+	}
+</style>
