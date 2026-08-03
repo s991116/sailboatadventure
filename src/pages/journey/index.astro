@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import JourneyMap from '../../components/JourneyMap.astro';
+import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
 import { journeyLegs, journeyLegBySlug } from '../../data/journey-legs';
 
@@ -34,7 +35,7 @@ const legPanels = await Promise.all(
 			{legPanels.map(({ leg, Content }) => {
 				const routeMeta = journeyLegBySlug[leg.slug];
 				return (
-					<article class="journey-panel hidden space-y-6" data-journey-panel data-leg={leg.slug}>
+					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
 						<header class="space-y-3">
 							<div class="flex flex-wrap items-center justify-between gap-4">
 								<p class="eyebrow">Passage {leg.data.legNumber}</p>
@@ -52,6 +53,58 @@ const legPanels = await Promise.all(
 								/>
 							) : null}
 						</header>
+
+						{leg.data.facts.length > 0 ? (
+							<dl class="passage-facts">
+								{leg.data.facts.map((fact) => (
+									<div class="passage-fact">
+										<dt class="eyebrow">{fact.label}</dt>
+										<dd>{fact.value}</dd>
+									</div>
+								))}
+							</dl>
+						) : null}
+
+						{(leg.data.sectionHeading || leg.data.intro) ? (
+							<div class="passage-intro space-y-3">
+								{leg.data.sectionHeading ? (
+									<h3 class="text-3xl leading-tight sm:text-4xl">{leg.data.sectionHeading}</h3>
+								) : null}
+								{leg.data.intro ? (
+									<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
+										{leg.data.intro}
+									</p>
+								) : null}
+							</div>
+						) : null}
+
+						{leg.data.gallery.length > 0 ? (
+							<div class="passage-gallery">
+								{leg.data.gallery.map((photo) => (
+									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
+								))}
+							</div>
+						) : null}
+
+						{leg.data.highlights.length > 0 ? (
+							<section class="passage-section space-y-3">
+								<p class="eyebrow">What we hope to experience</p>
+								<ul class="passage-highlights">
+									{leg.data.highlights.map((item) => (
+										<li>{item}</li>
+									))}
+								</ul>
+							</section>
+						) : null}
+
+						{leg.data.alternativeRoute ? (
+							<section class="passage-section space-y-3">
+								<p class="eyebrow">Alternative route</p>
+								<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
+									{leg.data.alternativeRoute}
+								</p>
+							</section>
+						) : null}
 
 						<div class="prose prose-slate max-w-none text-[color:var(--color-text)]">
 							<Content />
@@ -129,5 +182,56 @@ const legPanels = await Promise.all(
 
 	.journey-back:hover {
 		color: var(--color-accent);
+	}
+
+	.passage-facts {
+		display: grid;
+		gap: 1.25rem;
+		padding: 1.25rem 0;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	@media (min-width: 640px) {
+		.passage-facts {
+			gap: 1.5rem 2rem;
+			grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+		}
+	}
+
+	.passage-fact {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.passage-fact dd {
+		margin: 0;
+		max-width: 42rem;
+		font-size: 1.05rem;
+		line-height: 1.55;
+		color: var(--color-text);
+	}
+
+	.passage-highlights {
+		margin: 0;
+		padding-left: 1.25rem;
+		max-width: 42rem;
+		display: grid;
+		gap: 0.45rem;
+		font-size: 1.05rem;
+		line-height: 1.55;
+		color: var(--color-text);
+	}
+
+	.passage-gallery {
+		display: grid;
+		gap: 1rem;
+	}
+
+	@media (min-width: 640px) {
+		.passage-gallery {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1.25rem;
+		}
 	}
 </style>

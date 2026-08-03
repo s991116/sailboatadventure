@@ -21,6 +21,11 @@ const pages = defineCollection({
 	}),
 });
 
+const journeyFact = z.object({
+	label: z.string(),
+	value: z.string(),
+});
+
 const journey = defineCollection({
 	type: 'content',
 	schema: ({ image }) =>
@@ -29,6 +34,25 @@ const journey = defineCollection({
 			legNumber: z.number().int().min(1),
 			routeLabel: z.string(),
 			description: z.string().optional(),
+			/** Structured key facts shown above the passage narrative (period, distance, etc.). */
+			facts: z.array(journeyFact).default([]),
+			/** Optional heading shown above the intro paragraph. */
+			sectionHeading: z.string().optional(),
+			/** Short intro shown before the gallery and remaining markdown body. */
+			intro: z.string().optional(),
+			/** Photos shown between the intro and the markdown body. */
+			gallery: z
+				.array(
+					z.object({
+						src: image(),
+						alt: z.string(),
+					}),
+				)
+				.default([]),
+			/** Bullet list of hoped-for experiences. */
+			highlights: z.array(z.string()).default([]),
+			/** Optional alternative routing notes. */
+			alternativeRoute: z.string().optional(),
 			coverImage: image(),
 			draft: z.boolean().default(false),
 		}),
