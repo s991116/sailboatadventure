@@ -119,12 +119,14 @@ const legPanels = await Promise.all(
 <script>
 	const intro = document.querySelector('[data-journey-intro]');
 	const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-panel]'));
+	const mapEl = document.querySelector<HTMLElement>('[data-journey-map]');
 
 	const showLeg = (slug: string) => {
 		intro?.classList.add('hidden');
 		for (const panel of panels) {
 			panel.classList.toggle('hidden', panel.dataset.leg !== slug);
 		}
+		mapEl?.classList.add('is-compact');
 		history.replaceState(null, '', `#${slug}`);
 	};
 
@@ -133,6 +135,7 @@ const legPanels = await Promise.all(
 		for (const panel of panels) {
 			panel.classList.add('hidden');
 		}
+		mapEl?.classList.remove('is-compact');
 		history.replaceState(null, '', window.location.pathname);
 	};
 

@@ -157,6 +157,13 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			}
 		};
 
+		const setMapCompact = (compact: boolean) => {
+			container.classList.toggle('is-compact', compact);
+			requestAnimationFrame(() => {
+				map.resize();
+			});
+		};
+
 		const setActiveLeg = (slug: string | null) => {
 			for (const leg of legs) {
 				const isActive = slug ? leg.slug === slug : true;
@@ -175,6 +182,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 
 		const selectLeg = (slug: string, animate = true) => {
 			selectedSlug = slug;
+			setMapCompact(true);
 			setActiveLeg(slug);
 			fitToSlug(slug, animate);
 			tooltip.remove();
@@ -284,6 +292,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 				const { slug } = event.detail;
 				if (slug === selectedSlug) return;
 				selectedSlug = slug;
+				setMapCompact(true);
 				setActiveLeg(slug);
 				fitToSlug(slug, true);
 			}) as EventListener);
@@ -291,6 +300,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			window.addEventListener('journey-leg-clear', () => {
 				if (!selectedSlug) return;
 				selectedSlug = null;
+				setMapCompact(false);
 				setActiveLeg(null);
 				fitAllLegs(true);
 			});
@@ -327,6 +337,11 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		overflow: hidden;
 		border: 1px solid var(--color-border);
 		background: #e8edf2;
+	}
+
+	.journey-map.is-compact {
+		/* 60% of the default 16/9 height */
+		aspect-ratio: 16 / 5.4;
 	}
 
 	.journey-map :global(.maplibregl-canvas) {
