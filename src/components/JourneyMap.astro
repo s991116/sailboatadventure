@@ -194,7 +194,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		const setActiveLeg = (slug: string | null) => {
 			for (const leg of legs) {
 				const isActive = slug ? leg.slug === slug : true;
-				const lineOpacity = slug ? (isActive ? 0.95 : 0.2) : 0.9;
+				const lineOpacity = slug ? (isActive ? 0.95 : 0.6) : 0.9;
 				const lineWidth = slug && isActive ? 5 : 3;
 
 				if (map.getLayer(`${layerPrefix}-${leg.slug}-line`)) {
@@ -385,6 +385,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		z-index: 2;
 		display: flex;
 		align-items: flex-start;
+		justify-content: space-between;
 		gap: 10px;
 		padding: 10px;
 		border-radius: 1rem;
@@ -416,6 +417,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 	.journey-map__full-route {
 		pointer-events: auto;
 		appearance: none;
+		flex-shrink: 0;
 		color: var(--color-accent-strong);
 		cursor: pointer;
 		text-decoration: underline;

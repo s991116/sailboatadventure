@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import JourneyMap from '../../components/JourneyMap.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
-import { journeyLegs, journeyLegBySlug } from '../../data/journey-legs';
+import { journeyLegs } from '../../data/journey-legs';
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
@@ -33,19 +33,10 @@ const legPanels = await Promise.all(
 
 		<div class="journey-panels mt-10 sm:mt-12">
 			{legPanels.map(({ leg, Content }) => {
-				const routeMeta = journeyLegBySlug[leg.slug];
 				return (
 					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
 						<header class="space-y-3">
 							<h2 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h2>
-							<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">{routeMeta?.routeLabel ?? leg.data.routeLabel}</p>
-							{routeMeta ? (
-								<span
-									class="inline-block h-1 w-20 rounded-full"
-									style={`background:${routeMeta.color}`}
-									aria-hidden="true"
-								/>
-							) : null}
 						</header>
 
 						{leg.data.facts.length > 0 ? (
