@@ -12,8 +12,16 @@ const mapId = `journey-map-${Math.random().toString(36).slice(2, 9)}`;
 const mapConfig = JSON.stringify({ legs, mapTilerKey });
 ---
 
-<div class="journey-map-wrap">
-	<div id={mapId} class="journey-map" data-journey-map data-map-config={mapConfig}></div>
+<div class="journey-map-wrap" data-journey-map-wrap>
+	<div class="journey-map-frame">
+		<div id={mapId} class="journey-map" data-journey-map data-map-config={mapConfig}></div>
+		<div class="journey-map__overlays" data-journey-map-overlays hidden>
+			<p class="journey-map__passage-label" data-journey-map-passage></p>
+			<button type="button" class="journey-map__full-route" data-journey-back>
+				Full route
+			</button>
+		</div>
+	</div>
 	{!mapTilerKey ? (
 		<p class="journey-map__notice">
 			Map preview requires a MapTiler API key. Set <code>PUBLIC_MAPTILER_API_KEY</code> in your environment.
@@ -99,6 +107,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			new maplibregl.AttributionControl({
 				customAttribution: '© MapTiler © OpenStreetMap contributors',
 			}),
+			'bottom-left',
 		);
 
 		const tooltip = new maplibregl.Popup({
@@ -157,11 +166,29 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			}
 		};
 
+		const wrap = container.closest<HTMLElement>('[data-journey-map-wrap]');
+		const overlays = wrap?.querySelector<HTMLElement>('[data-journey-map-overlays]');
+		const passageLabel = wrap?.querySelector<HTMLElement>('[data-journey-map-passage]');
+
 		const setMapCompact = (compact: boolean) => {
 			container.classList.toggle('is-compact', compact);
 			requestAnimationFrame(() => {
 				map.resize();
 			});
+		};
+
+		const setOverlays = (slug: string | null) => {
+			if (!overlays || !passageLabel) return;
+
+			if (!slug) {
+				overlays.hidden = true;
+				passageLabel.textContent = '';
+				return;
+			}
+
+			const leg = legs.find((item) => item.slug === slug);
+			passageLabel.textContent = leg ? `Passage ${leg.number}` : '';
+			overlays.hidden = !leg;
 		};
 
 		const setActiveLeg = (slug: string | null) => {
@@ -184,6 +211,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			selectedSlug = slug;
 			setMapCompact(true);
 			setActiveLeg(slug);
+			setOverlays(slug);
 			fitToSlug(slug, animate);
 			tooltip.remove();
 			window.dispatchEvent(new CustomEvent('journey-leg-select', { detail: { slug } }));
@@ -294,6 +322,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 				selectedSlug = slug;
 				setMapCompact(true);
 				setActiveLeg(slug);
+				setOverlays(slug);
 				fitToSlug(slug, true);
 			}) as EventListener);
 
@@ -302,6 +331,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 				selectedSlug = null;
 				setMapCompact(false);
 				setActiveLeg(null);
+				setOverlays(null);
 				fitAllLegs(true);
 			});
 
@@ -330,6 +360,10 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		width: 100%;
 	}
 
+	.journey-map-frame {
+		position: relative;
+	}
+
 	.journey-map {
 		width: 100%;
 		aspect-ratio: 16 / 9;
@@ -342,6 +376,54 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 	.journey-map.is-compact {
 		/* 60% of the default 16/9 height */
 		aspect-ratio: 16 / 5.4;
+	}
+
+	.journey-map__overlays {
+		pointer-events: none;
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		padding: 10px;
+		border-radius: 1rem;
+	}
+
+	.journey-map__overlays[hidden] {
+		display: none;
+	}
+
+	.journey-map__passage-label,
+	.journey-map__full-route {
+		margin: 0;
+		padding: 0.35rem 0.55rem;
+		border-radius: 0.5rem;
+		border: 1px solid var(--color-border);
+		background: rgba(251, 247, 239, 0.94);
+		box-shadow: 0 6px 14px rgba(20, 20, 20, 0.1);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.22em;
+		line-height: 1.25;
+		text-transform: uppercase;
+	}
+
+	.journey-map__passage-label {
+		color: var(--color-text);
+	}
+
+	.journey-map__full-route {
+		pointer-events: auto;
+		appearance: none;
+		color: var(--color-accent-strong);
+		cursor: pointer;
+		text-decoration: underline;
+		text-underline-offset: 0.18em;
+	}
+
+	.journey-map__full-route:hover {
+		color: var(--color-accent);
 	}
 
 	.journey-map :global(.maplibregl-canvas) {
