@@ -4,6 +4,7 @@ import JourneyMap from '../../components/JourneyMap.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
 import { journeyLegs } from '../../data/journey-legs';
+import { formatPlaceName, getPassageEndpoints } from '../../data/journey-utils';
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
@@ -14,31 +15,70 @@ const legPanels = await Promise.all(
 		return { leg, Content };
 	}),
 );
+
+const passageSummaries = journeyLegs.map((leg) => {
+	const { start, end } = getPassageEndpoints(leg.stops);
+	return {
+		slug: leg.slug,
+		color: leg.color,
+		start: formatPlaceName(start.name),
+		end: formatPlaceName(end.name),
+	};
+});
 ---
 
-<Layout title="The Journey">
+<Layout title="Planned Route">
 	<div class="journey-page" data-journey-page>
-		<div class="journey-breakout -mt-12 sm:-mt-16">
+		<section class="journey-intro space-y-4" data-journey-intro>
+			<h1 class="text-5xl leading-[0.95] sm:text-6xl">Planned Route</h1>
+			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
+			</p>
+		</section>
+
+		{
+			legPanels.map(({ leg }) => (
+				<header class="journey-passage-title hidden space-y-3" data-journey-passage-title data-leg={leg.slug}>
+					<h1 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h1>
+				</header>
+			))
+		}
+
+		<div class="journey-breakout" data-journey-map-breakout>
 			<JourneyMap legs={journeyLegs} />
 		</div>
 
-		<section class="journey-intro mt-10 space-y-4 sm:mt-12" data-journey-intro>
-			<p class="eyebrow">Planned route</p>
-			<h1 class="text-5xl leading-[0.95] sm:text-6xl">The Journey</h1>
-			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
-				Our planned passage from Denmark to the Caribbean, divided into six passages. Hover a route on the map for a
-				preview, then click to zoom in and read more below.
-			</p>
+		<section class="passage-legend-block mt-8 sm:mt-10" data-journey-legend>
+			<h2 class="passage-legend__heading">Planned Passages</h2>
+			<ul class="passage-legend">
+				{passageSummaries.map((passage) => (
+					<li>
+						<button type="button" class="passage-legend__item" data-journey-legend-item data-leg={passage.slug}>
+							<span class="passage-legend__swatch" style={`background:${passage.color}`} aria-hidden="true" />
+							<span class="passage-legend__route">
+								{passage.start}
+								<svg class="passage-legend__arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+									<path
+										d="M2.5 8h10M9 3.5 13.5 8 9 12.5"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+								{passage.end}
+							</span>
+						</button>
+					</li>
+				))}
+			</ul>
 		</section>
 
 		<div class="journey-panels mt-10 sm:mt-12">
 			{legPanels.map(({ leg, Content }) => {
 				return (
 					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
-						<header class="space-y-3">
-							<h2 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h2>
-						</header>
-
 						{leg.data.facts.length > 0 ? (
 							<dl class="passage-facts">
 								{leg.data.facts.map((fact) => (
@@ -61,7 +101,7 @@ const legPanels = await Promise.all(
 						{(leg.data.sectionHeading || leg.data.intro) ? (
 							<div class="passage-intro space-y-3">
 								{leg.data.sectionHeading ? (
-									<h3 class="text-3xl leading-tight sm:text-4xl">{leg.data.sectionHeading}</h3>
+									<h2 class="text-3xl leading-tight sm:text-4xl">{leg.data.sectionHeading}</h2>
 								) : null}
 								{leg.data.intro ? (
 									<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
@@ -102,26 +142,41 @@ const legPanels = await Promise.all(
 </Layout>
 
 <script>
+	const page = document.querySelector<HTMLElement>('[data-journey-page]');
 	const intro = document.querySelector('[data-journey-intro]');
+	const legend = document.querySelector<HTMLElement>('[data-journey-legend]');
+	const titles = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-passage-title]'));
 	const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-panel]'));
 	const mapEl = document.querySelector<HTMLElement>('[data-journey-map]');
 
 	const showLeg = (slug: string) => {
+		page?.classList.add('is-passage-view');
 		intro?.classList.add('hidden');
+		legend?.classList.add('hidden');
+		for (const title of titles) {
+			title.classList.toggle('hidden', title.dataset.leg !== slug);
+		}
 		for (const panel of panels) {
 			panel.classList.toggle('hidden', panel.dataset.leg !== slug);
 		}
 		mapEl?.classList.add('is-compact');
 		history.replaceState(null, '', `#${slug}`);
+		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	};
 
 	const showIntro = () => {
+		page?.classList.remove('is-passage-view');
 		intro?.classList.remove('hidden');
+		legend?.classList.remove('hidden');
+		for (const title of titles) {
+			title.classList.add('hidden');
+		}
 		for (const panel of panels) {
 			panel.classList.add('hidden');
 		}
 		mapEl?.classList.remove('is-compact');
 		history.replaceState(null, '', window.location.pathname);
+		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	};
 
 	window.addEventListener('journey-leg-select', ((event: CustomEvent<{ slug: string }>) => {
@@ -138,6 +193,14 @@ const legPanels = await Promise.all(
 		});
 	}
 
+	for (const button of document.querySelectorAll<HTMLElement>('[data-journey-legend-item]')) {
+		button.addEventListener('click', () => {
+			const slug = button.dataset.leg;
+			if (!slug) return;
+			window.dispatchEvent(new CustomEvent('journey-leg-select', { detail: { slug } }));
+		});
+	}
+
 	const hashSlug = window.location.hash.replace(/^#/, '');
 	if (hashSlug && panels.some((panel) => panel.dataset.leg === hashSlug)) {
 		showLeg(hashSlug);
@@ -145,6 +208,18 @@ const legPanels = await Promise.all(
 </script>
 
 <style>
+	.journey-intro,
+	.journey-passage-title {
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 640px) {
+		.journey-intro,
+		.journey-passage-title {
+			margin-bottom: 2rem;
+		}
+	}
+
 	.journey-breakout {
 		position: relative;
 		left: 50%;
@@ -153,6 +228,79 @@ const legPanels = await Promise.all(
 		margin-right: -50vw;
 		width: 100vw;
 		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
+	}
+
+	.passage-legend-block {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.passage-legend-block.hidden {
+		display: none;
+	}
+
+	.passage-legend__heading {
+		margin: 0;
+		font-size: 1.75rem;
+		line-height: 1.2;
+		color: var(--color-text);
+	}
+
+	@media (min-width: 640px) {
+		.passage-legend__heading {
+			font-size: 2rem;
+		}
+	}
+
+	.passage-legend {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.65rem;
+	}
+
+	.passage-legend__item {
+		appearance: none;
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		width: 100%;
+		margin: 0;
+		padding: 0.35rem 0;
+		border: 0;
+		background: transparent;
+		text-align: left;
+		cursor: pointer;
+		color: var(--color-text);
+		font-size: 1.05rem;
+		line-height: 1.4;
+	}
+
+	.passage-legend__item:hover {
+		color: var(--color-accent-strong);
+	}
+
+	.passage-legend__swatch {
+		display: block;
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 3px;
+		border-radius: 999px;
+	}
+
+	.passage-legend__route {
+		display: inline-flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+	}
+
+	.passage-legend__arrow {
+		width: 0.95rem;
+		height: 0.95rem;
+		flex-shrink: 0;
+		color: var(--color-muted);
 	}
 
 	.passage-facts {
