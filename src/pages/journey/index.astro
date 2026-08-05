@@ -65,6 +65,14 @@ const legPanels = await Promise.all(
 							</dl>
 						) : null}
 
+						{leg.data.gallery.length > 0 ? (
+							<div class="passage-gallery">
+								{leg.data.gallery.map((photo) => (
+									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
+								))}
+							</div>
+						) : null}
+
 						{(leg.data.sectionHeading || leg.data.intro) ? (
 							<div class="passage-intro space-y-3">
 								{leg.data.sectionHeading ? (
@@ -75,14 +83,6 @@ const legPanels = await Promise.all(
 										{leg.data.intro}
 									</p>
 								) : null}
-							</div>
-						) : null}
-
-						{leg.data.gallery.length > 0 ? (
-							<div class="passage-gallery">
-								{leg.data.gallery.map((photo) => (
-									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
-								))}
 							</div>
 						) : null}
 

@@ -100,7 +100,7 @@ export const journeyLegs: JourneyLeg[] = [
 		slug: 'passage-3',
 		number: 3,
 		title: 'Passage 3',
-		color: '#2a6fd1',
+		color: '#f0a04b',
 		stops: passage3Stops,
 		route: routeFromFeature(passage3Route),
 		routeLabel: routeLabelFromStops(passage3Stops),
