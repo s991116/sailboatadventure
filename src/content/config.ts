@@ -58,6 +58,10 @@ const journey = defineCollection({
 					}),
 				)
 				.default([]),
+			/** Optional heading shown above the closing paragraph. */
+			outroHeading: z.string().optional(),
+			/** Optional closing paragraph shown after the secondary gallery. */
+			outro: z.string().optional(),
 			/** Bullet list of hoped-for experiences. */
 			highlights: z.array(z.string()).default([]),
 			/** Optional alternative routing notes. */

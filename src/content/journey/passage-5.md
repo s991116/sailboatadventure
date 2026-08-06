@@ -22,8 +22,8 @@ secondaryGallery:
     alt: "Tangier, Morocco"
   - src: ../../assets/photos/journey/Tangier_Morocco_marked.jpeg
     alt: "Market in Tangier, Morocco"
+outroHeading: "A Taste of Morocco"
+outro: "If weather and time allow, we may also make a detour to Tangier, where Europe meets Africa and Atlantic traditions blend with Moroccan culture. Whether or not we make this stop, this chapter marks our transition into the trade winds and brings us one step closer to the next great ocean crossing."
 coverImage: ../../assets/photos/journey/Madeira.jpeg
 draft: false
 ---
-
-If weather and time allow, we may also make a detour to Tangier, where Europe meets Africa and Atlantic traditions blend with Moroccan culture. Whether or not we make this stop, this chapter marks our transition into the trade winds and brings us one step closer to the next great ocean crossing.

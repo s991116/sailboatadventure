@@ -23,7 +23,13 @@ highlights:
   - "Historic villages and traditional harbours."
   - "Castles, whisky distilleries and Scottish culture."
   - "Hiking through glens, forests and along lochs."
-alternativeRoute: "If weather and time allow, we may continue north along the Norwegian coast to Bergen before making the offshore crossing to the Shetland Islands. From there, we would sail south to Inverness and enter the Caledonian Canal, combining a North Sea crossing with the spectacular scenery of both Shetland and the Scottish Highlands before finishing in Fort William."
+secondaryGallery:
+  - src: ../../assets/photos/journey/Shetland_islands.jpeg
+    alt: "The Shetland Islands"
+  - src: ../../assets/photos/journey/Age_settlement_Shetland.jpeg
+    alt: "Ancient settlement in Shetland"
+outroHeading: "The Shetland Route"
+outro: "If weather and time allow, we may continue north along the Norwegian coast to Bergen before making the offshore crossing to the Shetland Islands. From there, we would sail south to Inverness and enter the Caledonian Canal, combining a North Sea crossing with the spectacular scenery of both Shetland and the Scottish Highlands before finishing in Fort William."
 coverImage: ../../assets/photos/history/2022-07-01 Sjælland rundt/IMG_3530.jpeg
 draft: false
 ---
