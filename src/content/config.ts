@@ -40,8 +40,17 @@ const journey = defineCollection({
 			sectionHeading: z.string().optional(),
 			/** Short intro shown before the gallery and remaining markdown body. */
 			intro: z.string().optional(),
-			/** Photos shown between the intro and the markdown body. */
+			/** Photos shown between the facts and the section heading. */
 			gallery: z
+				.array(
+					z.object({
+						src: image(),
+						alt: z.string(),
+					}),
+				)
+				.default([]),
+			/** Optional second photo row shown after the intro text. */
+			secondaryGallery: z
 				.array(
 					z.object({
 						src: image(),

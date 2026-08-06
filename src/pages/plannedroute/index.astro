@@ -111,6 +111,14 @@ const passageSummaries = journeyLegs.map((leg) => {
 							</div>
 						) : null}
 
+						{leg.data.secondaryGallery.length > 0 ? (
+							<div class="passage-gallery">
+								{leg.data.secondaryGallery.map((photo) => (
+									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
+								))}
+							</div>
+						) : null}
+
 						{leg.data.highlights.length > 0 ? (
 							<section class="passage-section space-y-3">
 								<p class="eyebrow">What we hope to experience</p>
