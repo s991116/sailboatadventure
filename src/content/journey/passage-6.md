@@ -1,24 +1,33 @@
 ---
-title: "From Gran Canaria to Barbados via Cape Verde"
+title: "From the Azores to Gran Canaria"
 legNumber: 6
-routeLabel: "Gran Canaria → Cape Verde → Barbados"
-description: "The trade-wind crossing via Cape Verde toward the Caribbean."
+routeLabel: "the Azores → Gran Canaria"
+description: "Island hopping south through the Atlantic toward the Canary Islands."
 facts:
   - label: "Planned period"
-    value: "November – December 2027"
+    value: "September 2027"
   - label: "Estimated distance"
-    value: "3,000 nautical miles"
+    value: "1,000–1,300 nautical miles"
   - label: "Longest offshore passage"
-    value: "15–20 days at sea"
-sectionHeading: "Following the Trade Winds Across the Atlantic"
-intro: "Leaving Gran Canaria behind, we set course west following the trade winds towards Cape Verde and eventually across the Atlantic to the Caribbean. This will be our longest ocean passage so far, where the rhythm of life will be shaped entirely by the sea, the wind and the endless horizon."
+    value: "5–6 days at sea"
+sectionHeading: "From Volcanic Islands to the Trade Winds"
+intro: "Leaving the Azores behind, we continue south through the Atlantic toward Gran Canaria. Along the way, we hope to experience dramatic cliffs, warmer waters and the gradual shift into the trade-wind belt that will carry us west later in the year."
 gallery:
-  - src: ../../assets/photos/journey/Fishmarket_Cabo_Verde.jpeg
-    alt: "Fish market in Cape Verde"
-  - src: ../../assets/photos/journey/Barbados_beach.jpeg
-    alt: "Beach in Barbados"
-coverImage: ../../assets/photos/journey/Barbados_beach.jpeg
+  - src: ../../assets/photos/journey/Madeira.jpeg
+    alt: "Madeira coastline"
+  - src: ../../assets/photos/journey/Madeira_hiking.jpg
+    alt: "Hiking on Madeira's levada trails"
+highlights:
+  - "Warmer Atlantic waters."
+  - "Island landscapes and mountain trails."
+  - "A transition into the trade winds."
+secondaryGallery:
+  - src: ../../assets/photos/journey/Tangier_Morocco_city.jpg
+    alt: "Tangier, Morocco"
+  - src: ../../assets/photos/journey/Tangier_Morocco_marked.jpeg
+    alt: "Market in Tangier, Morocco"
+outroHeading: "A Taste of Morocco"
+outro: "If weather and time allow, we may also make a detour via Madeira or Tangier, where Atlantic traditions meet new cultures. Whether or not we make these stops, this chapter marks our transition into the trade winds and brings us one step closer to the next great ocean crossing."
+coverImage: ../../assets/photos/journey/Madeira.jpeg
 draft: false
 ---
-
-A stop in Cape Verde will give us the opportunity to experience a different culture, explore volcanic landscapes and prepare for the final Atlantic crossing. From there, we will follow the steady trade winds west towards Barbados, where the turquoise waters of the Caribbean mark the beginning of a new chapter of our adventure.

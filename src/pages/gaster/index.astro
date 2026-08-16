@@ -1,0 +1,225 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
+import {
+	gasterBenefits,
+	gasterContact,
+	gasterHero,
+	gasterImages,
+	gasterMeta,
+	gasterRoute,
+	gasterWho,
+} from '../../data/gaster-content';
+
+const stageOptions = gasterRoute.stages.map(
+	(s) => `${s.number} · ${s.month} — ${s.from} → ${s.to}`,
+);
+---
+
+<Layout title={gasterMeta.title}>
+	<section class="mb-6 sm:mb-10">
+		<OptimizedPhoto
+			src={gasterImages.hero}
+			alt="Sailboat on open ocean during an Atlantic crossing, with waves and horizon beyond."
+			preset="center"
+			aspectRatio="16/9"
+		/>
+	</section>
+
+	<section class="py-6 sm:py-10">
+		<p class="eyebrow">{gasterHero.label}</p>
+		<h1 class="display-title mt-3">{gasterHero.title}</h1>
+		<div class="accent-rule mt-6"></div>
+		<p class="lede">{gasterHero.routeLine}</p>
+		<div class="mt-8">
+			<a href={gasterHero.cta.href} class="inline-flex items-center gap-2 font-medium">
+				{gasterHero.cta.label}
+				<span aria-hidden="true">→</span>
+			</a>
+		</div>
+	</section>
+
+	<section class="mt-16 sm:mt-20" aria-labelledby="gaster-benefits-title">
+		<OptimizedPhoto
+			src={gasterImages.benefitsBg}
+			alt="Caribbean beach — destination for the final passage of the voyage."
+			preset="center"
+			aspectRatio="16/9"
+		/>
+
+		<div class="mt-10">
+			<p class="eyebrow">{gasterBenefits.label}</p>
+			<h2 id="gaster-benefits-title" class="mt-3 text-3xl sm:text-4xl">{gasterBenefits.title}</h2>
+			<div class="accent-rule mt-6"></div>
+
+			<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+				{gasterBenefits.items.map((item) => (
+					<article class="surface-card p-6 sm:p-7">
+						<h3 class="text-xl font-semibold">{item.title}</h3>
+						<p class="mt-3 text-[color:var(--color-muted)]">{item.description}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="gaster-who-title">
+		<p class="eyebrow">{gasterWho.label}</p>
+		<h2 id="gaster-who-title" class="mt-3 text-3xl sm:text-4xl">{gasterWho.title}</h2>
+		<div class="accent-rule mt-6"></div>
+
+		<ul class="mt-10 grid gap-8 sm:grid-cols-2">
+			{gasterWho.items.map((item) => (
+				<li class="flex gap-4">
+					<span
+						class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full"
+						style="background: var(--color-accent);"
+						aria-hidden="true"
+					></span>
+					<div>
+						<h3 class="text-xl font-semibold">{item.title}</h3>
+						<p class="mt-2 text-[color:var(--color-muted)]">{item.description}</p>
+					</div>
+				</li>
+			))}
+		</ul>
+	</section>
+
+	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="gaster-route-title">
+		<p class="eyebrow">{gasterRoute.label}</p>
+		<h2 id="gaster-route-title" class="mt-3 text-3xl sm:text-4xl">{gasterRoute.title}</h2>
+		<div class="accent-rule mt-6"></div>
+		<p class="mt-6 max-w-2xl text-[color:var(--color-muted)]">{gasterRoute.intro}</p>
+
+		<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			{gasterRoute.stages.map((stage) => (
+				<article class="surface-card p-5 sm:p-6">
+					<div class="flex items-start justify-between gap-3">
+						<span class="text-2xl font-semibold text-[color:var(--color-accent-strong)]">{stage.number}</span>
+						<span class="eyebrow text-[0.65rem]">{stage.month}</span>
+					</div>
+					<div class="divider mt-4 pt-4">
+						<p class="font-semibold">{stage.from}</p>
+						<p class="mt-1 text-[color:var(--color-accent)]" aria-hidden="true">↓</p>
+						<p class="font-semibold">{stage.to}</p>
+					</div>
+				</article>
+			))}
+		</div>
+
+		<p class="mt-8 text-sm text-[color:var(--color-muted)]">{gasterRoute.note}</p>
+		<p class="mt-6">
+			<a href={gasterRoute.plannedRoute.href} class="inline-flex items-center gap-2 font-medium">
+				{gasterRoute.plannedRoute.label}
+				<span aria-hidden="true">→</span>
+			</a>
+		</p>
+	</section>
+
+	<section id="contact" class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="gaster-contact-title">
+		<div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+			<div>
+				<p class="eyebrow">{gasterContact.label}</p>
+				<h2 id="gaster-contact-title" class="mt-3 text-3xl sm:text-4xl">{gasterContact.title}</h2>
+				<div class="accent-rule mt-6"></div>
+				<p class="mt-6 text-[color:var(--color-muted)]">{gasterContact.intro}</p>
+				<p class="mt-8">
+					<a href={gasterContact.facebook.href} target="_blank" rel="noopener noreferrer" class="font-medium">
+						{gasterContact.facebook.label}
+						<span aria-hidden="true"> →</span>
+					</a>
+				</p>
+			</div>
+
+			<form
+				class="surface-card space-y-5 p-6 sm:p-8"
+				data-gaster-form
+				data-email={gasterContact.email}
+				novalidate
+			>
+				<div>
+					<label for="gaster-name" class="eyebrow text-[0.65rem]">{gasterContact.form.nameLabel}</label>
+					<input
+						id="gaster-name"
+						name="name"
+						type="text"
+						required
+						autocomplete="name"
+						class="mt-2 w-full rounded-xl border border-[color:var(--color-border)] bg-white px-4 py-3"
+					/>
+				</div>
+				<div>
+					<label for="gaster-email" class="eyebrow text-[0.65rem]">{gasterContact.form.emailLabel}</label>
+					<input
+						id="gaster-email"
+						name="email"
+						type="email"
+						required
+						autocomplete="email"
+						class="mt-2 w-full rounded-xl border border-[color:var(--color-border)] bg-white px-4 py-3"
+					/>
+				</div>
+				<div>
+					<label for="gaster-stage" class="eyebrow text-[0.65rem]">{gasterContact.form.stageLabel}</label>
+					<select
+						id="gaster-stage"
+						name="stage"
+						required
+						class="mt-2 w-full rounded-xl border border-[color:var(--color-border)] bg-white px-4 py-3"
+					>
+						<option value="">{gasterContact.form.stagePlaceholder}</option>
+						{stageOptions.map((option) => (
+							<option value={option}>{option}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					<label for="gaster-message" class="eyebrow text-[0.65rem]">{gasterContact.form.messageLabel}</label>
+					<textarea
+						id="gaster-message"
+						name="message"
+						required
+						rows={5}
+						class="mt-2 w-full resize-y rounded-xl border border-[color:var(--color-border)] bg-white px-4 py-3"
+					></textarea>
+				</div>
+				<button type="submit" class="inline-flex items-center gap-2 font-medium">
+					{gasterContact.form.submitLabel}
+					<span aria-hidden="true">→</span>
+				</button>
+				<p class="hidden text-sm text-[color:var(--color-accent-strong)]" data-gaster-form-success role="status">
+					{gasterContact.form.successMessage}
+				</p>
+			</form>
+		</div>
+	</section>
+</Layout>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('[data-gaster-form]');
+	const success = document.querySelector<HTMLElement>('[data-gaster-form-success]');
+
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+
+		const email = form.dataset.email;
+		if (!email) return;
+
+		const data = new FormData(form);
+		const name = String(data.get('name') ?? '');
+		const fromEmail = String(data.get('email') ?? '');
+		const stage = String(data.get('stage') ?? '');
+		const message = String(data.get('message') ?? '');
+
+		const subject = encodeURIComponent(`Sailing crew enquiry: ${stage}`);
+		const body = encodeURIComponent(
+			`Name: ${name}\nEmail: ${fromEmail}\nPreferred passage: ${stage}\n\n${message}`,
+		);
+
+		window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+
+		if (success) {
+			success.classList.remove('hidden');
+		}
+	});
+</script>

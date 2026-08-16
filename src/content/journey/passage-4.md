@@ -1,24 +1,26 @@
 ---
-title: "From Isles of Scilly (England) to the Azores"
+title: "From Dublin to Isles of Scilly"
 legNumber: 4
-routeLabel: "Isles of Scilly → Azores"
-description: "The first long offshore passage across the Atlantic to the Azores."
+routeLabel: "Dublin → Isles of Scilly"
+description: "From Ireland south to the Isles of Scilly, the gateway to the Atlantic."
 facts:
   - label: "Planned period"
-    value: "July – August 2027"
+    value: "July 2027"
   - label: "Estimated distance"
-    value: "1,250 nautical miles"
+    value: "220–280 nautical miles"
   - label: "Longest offshore passage"
-    value: "10–14 days at sea"
-sectionHeading: "Across the Atlantic"
-intro: "Leaving the Isles of Scilly behind, we set course for our first true ocean passage. For nearly two weeks, the Atlantic becomes our home, where life is shaped by the rhythm of the sea, changing weather and endless horizons."
+    value: "1–2 days at sea"
+sectionHeading: "Toward the Atlantic Gateway"
+intro: "Leaving Dublin behind, this chapter takes us south to the Isles of Scilly — a special place for sailors preparing for longer passages. Here we will take time to complete preparations, watch the weather and get ready for the next chapter of our adventure: crossing the Atlantic towards the Azores."
 gallery:
-  - src: ../../assets/photos/journey/dolphins.jpg
-    alt: "Dolphins swimming alongside the boat"
-  - src: ../../assets/photos/journey/Azores_sperm_whale.jpg
-    alt: "Sperm whale in the Azores"
-coverImage: ../../assets/photos/journey/dolphins.jpg
+  - src: "../../assets/photos/journey/Isls of Scilly.jpeg"
+    alt: "Isles of Scilly"
+  - src: "../../assets/photos/journey/Tresco Island.jpeg"
+    alt: "Tresco Island, Isles of Scilly"
+highlights:
+  - "A final European stop before the ocean."
+  - "Clear water and island scenery."
+  - "Time to prepare for the Atlantic crossing."
+coverImage: "../../assets/photos/journey/Isls of Scilly.jpeg"
 draft: false
 ---
-
-Along the way, we hope to be joined by playful dolphins, experience unforgettable nights beneath the Milky Way, witness whales, and watch the ocean gradually change as we sail towards warmer waters. Reaching the volcanic islands of the Azores will mark the end of our first major offshore crossing.

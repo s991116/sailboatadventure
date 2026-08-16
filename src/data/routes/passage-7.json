@@ -1,27 +1,27 @@
 {
 	"type": "Feature",
 	"properties": {
-		"passage": "passage-6",
-		"note": "the Azores → Gran Canaria"
+		"passage": "passage-7",
+		"note": "Gran Canaria → Barbados"
 	},
 	"geometry": {
 		"type": "LineString",
 		"coordinates": [
 			[
-				-25.676,
-				37.741
-			],
-			[
-				-20,
-				34
-			],
-			[
-				-17,
-				32.7
-			],
-			[
 				-15.415,
 				28.1
+			],
+			[
+				-24.98,
+				16.89
+			],
+			[
+				-40,
+				14.5
+			],
+			[
+				-59.611,
+				13.098
 			]
 		]
 	}

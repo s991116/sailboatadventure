@@ -4,7 +4,6 @@ import JourneyMap from '../../components/JourneyMap.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
 import { journeyLegs } from '../../data/journey-legs';
-import { formatPlaceName, getPassageEndpoints } from '../../data/journey-utils';
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
@@ -16,15 +15,11 @@ const legPanels = await Promise.all(
 	}),
 );
 
-const passageSummaries = journeyLegs.map((leg) => {
-	const { start, end } = getPassageEndpoints(leg.stops);
-	return {
-		slug: leg.slug,
-		color: leg.color,
-		start: formatPlaceName(start.name),
-		end: formatPlaceName(end.name),
-	};
-});
+const passageSummaries = journeyLegs.map((leg) => ({
+	slug: leg.slug,
+	color: leg.color,
+	routeLabel: leg.routeLabel,
+}));
 ---
 
 <Layout title="Planned Route">
@@ -33,6 +28,13 @@ const passageSummaries = journeyLegs.map((leg) => {
 			<h1 class="text-5xl leading-[0.95] sm:text-6xl">Planned Route</h1>
 			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
 				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
+			</p>
+			<p class="max-w-2xl text-[color:var(--color-muted)]">
+				Want to join us for one or more passages? We are looking for sailing crew for 2027.
+				<a href="/gaster/" class="inline-flex items-center gap-2 font-medium">
+					Read more on Sailing crew
+					<span aria-hidden="true">→</span>
+				</a>
 			</p>
 		</section>
 
@@ -55,20 +57,7 @@ const passageSummaries = journeyLegs.map((leg) => {
 					<li>
 						<button type="button" class="passage-legend__item" data-journey-legend-item data-leg={passage.slug}>
 							<span class="passage-legend__swatch" style={`background:${passage.color}`} aria-hidden="true" />
-							<span class="passage-legend__route">
-								{passage.start}
-								<svg class="passage-legend__arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-									<path
-										d="M2.5 8h10M9 3.5 13.5 8 9 12.5"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
-								{passage.end}
-							</span>
+							<span class="passage-legend__route">{passage.routeLabel}</span>
 						</button>
 					</li>
 				))}

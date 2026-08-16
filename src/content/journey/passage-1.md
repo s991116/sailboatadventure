@@ -1,24 +1,24 @@
 ---
-title: "From Frederiksværk to Stavanger"
+title: "From Frederiksværk to Arendal"
 legNumber: 1
-routeLabel: "Frederiksværk → Kristiansand → Stavanger"
+routeLabel: "Frederiksværk → Arendal"
 description: "From Denmark across Skagerrak to southern Norway."
 facts:
   - label: "Planned period"
-    value: "April – May 2027"
+    value: "April 2027"
   - label: "Estimated distance"
-    value: "470–560 nautical miles"
+    value: "250–320 nautical miles"
   - label: "Longest offshore passage"
     value: "1–2 days at sea"
-sectionHeading: "Along Norway's Southern Coast"
-intro: "This chapter takes us from Denmark across the Skagerrak to Norway's beautiful southern and western coastline. Along the way, we hope to discover peaceful anchorages, charming fishing villages and spectacular coastal scenery, while taking time to explore the landscape through short hikes before arriving in Stavanger."
+sectionHeading: "Across the Skagerrak"
+intro: "This chapter takes us from Denmark across the Skagerrak to Arendal on Norway's southern coast. Along the way, we hope to discover peaceful anchorages, charming fishing villages and spectacular coastal scenery before continuing west and north later in the season."
 gallery:
   - src: ../../assets/photos/journey/Helleren_Jossinge_fjord.jpg
     alt: "Helleren at Jøssingfjord"
   - src: ../../assets/photos/journey/Preikestolen_norway.jpg
     alt: "Preikestolen, Norway"
 highlights:
-  - "Norway's beautiful west coast in early spring."
+  - "Norway's southern coast in early spring."
   - "Peaceful, unspoiled anchorages surrounded by nature."
   - "Charming fishing villages and small guest harbours."
   - "Coastal hiking trails and panoramic viewpoints."
