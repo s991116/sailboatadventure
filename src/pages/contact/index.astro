@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
+---
+
+<Layout title="Contact us — Sailboat Adventure">
+	<section class="space-y-4">
+		<p class="eyebrow">Contact</p>
+		<h1 class="display-title mt-3">Contact us</h1>
+		<div class="accent-rule mt-6"></div>
+		<p class="lede">
+			Write to us with the form below. Your message is delivered privately to our inbox — we do not publish an
+			email address or phone number on this site.
+		</p>
+	</section>
+
+	<section class="mt-10">
+		<Web3FormsContactForm
+			formId="contact-us"
+			subject="Contact us — Sailboat Adventure"
+		/>
+	</section>
+</Layout>

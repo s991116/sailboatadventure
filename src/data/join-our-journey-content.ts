@@ -4,35 +4,35 @@ import { plannedPassages } from './planned-passages';
 import heroPhoto from '../assets/photos/history/2023-12-01 Over Atlanten/IMG_6681.jpeg';
 import benefitsBg from '../assets/photos/journey/Barbados_beach.jpeg';
 
-export type GasterStage = {
+export type JoinOurJourneyStage = {
 	number: string;
 	month: string;
 	from: string;
 	to: string;
 };
 
-export type GasterListItem = {
+export type JoinOurJourneyListItem = {
 	title: string;
 	description: string;
 };
 
-export type GasterImages = {
+export type JoinOurJourneyImages = {
 	hero: ImageMetadata;
 	benefitsBg: ImageMetadata;
 };
 
-export const gasterMeta = {
+export const joinOurJourneyMeta = {
 	title: 'Join Our Journey — Atlantic crossing | Sailboat Adventure',
 	description:
 		'Join our staged voyage from Frederiksværk to Barbados. Night watches, open-ocean sailing, and adventure under the stars.',
 };
 
-export const gasterImages: GasterImages = {
+export const joinOurJourneyImages: JoinOurJourneyImages = {
 	hero: heroPhoto,
 	benefitsBg,
 };
 
-export const gasterHero = {
+export const joinOurJourneyHero = {
 	label: 'Join Our Journey',
 	title: 'Join our journey across the Atlantic',
 	routeLine:
@@ -43,7 +43,7 @@ export const gasterHero = {
 	},
 };
 
-export const gasterRoute = {
+export const joinOurJourneyRoute = {
 	label: 'The route',
 	title: 'Seven passages — from April to November 2027',
 	intro:
@@ -58,10 +58,10 @@ export const gasterRoute = {
 		month: passage.month,
 		from: passage.from,
 		to: passage.to,
-	})) satisfies GasterStage[],
+	})) satisfies JoinOurJourneyStage[],
 };
 
-export const gasterWho = {
+export const joinOurJourneyWho = {
 	label: 'Who we are looking for',
 	title: 'Attitude matters more than certificates',
 	items: [
@@ -81,10 +81,10 @@ export const gasterWho = {
 			title: 'Adventure first, luxury last',
 			description: 'Comfort is limited onboard — in return you get experiences few people ever have.',
 		},
-	] satisfies GasterListItem[],
+	] satisfies JoinOurJourneyListItem[],
 };
 
-export const gasterBenefits = {
+export const joinOurJourneyBenefits = {
 	label: 'What you get',
 	title: 'What awaits you onboard',
 	items: [
@@ -94,7 +94,7 @@ export const gasterBenefits = {
 		},
 		{
 			title: 'A strong crew bond',
-			description: 'You sail as a crew. Meals, watches, and challenges are shared along the way.',
+			description: 'We sail as a crew. Meals, watches, and challenges are shared along the way. We reflect on our team-work and adjust what we do as a group, to make the most of our time together.',
 		},
 		{
 			title: 'Unique destinations',
@@ -104,10 +104,10 @@ export const gasterBenefits = {
 			title: 'Stories for life',
 			description: 'Whales, stars, storms, and stillness. A journey you will talk about for years.',
 		},
-	] satisfies GasterListItem[],
+	] satisfies JoinOurJourneyListItem[],
 };
 
-export const gasterContact = {
+export const joinOurJourneyContact = {
 	label: 'Contact',
 	title: 'Want to come aboard?',
 	intro:

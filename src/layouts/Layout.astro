@@ -14,7 +14,7 @@ const navItems = [
 	{ href: '/plannedroute/', label: 'Planned Route' },
 	{ href: '/join-our-journey/', label: 'Join Our Journey' },
 	{ href: '/history/', label: 'History' },
-	{ href: '/contact/', label: 'Contact' },
+	{ href: '/contact/', label: 'Contact us' },
 ] as const;
 ---
 
@@ -34,27 +34,81 @@ const navItems = [
 	</head>
 	<body class="min-h-dvh antialiased">
 		<header class="site-header sticky top-0 z-50 backdrop-blur">
-			<nav class="site-container flex items-center gap-6 py-4">
-				<a href="/" class="site-brand">Sailboat Adventure</a>
-				<div class="ml-auto flex items-center gap-6">
-				{navItems.map((item) => {
-					const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-					return (
-						<a
-							href={item.href}
-							aria-current={isActive ? 'page' : undefined}
-							class="nav-link"
-						>
-							{item.label}
-						</a>
-					);
-				})}
+			<nav class="site-container flex items-center gap-4 py-4" aria-label="Main">
+				<a href="/" class="site-brand min-w-0 shrink">Sailboat Adventure</a>
+				<div class="ml-auto hidden items-center gap-6 md:flex">
+					{navItems.map((item) => {
+						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+						return (
+							<a
+								href={item.href}
+								aria-current={isActive ? 'page' : undefined}
+								class="nav-link"
+							>
+								{item.label}
+							</a>
+						);
+					})}
 				</div>
+				<button
+					type="button"
+					class="nav-menu-button ml-auto md:hidden"
+					aria-expanded="false"
+					aria-controls="mobile-nav-panel"
+					aria-label="Open menu"
+				>
+					<span class="nav-menu-button__bar" aria-hidden="true"></span>
+					<span class="nav-menu-button__bar" aria-hidden="true"></span>
+					<span class="nav-menu-button__bar" aria-hidden="true"></span>
+				</button>
 			</nav>
+			<div id="mobile-nav-panel" class="nav-panel hidden md:hidden" hidden>
+				<div class="site-container pb-4">
+					{navItems.map((item) => {
+						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+						return (
+							<a
+								href={item.href}
+								aria-current={isActive ? 'page' : undefined}
+								class="nav-panel__link"
+							>
+								{item.label}
+							</a>
+						);
+					})}
+				</div>
+			</div>
 		</header>
 
 		<main class="site-container py-12 sm:py-16">
 			<slot />
 		</main>
+
+		<script>
+			const menuButton = document.querySelector<HTMLButtonElement>('.nav-menu-button');
+			const mobilePanel = document.getElementById('mobile-nav-panel');
+
+			if (menuButton && mobilePanel) {
+				const setMenuOpen = (open: boolean) => {
+					menuButton.setAttribute('aria-expanded', String(open));
+					menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+					mobilePanel.hidden = !open;
+					mobilePanel.classList.toggle('hidden', !open);
+				};
+
+				menuButton.addEventListener('click', () => {
+					const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+					setMenuOpen(!isOpen);
+				});
+
+				mobilePanel.querySelectorAll('a').forEach((link) => {
+					link.addEventListener('click', () => setMenuOpen(false));
+				});
+
+				window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
+					if (event.matches) setMenuOpen(false);
+				});
+			}
+		</script>
 	</body>
 </html>

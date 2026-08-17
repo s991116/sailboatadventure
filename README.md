@@ -14,7 +14,6 @@ src/
       first-post.mdx
     pages/
       about.md
-      contact.mdx
   layouts/
     Layout.astro
   pages/
@@ -29,7 +28,7 @@ src/
 
 - **Home**: `/`
 - **About**: `/about/` (from `src/content/pages/about.md`)
-- **Contact**: `/contact/` (from `src/content/pages/contact.mdx`)
+- **Contact us**: `/contact/` (from `src/pages/contact/index.astro`)
 - **Blog index**: `/blog/` (lists posts)
 - **Blog post**: `/blog/<slug>/` (from `src/content/posts/<slug>.mdx`)
 
@@ -76,9 +75,9 @@ import deckPhoto from '../../assets/photos/home/louise-on-deck.png'
 
 The main navigation is defined in `src/layouts/Layout.astro`.
 
-## Contact form (Join Our Journey)
+## Contact form (Web3Forms)
 
-The contact form on **Join Our Journey** (`/join-our-journey/#contact`) sends messages via [Web3Forms](https://web3forms.com/). The site does not publish an email address or phone number — submissions are delivered to `blueheaven@sailboatadventure.dk`.
+Both **Contact us** (`/contact/`) and **Join Our Journey** (`/join-our-journey/#contact`) send messages via [Web3Forms](https://web3forms.com/) using the same access key. The site does not publish an email address or phone number — submissions are delivered to `blueheaven@sailboatadventure.dk`.
 
 ### Setup
 
@@ -91,7 +90,7 @@ The contact form on **Join Our Journey** (`/join-our-journey/#contact`) sends me
 
 ### Test
 
-Open `/join-our-journey/#contact`, send a test message, and check that it arrives in `blueheaven@sailboatadventure.dk`.
+Open `/contact/` or `/join-our-journey/#contact`, send a test message, and check that it arrives in `blueheaven@sailboatadventure.dk`.
 
 Until the key is set, the form shows a setup notice and the submit button stays disabled.
 
