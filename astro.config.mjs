@@ -14,6 +14,11 @@ export default defineConfig({
   },
   integrations: [mdx()],
 
+  redirects: {
+    '/gaster': '/join-our-journey/',
+    '/gaster/': '/join-our-journey/',
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },

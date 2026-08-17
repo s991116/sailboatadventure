@@ -74,7 +74,31 @@ import deckPhoto from '../../assets/photos/home/louise-on-deck.png'
 
 ## Navigation
 
-The main navigation is defined in `src/layouts/Layout.astro` and links to Home / About / Contact.
+The main navigation is defined in `src/layouts/Layout.astro`.
+
+## Contact form (Join Our Journey)
+
+The contact form on **Join Our Journey** (`/join-our-journey/#contact`) sends messages via [Web3Forms](https://web3forms.com/). The site does not publish an email address or phone number — submissions are delivered to `blueheaven@sailboatadventure.dk`.
+
+### Setup
+
+1. Go to [web3forms.com](https://web3forms.com/) and create an access key with **`blueheaven@sailboatadventure.dk`**.
+2. Confirm the verification email in that inbox (check spam/promotions if needed).
+3. Copy the access key and add it in two places:
+   - **Local dev**: create `.env` from `.env.example` and set `PUBLIC_WEB3FORMS_ACCESS_KEY=your-key-here`
+   - **Production**: GitHub repo → **Settings → Secrets and variables → Actions → Variables** → add `PUBLIC_WEB3FORMS_ACCESS_KEY` with the same value
+4. Restart the dev server (`npm run dev`) or push to `main` to trigger a deploy.
+
+### Test
+
+Open `/join-our-journey/#contact`, send a test message, and check that it arrives in `blueheaven@sailboatadventure.dk`.
+
+Until the key is set, the form shows a setup notice and the submit button stays disabled.
+
+### Notes
+
+- The access key is public in the built HTML — that is expected. It only forwards messages to the email address you verified when creating the key.
+- Web3Forms free tier: 250 submissions/month.
 
 ## Commands
 

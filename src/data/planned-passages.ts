@@ -1,4 +1,4 @@
-/** Shared planned passages — used by Planned Route and Sailing crew. */
+/** Shared planned passages — used by Planned Route and Join Our Journey. */
 
 /** GeoJSON order: [longitude, latitude] */
 export type PassageCoordinate = [number, number];

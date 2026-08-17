@@ -22,9 +22,9 @@ export type GasterImages = {
 };
 
 export const gasterMeta = {
-	title: 'Sailing crew wanted — Atlantic crossing | Sailboat Adventure',
+	title: 'Join Our Journey — Atlantic crossing | Sailboat Adventure',
 	description:
-		'We are looking for sailing crew for a staged voyage from Frederiksværk to Barbados. Join night watches, open-ocean sailing, and adventure under the stars.',
+		'Join our staged voyage from Frederiksværk to Barbados. Night watches, open-ocean sailing, and adventure under the stars.',
 };
 
 export const gasterImages: GasterImages = {
@@ -33,8 +33,8 @@ export const gasterImages: GasterImages = {
 };
 
 export const gasterHero = {
-	label: 'Sailboat Adventure',
-	title: 'Sailing crew wanted for an Atlantic adventure',
+	label: 'Join Our Journey',
+	title: 'Join our journey across the Atlantic',
 	routeLine:
 		'Denmark → Norway → Scotland → Ireland → the Azores → Gran Canaria → Barbados',
 	cta: {
@@ -111,7 +111,7 @@ export const gasterContact = {
 	label: 'Contact',
 	title: 'Want to come aboard?',
 	intro:
-		'Write to us with your name, email, preferred passage, and a short note about yourself. We will get back to you as soon as we can.',
+		'Write to us with your name, email, preferred passage, and a short note about yourself. Your message is delivered privately to our inbox — we do not publish an email address or phone number on this page.',
 	form: {
 		nameLabel: 'Name',
 		emailLabel: 'Email',
@@ -120,10 +120,7 @@ export const gasterContact = {
 		messageLabel: 'Message',
 		submitLabel: 'Send message',
 		successMessage: 'Thanks for reaching out — we will reply soon.',
+		errorMessage: 'Could not send your message. Please try again.',
+		sendingLabel: 'Sending…',
 	},
-	facebook: {
-		label: 'Message us on Messenger',
-		href: 'https://m.me/',
-	},
-	email: 'hello@example.com',
 };
