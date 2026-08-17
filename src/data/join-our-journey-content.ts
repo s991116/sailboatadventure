@@ -5,10 +5,25 @@ import heroPhoto from '../assets/photos/history/2023-12-01 Over Atlanten/IMG_668
 import benefitsBg from '../assets/photos/journey/Barbados_beach.jpeg';
 
 export type JoinOurJourneyStage = {
-	number: string;
 	month: string;
-	from: string;
-	to: string;
+	title: string;
+};
+
+const placeCountry: Record<string, string> = {
+	Frederiksværk: 'Denmark',
+	Arendal: 'Norway',
+	Inverness: 'Scotland',
+	Dublin: 'Ireland',
+	'Isles of Scilly': 'England',
+	'the Azores': 'Portugal',
+	'Gran Canaria': 'Spain',
+	Barbados: 'Barbados',
+};
+
+const formatEndpoint = (place: string) => {
+	const country = placeCountry[place];
+	if (!country || country.toLowerCase() === place.toLowerCase()) return place;
+	return `${place} (${country})`;
 };
 
 export type JoinOurJourneyListItem = {
@@ -34,13 +49,8 @@ export const joinOurJourneyImages: JoinOurJourneyImages = {
 
 export const joinOurJourneyHero = {
 	label: 'Join Our Journey',
-	title: 'Join our journey across the Atlantic',
-	routeLine:
-		'Denmark → Norway → Scotland → Ireland → the Azores → Gran Canaria → Barbados',
-	cta: {
-		label: 'Get in touch',
-		href: '#contact',
-	},
+	title: 'Join us, on our journey',
+	routeLine: 'From Denmark to the Caribbean',
 };
 
 export const joinOurJourneyRoute = {
@@ -54,10 +64,8 @@ export const joinOurJourneyRoute = {
 		href: '/plannedroute/',
 	},
 	stages: plannedPassages.map((passage) => ({
-		number: String(passage.number).padStart(2, '0'),
 		month: passage.month,
-		from: passage.from,
-		to: passage.to,
+		title: `${formatEndpoint(passage.from)} → ${formatEndpoint(passage.to)}`,
 	})) satisfies JoinOurJourneyStage[],
 };
 
@@ -85,7 +93,6 @@ export const joinOurJourneyWho = {
 };
 
 export const joinOurJourneyBenefits = {
-	label: 'What you get',
 	title: 'What awaits you onboard',
 	items: [
 		{

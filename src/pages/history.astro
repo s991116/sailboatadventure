@@ -18,10 +18,22 @@ const historyImages = import.meta.glob('../assets/photos/history/**/*.{png,jpg,j
 
 const cleanTitle = (raw: string) => raw.replace(/^[-–—]\s*/, '').trim();
 
+const titleEn: Record<string, string> = {
+	'Sommerferie i Bavaria': 'Summer holiday on a Bavaria',
+	'Over Atlanten': 'Across the Atlantic',
+	'Fyn rundt': 'Around Funen',
+	'Sjælland rundt': 'Around Zealand',
+	'Sejltur med Oliver og Mikkel': 'Sailing trip with Oliver and Mikkel',
+	'Sejltur i Maxi': 'Sailing trip in a Maxi',
+	'Tømmerflåde': 'Timber raft',
+	'Erlings sejlbåd': "Louise's dad's sailboat, named Puk",
+};
+
 const parseFolder = (folderName: string) => {
 	const match = folderName.match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);
 	if (!match) return { date: folderName, title: folderName };
-	return { date: match[1], title: cleanTitle(match[2] ?? '') || match[1] };
+	const danishTitle = cleanTitle(match[2] ?? '') || match[1];
+	return { date: match[1], title: titleEn[danishTitle] ?? danishTitle };
 };
 
 const chooseCover = (paths: string[]) => {

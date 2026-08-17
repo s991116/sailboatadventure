@@ -13,7 +13,7 @@ import {
 } from '../../data/join-our-journey-content';
 
 const stageOptions = joinOurJourneyRoute.stages.map(
-	(s) => `${s.number} · ${s.month} — ${s.from} → ${s.to}`,
+	(s) => `${s.month} — ${s.title}`,
 );
 ---
 
@@ -32,12 +32,6 @@ const stageOptions = joinOurJourneyRoute.stages.map(
 		<h1 class="display-title mt-3">{joinOurJourneyHero.title}</h1>
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">{joinOurJourneyHero.routeLine}</p>
-		<div class="mt-8">
-			<a href={joinOurJourneyHero.cta.href} class="inline-flex items-center gap-2 font-medium">
-				{joinOurJourneyHero.cta.label}
-				<span aria-hidden="true">→</span>
-			</a>
-		</div>
 	</section>
 
 	<section class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-benefits-title">
@@ -49,8 +43,7 @@ const stageOptions = joinOurJourneyRoute.stages.map(
 		/>
 
 		<div class="mt-10">
-			<p class="eyebrow">{joinOurJourneyBenefits.label}</p>
-			<h2 id="join-our-journey-benefits-title" class="mt-3 text-3xl sm:text-4xl">{joinOurJourneyBenefits.title}</h2>
+			<h2 id="join-our-journey-benefits-title" class="text-3xl sm:text-4xl">{joinOurJourneyBenefits.title}</h2>
 			<div class="accent-rule mt-6"></div>
 
 			<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -92,17 +85,12 @@ const stageOptions = joinOurJourneyRoute.stages.map(
 		<div class="accent-rule mt-6"></div>
 		<p class="mt-6 max-w-2xl text-[color:var(--color-muted)]">{joinOurJourneyRoute.intro}</p>
 
-		<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
 			{joinOurJourneyRoute.stages.map((stage) => (
 				<article class="surface-card p-5 sm:p-6">
 					<div class="flex items-start justify-between gap-3">
-						<span class="text-2xl font-semibold text-[color:var(--color-accent-strong)]">{stage.number}</span>
-						<span class="eyebrow text-[0.65rem]">{stage.month}</span>
-					</div>
-					<div class="divider mt-4 pt-4">
-						<p class="font-semibold">{stage.from}</p>
-						<p class="mt-1 text-[color:var(--color-accent)]" aria-hidden="true">↓</p>
-						<p class="font-semibold">{stage.to}</p>
+						<h3 class="text-lg font-semibold text-[color:var(--color-accent-strong)]">{stage.title}</h3>
+						<span class="eyebrow shrink-0 text-[0.65rem]">{stage.month}</span>
 					</div>
 				</article>
 			))}
