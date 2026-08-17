@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
-import heroPhoto from '../assets/photos/home/louise-on-deck.png';
 import headerImage from '../assets/photos/home/header-image.png';
 ---
 
@@ -22,15 +21,21 @@ import headerImage from '../assets/photos/home/header-image.png';
 		<p class="lede">
 			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard—calm colors,
 			plenty of breathing room, and a hint of saltwater.
+			<a href="/about/" class="inline-flex items-center gap-2 font-medium">
+				About us
+				<span aria-hidden="true">→</span>
+			</a>
 		</p>
 	</section>
 
-	<section class="mt-10">
-		<OptimizedPhoto
-			src={heroPhoto}
-			alt="Louise sitting on the deck with the sea behind her and a Danish flag in the foreground."
-			preset="homeHero"
-		/>
+	<section class="mt-2 sm:mt-4">
+		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			We sail with guest crew on the longer passages. You can read more about joining us here:
+			<a href="/join-our-journey/" class="inline-flex items-center gap-2 font-medium">
+				Join Our Journey
+				<span aria-hidden="true">→</span>
+			</a>
+		</p>
 	</section>
 
 	<section class="mt-10">
