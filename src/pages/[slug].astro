@@ -20,13 +20,15 @@ const { Content } = await page.render();
 ---
 
 <Layout title={page.data.title}>
-	<article class="space-y-6">
-		<header class="space-y-2">
-			<h1 class="text-4xl font-bold tracking-tight">{page.data.title}</h1>
-			{page.data.description ? <p class="text-lg text-slate-300">{page.data.description}</p> : null}
+	<article>
+		<header class="space-y-4">
+			<h1 class="display-title">{page.data.title}</h1>
+			{page.data.description ? (
+				<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">{page.data.description}</p>
+			) : null}
 		</header>
 
-		<div class="prose prose-invert max-w-none">
+		<div class="page-prose mt-10 max-w-none">
 			<Content />
 		</div>
 	</article>

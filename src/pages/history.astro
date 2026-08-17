@@ -17,23 +17,28 @@ const historyImages = import.meta.glob('../assets/photos/history/**/*.{png,jpg,j
 }) as Record<string, any>;
 
 const cleanTitle = (raw: string) => raw.replace(/^[-–—]\s*/, '').trim();
+const nfc = (value: string) => value.normalize('NFC');
 
 const titleEn: Record<string, string> = {
-	'Sommerferie i Bavaria': 'Summer holiday on a Bavaria',
+	'Sommerferie i Bavaria': 'Summer holiday on our Bavaria 39',
 	'Over Atlanten': 'Across the Atlantic',
 	'Fyn rundt': 'Around Funen',
 	'Sjælland rundt': 'Around Zealand',
-	'Sejltur med Oliver og Mikkel': 'Sailing trip with Oliver and Mikkel',
-	'Sejltur i Maxi': 'Sailing trip in a Maxi',
-	'Tømmerflåde': 'Timber raft',
-	'Erlings sejlbåd': "Louise's dad's sailboat, named Puk",
+	'Sejltur med Oliver og Mikkel': 'Sailing trip as a family',
+	'Sejltur i Maxi': 'Sailing trip in our Maxi 87 sailboat',
+	'Tømmerflåde': 'Building and sailing on a raft, our first "boat"',
+	'Erlings sejlbåd': "Louise's dad's small sailboat named Puk",
 };
+
+const titleEnNfc = Object.fromEntries(
+	Object.entries(titleEn).map(([danish, english]) => [nfc(danish), english]),
+);
 
 const parseFolder = (folderName: string) => {
 	const match = folderName.match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);
 	if (!match) return { date: folderName, title: folderName };
-	const danishTitle = cleanTitle(match[2] ?? '') || match[1];
-	return { date: match[1], title: titleEn[danishTitle] ?? danishTitle };
+	const danishTitle = nfc(cleanTitle(match[2] ?? '') || match[1]);
+	return { date: match[1], title: titleEnNfc[danishTitle] ?? danishTitle };
 };
 
 const chooseCover = (paths: string[]) => {

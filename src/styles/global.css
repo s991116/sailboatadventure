@@ -163,4 +163,28 @@
 		width: 64px;
 		background: linear-gradient(90deg, var(--color-accent), transparent);
 	}
+
+	.page-prose {
+		@apply space-y-5;
+	}
+
+	.page-prose h2 {
+		@apply mt-10 text-3xl sm:text-4xl;
+	}
+
+	.page-prose h2:first-child {
+		@apply mt-0;
+	}
+
+	.page-prose h3 {
+		@apply mt-8 text-xl sm:text-2xl;
+	}
+
+	.page-prose p {
+		color: var(--color-text);
+	}
+
+	.page-prose a {
+		font-weight: 500;
+	}
 }

@@ -28,3 +28,9 @@ As Skipper on the boat, my main responsibility is safety and make sure the engin
 Unlike Philip, I’ve always felt comfortable on the water. My dad has sailed since he was a boy, and I grew up joining him on trips—mostly as a guest rather than crew, but always happy to be out there.
 
 One of my focus areas are planning the route, both the overall and the day-to-day planning, to ensure we have a safe and comfortable sailing.
+
+## Our sailboat Blue Heaven
+
+Our sailboat, Blue Heaven, is our Bavaria 39 Cruiser, which we have prepared for long-distance sailing.
+
+We have installed safety equipment such as a life raft, AIS and radar, and made it more comfortable to live on, with solar panels, a cockpit tent, and chargers for electronics.
