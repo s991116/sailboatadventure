@@ -75,6 +75,12 @@ import deckPhoto from '../../assets/photos/home/louise-on-deck.png'
 
 The main navigation is defined in `src/layouts/Layout.astro`.
 
+## Visits
+
+Page views are counted with [GoatCounter](https://www.goatcounter.com/) on the same dashboard as the flag sheet: https://sailboatadventure.goatcounter.com. The script sets no cookies. Localhost is not counted.
+
+Each visit is stored as `sailboatadventure.dk` plus the menu path, so the rows are Home, Planned Route, Join Our Journey, History, About us, and Contact us. A page outside the menu, such as a blog post, keeps its own path. `www` is counted with the bare domain. Flag-sheet visits stay on `/`, and a finished PDF stays on the event `download-pdf`.
+
 ## Contact form (Web3Forms)
 
 Both **Contact us** (`/contact/`) and **Join Our Journey** (`/join-our-journey/#contact`) send messages via [Web3Forms](https://web3forms.com/) using the same access key. The site does not publish an email address or phone number — submissions are delivered to `blueheaven@sailboatadventure.dk`.

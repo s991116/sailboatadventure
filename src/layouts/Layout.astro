@@ -31,6 +31,43 @@ const navItems = [
 			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
 			rel="stylesheet"
 		/>
+		<script is:inline define:vars={{ navItems }}>
+			(function () {
+				var host = location.hostname;
+				if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return;
+				if (host.slice(0, 4) === 'www.') host = host.slice(4);
+
+				function trimSlash(value) {
+					if (value.length > 1 && value.charAt(value.length - 1) === '/') return value.slice(0, -1);
+					return value;
+				}
+
+				var page = trimSlash(location.pathname || '/');
+				var section = null;
+				for (var i = 0; i < navItems.length; i++) {
+					var href = trimSlash(navItems[i].href);
+					var underSection = href === '/' ? page === '/' : page === href || page.indexOf(href + '/') === 0;
+					if (underSection) {
+						section = navItems[i];
+						break;
+					}
+				}
+
+				var countedPath = host + (section ? trimSlash(section.href) : page);
+				window.goatcounter = {
+					path: function () {
+						return countedPath;
+					},
+					title: section ? section.label : document.title,
+				};
+
+				var script = document.createElement('script');
+				script.async = true;
+				script.src = 'https://gc.zgo.at/count.js';
+				script.dataset.goatcounter = 'https://sailboatadventure.goatcounter.com/count';
+				document.head.appendChild(script);
+			})();
+		</script>
 	</head>
 	<body class="min-h-dvh antialiased">
 		<header class="site-header sticky top-0 z-50 backdrop-blur">
