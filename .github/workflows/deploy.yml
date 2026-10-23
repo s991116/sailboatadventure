@@ -42,11 +42,11 @@ jobs:
       - name: Trust one.com host key
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ssh.sailboatadventure.dk >> ~/.ssh/known_hosts
+          ssh-keyscan -H ssh.cd3kk2229.service.one >> ~/.ssh/known_hosts
 
       - name: Deploy (rsync)
         env:
-          ONECOM_HOST: ssh.sailboatadventure.dk
+          ONECOM_HOST: ssh.cd3kk2229.service.one
           ONECOM_USER: sailboatadventure.dk
           ONECOM_PATH: /customers/2/a/d/sailboatadventure.dk/httpd.www/
         run: |
