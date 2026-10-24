@@ -187,4 +187,17 @@
 	.page-prose a {
 		font-weight: 500;
 	}
+
+	.page-prose ul,
+	.page-prose ol {
+		@apply space-y-2 pl-5;
+	}
+
+	.page-prose ul {
+		list-style: disc;
+	}
+
+	.page-prose ol {
+		list-style: decimal;
+	}
 }

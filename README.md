@@ -27,6 +27,7 @@ src/
 ## Routes
 
 - **Home**: `/`
+- **Tips**: `/tips/`
 - **About**: `/about/` (from `src/content/pages/about.md`)
 - **Contact us**: `/contact/` (from `src/pages/contact/index.astro`)
 - **Blog index**: `/blog/` (lists posts)
@@ -79,7 +80,7 @@ The main navigation is defined in `src/layouts/Layout.astro`.
 
 Page views are counted with [GoatCounter](https://www.goatcounter.com/) on the same dashboard as the flag sheet: https://sailboatadventure.goatcounter.com. The script sets no cookies. Localhost is not counted.
 
-Each visit is stored as `sailboatadventure.dk` plus the menu path, so the rows are Home, Planned Route, Join Our Journey, History, About us, and Contact us. A page outside the menu, such as a blog post, keeps its own path. `www` is counted with the bare domain. Flag-sheet visits stay on `/`, and a finished PDF stays on the event `download-pdf`.
+Each visit is stored as `sailboatadventure.dk` plus the menu path, so the rows are Home, Planned Route, Join Our Journey, History, Tips, About us, and Contact us. A page outside the menu, such as a blog post, keeps its own path. `www` is counted with the bare domain. Flag-sheet visits stay on `/`, and a finished PDF stays on the event `download-pdf`.
 
 ## Contact form (Web3Forms)
 
