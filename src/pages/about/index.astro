@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import louisePhoto from '../../assets/photos/home/louise-on-deck.png';
+import philipPhoto from '../../assets/photos/join-our-journey/philip_beanie.jpg';
 ---
 
 <Layout title="About us">
@@ -29,6 +30,12 @@ import louisePhoto from '../../assets/photos/home/louise-on-deck.png';
 			</p>
 
 			<h2>Philip</h2>
+			<OptimizedPhoto
+				src={philipPhoto}
+				alt="Philip in a striped beanie, onboard."
+				preset="homeHero"
+				position="62% 40%"
+			/>
 			<p>
 				I’m drawn to long-distance sailing for the experiences and the challenges. To me, adventure means the unknown:
 				you can prepare a lot, but you can’t prepare for everything.
