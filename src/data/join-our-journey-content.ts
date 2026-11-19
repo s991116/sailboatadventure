@@ -68,7 +68,7 @@ export const joinOurJourneyWho = {
 	},
 	guestAgreement: {
 		label: 'Guest agreement',
-		intro: 'Download the guest agreement before you join:',
+		intro: 'Read our guest agreement to see what joining involves.',
 		downloads: [
 			{
 				href: '/docs/Guest-agreement-DK.pdf',
@@ -101,7 +101,6 @@ export const joinOurJourneyBenefits = {
 };
 
 export const joinOurJourneyContact = {
-	label: 'Contact',
 	title: 'Want to come aboard?',
 	intro:
 		'Write to us with your name, email, preferred passage, and a short note about yourself. Your message is delivered privately to our inbox — we do not publish an email address or phone number on this page.',

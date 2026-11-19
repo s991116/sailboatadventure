@@ -2,35 +2,20 @@
 	"type": "Feature",
 	"properties": {
 		"passage": "passage-1",
-		"note": "Frederiksværk → Kristiansand"
+		"note": "Frederiksværk → Kristiansand, east of Læsø and north of Skagen"
 	},
 	"geometry": {
 		"type": "LineString",
 		"coordinates": [
-			[
-				11.9937,
-				55.9609
-			],
-			[
-				11.7904,
-				55.9773
-			],
-			[
-				10.663,
-				57.148
-			],
-			[
-				10.7168,
-				57.7667
-			],
-			[
-				9.2,
-				58.1
-			],
-			[
-				8.772,
-				58.461
-			]
+			[11.9937, 55.9609],
+			[11.7904, 55.9773],
+			[11.4, 56.55],
+			[11.28, 56.95],
+			[11.48, 57.28],
+			[11.35, 57.55],
+			[10.65, 57.9],
+			[8.6, 58.02],
+			[7.996, 58.147]
 		]
 	}
 }

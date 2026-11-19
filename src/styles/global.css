@@ -60,11 +60,13 @@
 	.site-brand {
 		@apply text-sm font-semibold tracking-[0.18em] uppercase;
 		color: var(--color-text);
+		white-space: nowrap;
 	}
 
 	.nav-link {
 		@apply text-sm font-medium tracking-wide;
 		color: var(--color-muted);
+		white-space: nowrap;
 	}
 
 	.nav-link:hover {
@@ -78,7 +80,7 @@
 	}
 
 	.nav-menu-button {
-		display: inline-flex;
+		display: none;
 		flex-direction: column;
 		justify-content: center;
 		gap: 5px;
@@ -89,6 +91,26 @@
 		border-radius: 0.75rem;
 		background: rgba(255, 255, 255, 0.65);
 		cursor: pointer;
+	}
+
+	.site-header.is-collapsed .nav-menu-button {
+		display: inline-flex;
+	}
+
+	/* Kept in the DOM so its natural one-line width can be measured. */
+	.site-header.is-collapsed .nav-links {
+		position: absolute;
+		width: max-content;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.site-header.is-collapsed {
+		overflow-x: clip;
+	}
+
+	.site-header:not(.is-collapsed) .nav-panel {
+		display: none;
 	}
 
 	.nav-menu-button:focus-visible {

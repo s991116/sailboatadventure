@@ -72,9 +72,9 @@ const navItems = [
 	</head>
 	<body class="min-h-dvh antialiased">
 		<header class="site-header sticky top-0 z-50 backdrop-blur">
-			<nav class="site-container flex items-center gap-4 py-4" aria-label="Main">
-				<a href="/" class="site-brand min-w-0 shrink">Sailboat Adventure</a>
-				<div class="ml-auto hidden items-center gap-6 md:flex">
+			<nav class="site-container relative flex flex-nowrap items-center gap-4 py-4" data-site-nav aria-label="Main">
+				<a href="/" class="site-brand shrink-0">Sailboat Adventure</a>
+				<div class="nav-links ml-auto flex items-center gap-6" data-nav-links>
 					{navItems.map((item) => {
 						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
 						return (
@@ -90,7 +90,7 @@ const navItems = [
 				</div>
 				<button
 					type="button"
-					class="nav-menu-button ml-auto md:hidden"
+					class="nav-menu-button ml-auto"
 					aria-expanded="false"
 					aria-controls="mobile-nav-panel"
 					aria-label="Open menu"
@@ -100,7 +100,7 @@ const navItems = [
 					<span class="nav-menu-button__bar" aria-hidden="true"></span>
 				</button>
 			</nav>
-			<div id="mobile-nav-panel" class="nav-panel hidden md:hidden" hidden>
+			<div id="mobile-nav-panel" class="nav-panel hidden" hidden>
 				<div class="site-container pb-4">
 					{navItems.map((item) => {
 						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
@@ -117,36 +117,80 @@ const navItems = [
 				</div>
 			</div>
 		</header>
+		<script is:inline>
+			(function () {
+				var header = document.querySelector('.site-header');
+				var nav = document.querySelector('[data-site-nav]');
+				var links = document.querySelector('[data-nav-links]');
+				var brand = document.querySelector('.site-brand');
+				var menuButton = document.querySelector('.nav-menu-button');
+				var mobilePanel = document.getElementById('mobile-nav-panel');
+				if (!header || !nav || !links || !brand || !menuButton || !mobilePanel) return;
+
+				function setMenuOpen(open) {
+					menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+					menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+					mobilePanel.hidden = !open;
+					mobilePanel.classList.toggle('hidden', !open);
+				}
+
+				var cachedLinksWidth = 0;
+
+				function linksWidth() {
+					var kids = links.children;
+					var gap = parseFloat(getComputedStyle(links).columnGap) || 0;
+					var total = 0;
+					for (var i = 0; i < kids.length; i++) total += kids[i].offsetWidth;
+					if (kids.length > 1) total += gap * (kids.length - 1);
+					if (total > 0) cachedLinksWidth = total;
+					return cachedLinksWidth;
+				}
+
+				function updateNav() {
+					var navStyle = getComputedStyle(nav);
+					var gap = parseFloat(navStyle.columnGap) || 0;
+					var padding = (parseFloat(navStyle.paddingLeft) || 0) + (parseFloat(navStyle.paddingRight) || 0);
+					var available = nav.clientWidth - padding;
+					var needed = brand.offsetWidth + gap + linksWidth();
+					var collapsed = header.classList.contains('is-collapsed');
+					// A few pixels of slack so the bar does not flicker at the boundary.
+					var collapse = collapsed ? needed > available - 8 : needed > available + 1;
+					if (collapsed === collapse) return;
+					header.classList.toggle('is-collapsed', collapse);
+					if (collapse) {
+						links.setAttribute('inert', '');
+						links.setAttribute('aria-hidden', 'true');
+					} else {
+						links.removeAttribute('inert');
+						links.removeAttribute('aria-hidden');
+						setMenuOpen(false);
+					}
+				}
+
+				menuButton.addEventListener('click', function () {
+					setMenuOpen(menuButton.getAttribute('aria-expanded') !== 'true');
+				});
+
+				var panelLinks = mobilePanel.querySelectorAll('a');
+				for (var i = 0; i < panelLinks.length; i++) {
+					panelLinks[i].addEventListener('click', function () {
+						setMenuOpen(false);
+					});
+				}
+
+				updateNav();
+				if (window.ResizeObserver) {
+					var observer = new ResizeObserver(updateNav);
+					observer.observe(nav);
+				} else {
+					window.addEventListener('resize', updateNav);
+				}
+				if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateNav);
+			})();
+		</script>
 
 		<main class="site-container py-12 sm:py-16">
 			<slot />
 		</main>
-
-		<script>
-			const menuButton = document.querySelector<HTMLButtonElement>('.nav-menu-button');
-			const mobilePanel = document.getElementById('mobile-nav-panel');
-
-			if (menuButton && mobilePanel) {
-				const setMenuOpen = (open: boolean) => {
-					menuButton.setAttribute('aria-expanded', String(open));
-					menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-					mobilePanel.hidden = !open;
-					mobilePanel.classList.toggle('hidden', !open);
-				};
-
-				menuButton.addEventListener('click', () => {
-					const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
-					setMenuOpen(!isOpen);
-				});
-
-				mobilePanel.querySelectorAll('a').forEach((link) => {
-					link.addEventListener('click', () => setMenuOpen(false));
-				});
-
-				window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
-					if (event.matches) setMenuOpen(false);
-				});
-			}
-		</script>
 	</body>
 </html>
