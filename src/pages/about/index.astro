@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import louisePhoto from '../../assets/photos/home/louise-on-deck.png';
 import philipPhoto from '../../assets/photos/join-our-journey/philip_beanie.jpg';
+import couplePhoto from '../../assets/photos/join-our-journey/louise-philip-sailboat.jpg';
 ---
 
 <Layout title="About us">
@@ -14,6 +15,12 @@ import philipPhoto from '../../assets/photos/join-our-journey/philip_beanie.jpg'
 
 		<div class="page-prose mt-10 max-w-none">
 			<h2>Louise and Philip</h2>
+			<OptimizedPhoto
+				src={couplePhoto}
+				alt="Louise and Philip together in the cockpit of their sailboat."
+				preset="homeHero"
+				position="50% 62%"
+			/>
 			<p>
 				We are a Danish couple, who are setting out, for our long distance sailing. We bought our first sailboat in
 				2020 and have been sailing around Denmark, Norway and Sweden for the last couple of years.

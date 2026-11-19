@@ -40,13 +40,6 @@ const guestBySlug = Object.fromEntries(
 			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
 				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
 			</p>
-			<p class="max-w-2xl text-[color:var(--color-muted)]">
-				Want to join us for one or more passages in 2027?
-				<a href={joinOurJourneyContactHref} class="inline-flex items-center gap-2 font-medium">
-					Join our journey
-					<span aria-hidden="true">→</span>
-				</a>
-			</p>
 		</section>
 
 		{
@@ -61,64 +54,19 @@ const guestBySlug = Object.fromEntries(
 			<JourneyMap legs={journeyLegs} />
 		</div>
 
-		<section class="passage-legend-block mt-8 sm:mt-10" data-journey-legend>
-			<h2 class="passage-legend__heading">Planned Passages</h2>
-			<ul class="passage-legend">
-				{journeyLegs.map((leg) => {
-					const guest = guestBySlug[leg.slug];
-					return (
-						<li class="passage-legend__row">
-							<button type="button" class="passage-legend__item" data-journey-legend-item data-leg={leg.slug}>
-								<span class="passage-legend__swatch" style={`background:${leg.color}`} aria-hidden="true" />
-								<span class="passage-legend__text">
-									<span class="passage-legend__route">{leg.routeLabel}</span>
-									{guest?.status === 'open' ? (
-										<span class="passage-legend__guest">{guest.dateRange}</span>
-									) : (
-										<span class="passage-legend__guest passage-legend__guest--booked">Fully booked</span>
-									)}
-								</span>
-							</button>
-							{guest?.status === 'open' ? (
-								<a href={guest.href} class="passage-legend__join">
-									Join
-									<span aria-hidden="true">→</span>
-								</a>
-							) : null}
-						</li>
-					);
-				})}
-			</ul>
-		</section>
+		<p class="mt-8 max-w-2xl text-[color:var(--color-muted)] sm:mt-10" data-journey-join-cta>
+			Want to join us for one or more passages in 2027?
+			<a href={joinOurJourneyContactHref} class="inline-flex items-center gap-2 font-medium">
+				Join our journey
+				<span aria-hidden="true">→</span>
+			</a>
+		</p>
 
 		<div class="journey-panels mt-10 sm:mt-12">
 			{legPanels.map(({ leg, Content }) => {
 				return (
 					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
-						{(() => {
-							const guest = guestBySlug[leg.slug];
-							if (!guest) return null;
-							return (
-								<section class="passage-guest surface-card p-5 sm:p-6">
-									<p class="eyebrow">Guest crew</p>
-									{guest.status === 'open' ? (
-										<>
-											<p class="mt-3 text-lg font-semibold sm:text-xl">{guest.dateRange}</p>
-											<p class="mt-4">
-												<a href={guest.href} class="inline-flex items-center gap-2 font-medium">
-													Join this passage
-													<span aria-hidden="true">→</span>
-												</a>
-											</p>
-										</>
-									) : (
-										<p class="mt-3 text-lg font-semibold sm:text-xl">Fully booked</p>
-									)}
-								</section>
-							);
-						})()}
-
-						{leg.data.facts.length > 0 ? (
+						{(leg.data.facts.length > 0 || guestBySlug[leg.slug]) ? (
 							<dl class="passage-facts">
 								{leg.data.facts.map((fact) => (
 									<div class="passage-fact">
@@ -126,6 +74,25 @@ const guestBySlug = Object.fromEntries(
 										<dd>{fact.value}</dd>
 									</div>
 								))}
+								{(() => {
+									const guest = guestBySlug[leg.slug];
+									if (!guest) return null;
+									return (
+										<div class="passage-fact">
+											<dt class="eyebrow">Guest crew</dt>
+											<dd>
+												{guest.status === 'open' ? (
+													<a href={guest.href} class="inline-flex items-center gap-2 font-medium">
+														Join this passage
+														<span aria-hidden="true">→</span>
+													</a>
+												) : (
+													'Fully booked'
+												)}
+											</dd>
+										</div>
+									);
+								})()}
 							</dl>
 						) : null}
 
@@ -204,7 +171,7 @@ const guestBySlug = Object.fromEntries(
 <script>
 	const page = document.querySelector<HTMLElement>('[data-journey-page]');
 	const intro = document.querySelector('[data-journey-intro]');
-	const legend = document.querySelector<HTMLElement>('[data-journey-legend]');
+	const joinCta = document.querySelector<HTMLElement>('[data-journey-join-cta]');
 	const titles = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-passage-title]'));
 	const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-panel]'));
 	const mapEl = document.querySelector<HTMLElement>('[data-journey-map]');
@@ -212,7 +179,7 @@ const guestBySlug = Object.fromEntries(
 	const showLeg = (slug: string) => {
 		page?.classList.add('is-passage-view');
 		intro?.classList.add('hidden');
-		legend?.classList.add('hidden');
+		joinCta?.classList.add('hidden');
 		for (const title of titles) {
 			title.classList.toggle('hidden', title.dataset.leg !== slug);
 		}
@@ -227,7 +194,7 @@ const guestBySlug = Object.fromEntries(
 	const showIntro = () => {
 		page?.classList.remove('is-passage-view');
 		intro?.classList.remove('hidden');
-		legend?.classList.remove('hidden');
+		joinCta?.classList.remove('hidden');
 		for (const title of titles) {
 			title.classList.add('hidden');
 		}
@@ -250,14 +217,6 @@ const guestBySlug = Object.fromEntries(
 	for (const button of document.querySelectorAll('[data-journey-back]')) {
 		button.addEventListener('click', () => {
 			window.dispatchEvent(new CustomEvent('journey-leg-clear'));
-		});
-	}
-
-	for (const button of document.querySelectorAll<HTMLElement>('[data-journey-legend-item]')) {
-		button.addEventListener('click', () => {
-			const slug = button.dataset.leg;
-			if (!slug) return;
-			window.dispatchEvent(new CustomEvent('journey-leg-select', { detail: { slug } }));
 		});
 	}
 
@@ -288,90 +247,6 @@ const guestBySlug = Object.fromEntries(
 		margin-right: -50vw;
 		width: 100vw;
 		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
-	}
-
-	.passage-legend-block.hidden {
-		display: none;
-	}
-
-	.passage-legend__heading {
-		font-size: 1.5rem;
-		margin-bottom: 1rem;
-	}
-
-	.passage-legend {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: 0.5rem;
-	}
-
-	.passage-legend__row {
-		display: grid;
-		gap: 0.5rem;
-		grid-template-columns: minmax(0, 1fr) auto;
-		align-items: stretch;
-	}
-
-	.passage-legend__item {
-		appearance: none;
-		border: 1px solid var(--color-border);
-		background: var(--color-surface);
-		border-radius: 1rem;
-		padding: 0.85rem 1rem;
-		display: flex;
-		align-items: flex-start;
-		gap: 0.75rem;
-		width: 100%;
-		text-align: left;
-		cursor: pointer;
-		color: inherit;
-	}
-
-	.passage-legend__join {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		align-self: center;
-		font-weight: 500;
-		white-space: nowrap;
-		padding-inline: 0.25rem;
-	}
-
-	.passage-legend__item:hover {
-		border-color: rgba(184, 132, 58, 0.45);
-	}
-
-	.passage-legend__swatch {
-		width: 0.75rem;
-		height: 0.75rem;
-		border-radius: 999px;
-		margin-top: 0.35rem;
-		flex-shrink: 0;
-	}
-
-	.passage-legend__text {
-		display: grid;
-		gap: 0.2rem;
-		min-width: 0;
-	}
-
-	.passage-legend__route {
-		font-weight: 600;
-	}
-
-	.passage-legend__guest {
-		font-size: 0.9rem;
-		color: var(--color-muted);
-	}
-
-	.passage-legend__guest--booked {
-		font-style: italic;
-	}
-
-	.passage-legend__join {
-		font-weight: 500;
 	}
 
 	.passage-facts {

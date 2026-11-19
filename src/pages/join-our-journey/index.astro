@@ -40,15 +40,21 @@ const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 				</article>
 			))}
 		</div>
+
+		<p class="mt-8 max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			Read more about the routes and passages
+			<a href="/plannedroute/" class="inline-flex items-center gap-2 font-medium">
+				here
+				<span aria-hidden="true">→</span>
+			</a>
+		</p>
 	</section>
 
 	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="join-our-journey-who-title">
 		<h2 id="join-our-journey-who-title" class="text-3xl sm:text-4xl">{joinOurJourneyWho.title}</h2>
 		<div class="accent-rule mt-6"></div>
-		<p class="mt-6 max-w-2xl text-[color:var(--color-muted)]">{joinOurJourneyWho.intro}</p>
 
-		<h3 class="mt-10 text-2xl sm:text-3xl">{joinOurJourneyWho.togetherTitle}</h3>
-		<ul class="mt-6 max-w-2xl list-disc space-y-3 pl-5">
+		<ul class="mt-10 max-w-2xl list-disc space-y-3 pl-5">
 			{joinOurJourneyWho.principles.map((principle) => (
 				<li>
 					<strong class="font-semibold text-[color:var(--color-text)]">{principle.lead}</strong>
@@ -61,16 +67,47 @@ const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 			<strong class="font-semibold">{joinOurJourneyWho.sharedRule.lead}</strong>
 			<span class="text-[color:var(--color-muted)]"> {joinOurJourneyWho.sharedRule.text}</span>
 		</p>
-	</section>
 
-	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20">
-		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
-			Read more about the routes and passages
-			<a href="/plannedroute/" class="inline-flex items-center gap-2 font-medium">
-				here
-				<span aria-hidden="true">→</span>
-			</a>
-		</p>
+		<div class="mt-16 max-w-2xl sm:mt-20">
+			<h2 class="text-3xl sm:text-4xl">{joinOurJourneyWho.guestAgreement.label}</h2>
+			<div class="accent-rule mt-6"></div>
+			<p class="mt-6 text-[color:var(--color-muted)]">{joinOurJourneyWho.guestAgreement.intro}</p>
+			<ul class="mt-5 flex flex-wrap gap-4">
+				{joinOurJourneyWho.guestAgreement.downloads.map((file) => (
+					<li>
+						<a
+							href={file.href}
+							class="inline-flex items-center gap-2 font-medium"
+							download
+							aria-label={file.ariaLabel}
+						>
+							<span
+								class="inline-flex h-5 w-7 overflow-hidden rounded-sm border border-[color:var(--color-border)] shadow-sm"
+								aria-hidden="true"
+							>
+								{file.flag === 'dk' ? (
+									<svg viewBox="0 0 37 28" class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+										<rect width="37" height="28" fill="#c8102e" />
+										<rect x="12" width="4" height="28" fill="#fff" />
+										<rect y="12" width="37" height="4" fill="#fff" />
+									</svg>
+								) : (
+									<svg viewBox="0 0 60 30" class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+										<rect width="60" height="30" fill="#012169" />
+										<path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6" />
+										<path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2" />
+										<path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10" />
+										<path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6" />
+									</svg>
+								)}
+							</span>
+							{file.label}
+							<span aria-hidden="true">PDF</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
 	</section>
 
 	<section id="contact" class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="join-our-journey-contact-title">

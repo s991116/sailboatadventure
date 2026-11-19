@@ -35,10 +35,7 @@ export type JoinOurJourneyPrinciple = {
 };
 
 export const joinOurJourneyWho = {
-	title: 'Welcome aboard Blue Heaven',
-	intro:
-		'On Blue Heaven we are a team. We do not expect you to know everything, but we do expect you to take part, ask if you are unsure, and speak up if something does not feel right.',
-	togetherTitle: 'How we sail together',
+	title: 'How we sail together',
 	principles: [
 		{
 			lead: 'Safety first.',
@@ -69,6 +66,24 @@ export const joinOurJourneyWho = {
 		lead: 'Our most important shared rule:',
 		text: 'If you are in doubt, ask. If you see something unsafe, say so at once.',
 	},
+	guestAgreement: {
+		label: 'Guest agreement',
+		intro: 'Download the guest agreement before you join:',
+		downloads: [
+			{
+				href: '/docs/Guest-agreement-DK.pdf',
+				label: 'Danish',
+				flag: 'dk' as const,
+				ariaLabel: 'Download guest agreement in Danish (PDF)',
+			},
+			{
+				href: '/docs/Guest-agreement-GB.pdf',
+				label: 'English',
+				flag: 'gb' as const,
+				ariaLabel: 'Download guest agreement in English (PDF)',
+			},
+		],
+	},
 };
 
 export const joinOurJourneyBenefits = {
@@ -77,10 +92,6 @@ export const joinOurJourneyBenefits = {
 		{
 			title: 'Open-ocean experience',
 			description: 'Night watches, navigation, and sailing in changing weather — from archipelago to ocean passage.',
-		},
-		{
-			title: 'A strong crew bond',
-			description: 'We sail as a crew. Meals, watches, and challenges are shared along the way. We reflect on our team-work and adjust what we do as a group, to make the most of our time together.',
 		},
 		{
 			title: 'Unique destinations',
