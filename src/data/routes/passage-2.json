@@ -2,18 +2,39 @@
 	"type": "Feature",
 	"properties": {
 		"passage": "passage-2",
-		"note": "Arendal → Stavanger → Inverness"
+		"note": "Kristiansand → Stavanger → Inverness"
 	},
 	"geometry": {
 		"type": "LineString",
 		"coordinates": [
-			[8.772, 58.461],
-			[7.5, 58.55],
-			[5.733, 58.97],
-			[3.0, 58.4],
-			[-1.0, 57.9],
-			[-3.5, 57.6],
-			[-4.225, 57.478]
+			[
+				8.772,
+				58.461
+			],
+			[
+				7.5,
+				58.55
+			],
+			[
+				5.733,
+				58.97
+			],
+			[
+				3.0,
+				58.4
+			],
+			[
+				-1.0,
+				57.9
+			],
+			[
+				-3.5,
+				57.6
+			],
+			[
+				-4.225,
+				57.478
+			]
 		]
 	}
 }

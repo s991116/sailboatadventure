@@ -5,7 +5,7 @@ routeLabel: "Isles of Scilly → the Azores"
 description: "The first long offshore passage across the Atlantic to the Azores."
 facts:
   - label: "Planned period"
-    value: "August 2027"
+    value: "17 July – 4 September 2027"
   - label: "Estimated distance"
     value: "1,250 nautical miles"
   - label: "Longest offshore passage"

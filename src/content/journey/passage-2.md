@@ -1,17 +1,17 @@
 ---
-title: "From Arendal to Inverness"
+title: "From Kristiansand to Inverness"
 legNumber: 2
-routeLabel: "Arendal → Stavanger → Inverness"
+routeLabel: "Kristiansand → Stavanger → Inverness"
 description: "From southern Norway via Stavanger across the North Sea to Scotland."
 facts:
   - label: "Planned period"
-    value: "May 2027"
+    value: "1 May – 29 May 2027"
   - label: "Estimated distance"
     value: "420–520 nautical miles"
   - label: "Longest offshore passage"
     value: "1½–2½ days at sea"
 sectionHeading: "Via Stavanger and across the North Sea"
-intro: "Leaving Arendal behind, we sail west along Norway's coast to Stavanger before setting course across the North Sea toward Inverness. This passage takes us from Norway's rugged coastline to the gateway of the Scottish Highlands, where dramatic landscapes and maritime history await."
+intro: "Leaving Kristiansand behind, we sail west along Norway's coast to Stavanger before setting course across the North Sea toward Inverness. This passage takes us from Norway's rugged coastline to the gateway of the Scottish Highlands, where dramatic landscapes and maritime history await."
 gallery:
   - src: ../../assets/photos/journey/Preikestolen_norway.jpg
     alt: "Preikestolen, Norway"

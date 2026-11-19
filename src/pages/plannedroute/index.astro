@@ -4,6 +4,10 @@ import JourneyMap from '../../components/JourneyMap.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
 import { journeyLegs } from '../../data/journey-legs';
+import {
+	formatGuestDateRange,
+	joinOurJourneyContactHref,
+} from '../../data/planned-passages';
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
@@ -15,11 +19,18 @@ const legPanels = await Promise.all(
 	}),
 );
 
-const passageSummaries = journeyLegs.map((leg) => ({
-	slug: leg.slug,
-	color: leg.color,
-	routeLabel: leg.routeLabel,
-}));
+const guestBySlug = Object.fromEntries(
+	journeyLegs.map((leg) => [
+		leg.slug,
+		leg.guestSignup.status === 'open'
+			? {
+					status: 'open' as const,
+					dateRange: formatGuestDateRange(leg.guestSignup.startDate, leg.guestSignup.endDate),
+					href: joinOurJourneyContactHref,
+				}
+			: { status: 'fully-booked' as const },
+	]),
+);
 ---
 
 <Layout title="Planned Route">
@@ -31,7 +42,7 @@ const passageSummaries = journeyLegs.map((leg) => ({
 			</p>
 			<p class="max-w-2xl text-[color:var(--color-muted)]">
 				Want to join us for one or more passages in 2027?
-				<a href="/join-our-journey/" class="inline-flex items-center gap-2 font-medium">
+				<a href={joinOurJourneyContactHref} class="inline-flex items-center gap-2 font-medium">
 					Join our journey
 					<span aria-hidden="true">→</span>
 				</a>
@@ -53,14 +64,30 @@ const passageSummaries = journeyLegs.map((leg) => ({
 		<section class="passage-legend-block mt-8 sm:mt-10" data-journey-legend>
 			<h2 class="passage-legend__heading">Planned Passages</h2>
 			<ul class="passage-legend">
-				{passageSummaries.map((passage) => (
-					<li>
-						<button type="button" class="passage-legend__item" data-journey-legend-item data-leg={passage.slug}>
-							<span class="passage-legend__swatch" style={`background:${passage.color}`} aria-hidden="true" />
-							<span class="passage-legend__route">{passage.routeLabel}</span>
-						</button>
-					</li>
-				))}
+				{journeyLegs.map((leg) => {
+					const guest = guestBySlug[leg.slug];
+					return (
+						<li class="passage-legend__row">
+							<button type="button" class="passage-legend__item" data-journey-legend-item data-leg={leg.slug}>
+								<span class="passage-legend__swatch" style={`background:${leg.color}`} aria-hidden="true" />
+								<span class="passage-legend__text">
+									<span class="passage-legend__route">{leg.routeLabel}</span>
+									{guest?.status === 'open' ? (
+										<span class="passage-legend__guest">{guest.dateRange}</span>
+									) : (
+										<span class="passage-legend__guest passage-legend__guest--booked">Fully booked</span>
+									)}
+								</span>
+							</button>
+							{guest?.status === 'open' ? (
+								<a href={guest.href} class="passage-legend__join">
+									Join
+									<span aria-hidden="true">→</span>
+								</a>
+							) : null}
+						</li>
+					);
+				})}
 			</ul>
 		</section>
 
@@ -68,6 +95,29 @@ const passageSummaries = journeyLegs.map((leg) => ({
 			{legPanels.map(({ leg, Content }) => {
 				return (
 					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
+						{(() => {
+							const guest = guestBySlug[leg.slug];
+							if (!guest) return null;
+							return (
+								<section class="passage-guest surface-card p-5 sm:p-6">
+									<p class="eyebrow">Guest crew</p>
+									{guest.status === 'open' ? (
+										<>
+											<p class="mt-3 text-lg font-semibold sm:text-xl">{guest.dateRange}</p>
+											<p class="mt-4">
+												<a href={guest.href} class="inline-flex items-center gap-2 font-medium">
+													Join this passage
+													<span aria-hidden="true">→</span>
+												</a>
+											</p>
+										</>
+									) : (
+										<p class="mt-3 text-lg font-semibold sm:text-xl">Fully booked</p>
+									)}
+								</section>
+							);
+						})()}
+
 						{leg.data.facts.length > 0 ? (
 							<dl class="passage-facts">
 								{leg.data.facts.map((fact) => (
@@ -240,77 +290,88 @@ const passageSummaries = journeyLegs.map((leg) => ({
 		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
 	}
 
-	.passage-legend-block {
-		display: grid;
-		gap: 1rem;
-	}
-
 	.passage-legend-block.hidden {
 		display: none;
 	}
 
 	.passage-legend__heading {
-		margin: 0;
-		font-size: 1.75rem;
-		line-height: 1.2;
-		color: var(--color-text);
-	}
-
-	@media (min-width: 640px) {
-		.passage-legend__heading {
-			font-size: 2rem;
-		}
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
 	}
 
 	.passage-legend {
+		list-style: none;
 		margin: 0;
 		padding: 0;
-		list-style: none;
 		display: grid;
-		gap: 0.65rem;
+		gap: 0.5rem;
+	}
+
+	.passage-legend__row {
+		display: grid;
+		gap: 0.5rem;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: stretch;
 	}
 
 	.passage-legend__item {
 		appearance: none;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		border-radius: 1rem;
+		padding: 0.85rem 1rem;
 		display: flex;
-		align-items: center;
-		gap: 0.85rem;
+		align-items: flex-start;
+		gap: 0.75rem;
 		width: 100%;
-		margin: 0;
-		padding: 0.35rem 0;
-		border: 0;
-		background: transparent;
 		text-align: left;
 		cursor: pointer;
-		color: var(--color-text);
-		font-size: 1.05rem;
-		line-height: 1.4;
+		color: inherit;
+	}
+
+	.passage-legend__join {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		align-self: center;
+		font-weight: 500;
+		white-space: nowrap;
+		padding-inline: 0.25rem;
 	}
 
 	.passage-legend__item:hover {
-		color: var(--color-accent-strong);
+		border-color: rgba(184, 132, 58, 0.45);
 	}
 
 	.passage-legend__swatch {
-		display: block;
-		flex-shrink: 0;
-		width: 2.25rem;
-		height: 3px;
+		width: 0.75rem;
+		height: 0.75rem;
 		border-radius: 999px;
+		margin-top: 0.35rem;
+		flex-shrink: 0;
+	}
+
+	.passage-legend__text {
+		display: grid;
+		gap: 0.2rem;
+		min-width: 0;
 	}
 
 	.passage-legend__route {
-		display: inline-flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.45rem;
+		font-weight: 600;
 	}
 
-	.passage-legend__arrow {
-		width: 0.95rem;
-		height: 0.95rem;
-		flex-shrink: 0;
+	.passage-legend__guest {
+		font-size: 0.9rem;
 		color: var(--color-muted);
+	}
+
+	.passage-legend__guest--booked {
+		font-style: italic;
+	}
+
+	.passage-legend__join {
+		font-weight: 500;
 	}
 
 	.passage-facts {

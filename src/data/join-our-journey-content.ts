@@ -1,30 +1,7 @@
 import type { ImageMetadata } from 'astro';
-import { plannedPassages } from './planned-passages';
+import { getOpenGuestTrips } from './planned-passages';
 
-import heroPhoto from '../assets/photos/history/2023-12-01 Over Atlanten/IMG_6681.jpeg';
-import benefitsBg from '../assets/photos/journey/Barbados_beach.jpeg';
-
-export type JoinOurJourneyStage = {
-	month: string;
-	title: string;
-};
-
-const placeCountry: Record<string, string> = {
-	Frederiksværk: 'Denmark',
-	Arendal: 'Norway',
-	Inverness: 'Scotland',
-	Dublin: 'Ireland',
-	'Isles of Scilly': 'England',
-	'the Azores': 'Portugal',
-	'Gran Canaria': 'Spain',
-	Barbados: 'Barbados',
-};
-
-const formatEndpoint = (place: string) => {
-	const country = placeCountry[place];
-	if (!country || country.toLowerCase() === place.toLowerCase()) return place;
-	return `${place} (${country})`;
-};
+import heroPhoto from '../assets/photos/join-our-journey/louise-philip-egypten.jpg';
 
 export type JoinOurJourneyListItem = {
 	title: string;
@@ -33,7 +10,6 @@ export type JoinOurJourneyListItem = {
 
 export type JoinOurJourneyImages = {
 	hero: ImageMetadata;
-	benefitsBg: ImageMetadata;
 };
 
 export const joinOurJourneyMeta = {
@@ -44,52 +20,55 @@ export const joinOurJourneyMeta = {
 
 export const joinOurJourneyImages: JoinOurJourneyImages = {
 	hero: heroPhoto,
-	benefitsBg,
 };
 
 export const joinOurJourneyHero = {
-	label: 'Join Our Journey',
 	title: 'Join us, on our journey',
-	routeLine: 'From Denmark to the Caribbean',
 };
 
-export const joinOurJourneyRoute = {
-	label: 'The route',
-	title: 'Seven passages — from April to November 2027',
-	intro:
-		'Here is an overview of the passages. For maps, timing details and more about each stretch, see the Planned Route page.',
-	note: 'Dates are indicative and may shift with weather, wind, and harbour conditions.',
-	plannedRoute: {
-		label: 'Read more on Planned Route',
-		href: '/plannedroute/',
-	},
-	stages: plannedPassages.map((passage) => ({
-		month: passage.month,
-		title: `${formatEndpoint(passage.from)} → ${formatEndpoint(passage.to)}`,
-	})) satisfies JoinOurJourneyStage[],
+/** Only open guest trips — used by the contact form. */
+export const joinOurJourneyOpenTrips = getOpenGuestTrips();
+
+export type JoinOurJourneyPrinciple = {
+	lead: string;
+	text: string;
 };
 
 export const joinOurJourneyWho = {
-	label: 'Who we are looking for',
-	title: 'Attitude matters more than certificates',
-	items: [
+	title: 'Welcome aboard Blue Heaven',
+	intro:
+		'On Blue Heaven we are a team. We do not expect you to know everything, but we do expect you to take part, ask if you are unsure, and speak up if something does not feel right.',
+	togetherTitle: 'How we sail together',
+	principles: [
 		{
-			title: 'Curious and flexible',
-			description: 'You are ready to contribute, learn along the way, and accept that plans can change.',
+			lead: 'Safety first.',
+			text: 'Weather, the boat and the crew always come before schedule and destination.',
 		},
 		{
-			title: 'Physically ready for life onboard',
-			description: 'Watches, moving in a seaway, and time in the elements require basic fitness.',
+			lead: 'We help each other.',
+			text: 'Watches and practical tasks are shared according to ability and experience.',
 		},
 		{
-			title: 'A calm teammate',
-			description: 'Close quarters call for respect, patience, and clear communication.',
+			lead: 'We say things in time.',
+			text: 'Fatigue, seasickness, worries and disagreements are easier to handle when we talk about them early.',
 		},
 		{
-			title: 'Adventure first, luxury last',
-			description: 'Comfort is limited onboard — in return you get experiences few people ever have.',
+			lead: 'We look after our resources.',
+			text: 'Water, power, gas, fuel and space are limited.',
 		},
-	] satisfies JoinOurJourneyListItem[],
+		{
+			lead: 'We respect rest.',
+			text: 'Sleep and quiet are part of safety, especially on longer passages.',
+		},
+		{
+			lead: 'We keep things tidy.',
+			text: 'Personal gear is stowed securely, and shared areas are left clear.',
+		},
+	] satisfies JoinOurJourneyPrinciple[],
+	sharedRule: {
+		lead: 'Our most important shared rule:',
+		text: 'If you are in doubt, ask. If you see something unsafe, say so at once.',
+	},
 };
 
 export const joinOurJourneyBenefits = {
@@ -106,10 +85,6 @@ export const joinOurJourneyBenefits = {
 		{
 			title: 'Unique destinations',
 			description: 'Scottish landscapes, Irish coasts, the Azores, and Gran Canaria — before the Caribbean waits.',
-		},
-		{
-			title: 'Stories for life',
-			description: 'Whales, stars, storms, and stillness. A journey you will talk about for years.',
 		},
 	] satisfies JoinOurJourneyListItem[],
 };

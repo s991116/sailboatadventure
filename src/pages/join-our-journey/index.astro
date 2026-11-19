@@ -8,98 +8,66 @@ import {
 	joinOurJourneyHero,
 	joinOurJourneyImages,
 	joinOurJourneyMeta,
-	joinOurJourneyRoute,
+	joinOurJourneyOpenTrips,
 	joinOurJourneyWho,
 } from '../../data/join-our-journey-content';
 
-const stageOptions = joinOurJourneyRoute.stages.map(
-	(s) => `${s.month} — ${s.title}`,
-);
+const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 ---
 
 <Layout title={joinOurJourneyMeta.title}>
 	<section class="mb-6 sm:mb-10">
-		<OptimizedPhoto
-			src={joinOurJourneyImages.hero}
-			alt="Sailboat on open ocean during an Atlantic crossing, with waves and horizon beyond."
-			preset="center"
-			aspectRatio="16/9"
-		/>
-	</section>
-
-	<section class="py-6 sm:py-10">
-		<p class="eyebrow">{joinOurJourneyHero.label}</p>
-		<h1 class="display-title mt-3">{joinOurJourneyHero.title}</h1>
-		<div class="accent-rule mt-6"></div>
-		<p class="lede">{joinOurJourneyHero.routeLine}</p>
+		<h1 class="display-title">{joinOurJourneyHero.title}</h1>
+		<div class="mt-6 sm:mt-8">
+			<OptimizedPhoto
+				src={joinOurJourneyImages.hero}
+				alt="Louise and Philip in Egypt."
+				preset="center"
+				aspectRatio="16/9"
+			/>
+		</div>
 	</section>
 
 	<section class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-benefits-title">
-		<OptimizedPhoto
-			src={joinOurJourneyImages.benefitsBg}
-			alt="Caribbean beach — destination for the final passage of the voyage."
-			preset="center"
-			aspectRatio="16/9"
-		/>
+		<h2 id="join-our-journey-benefits-title" class="text-3xl sm:text-4xl">{joinOurJourneyBenefits.title}</h2>
+		<div class="accent-rule mt-6"></div>
 
-		<div class="mt-10">
-			<h2 id="join-our-journey-benefits-title" class="text-3xl sm:text-4xl">{joinOurJourneyBenefits.title}</h2>
-			<div class="accent-rule mt-6"></div>
-
-			<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-				{joinOurJourneyBenefits.items.map((item) => (
-					<article class="surface-card p-6 sm:p-7">
-						<h3 class="text-xl font-semibold">{item.title}</h3>
-						<p class="mt-3 text-[color:var(--color-muted)]">{item.description}</p>
-					</article>
-				))}
-			</div>
+		<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+			{joinOurJourneyBenefits.items.map((item) => (
+				<article class="surface-card p-6 sm:p-7">
+					<h3 class="text-xl font-semibold">{item.title}</h3>
+					<p class="mt-3 text-[color:var(--color-muted)]">{item.description}</p>
+				</article>
+			))}
 		</div>
 	</section>
 
 	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="join-our-journey-who-title">
-		<p class="eyebrow">{joinOurJourneyWho.label}</p>
-		<h2 id="join-our-journey-who-title" class="mt-3 text-3xl sm:text-4xl">{joinOurJourneyWho.title}</h2>
+		<h2 id="join-our-journey-who-title" class="text-3xl sm:text-4xl">{joinOurJourneyWho.title}</h2>
 		<div class="accent-rule mt-6"></div>
+		<p class="mt-6 max-w-2xl text-[color:var(--color-muted)]">{joinOurJourneyWho.intro}</p>
 
-		<ul class="mt-10 grid gap-8 sm:grid-cols-2">
-			{joinOurJourneyWho.items.map((item) => (
-				<li class="flex gap-4">
-					<span
-						class="mt-2 h-2.5 w-2.5 shrink-0 rounded-full"
-						style="background: var(--color-accent);"
-						aria-hidden="true"
-					></span>
-					<div>
-						<h3 class="text-xl font-semibold">{item.title}</h3>
-						<p class="mt-2 text-[color:var(--color-muted)]">{item.description}</p>
-					</div>
+		<h3 class="mt-10 text-2xl sm:text-3xl">{joinOurJourneyWho.togetherTitle}</h3>
+		<ul class="mt-6 max-w-2xl list-disc space-y-3 pl-5">
+			{joinOurJourneyWho.principles.map((principle) => (
+				<li>
+					<strong class="font-semibold text-[color:var(--color-text)]">{principle.lead}</strong>
+					<span class="text-[color:var(--color-muted)]"> {principle.text}</span>
 				</li>
 			))}
 		</ul>
+
+		<p class="mt-8 max-w-2xl">
+			<strong class="font-semibold">{joinOurJourneyWho.sharedRule.lead}</strong>
+			<span class="text-[color:var(--color-muted)]"> {joinOurJourneyWho.sharedRule.text}</span>
+		</p>
 	</section>
 
-	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20" aria-labelledby="join-our-journey-route-title">
-		<p class="eyebrow">{joinOurJourneyRoute.label}</p>
-		<h2 id="join-our-journey-route-title" class="mt-3 text-3xl sm:text-4xl">{joinOurJourneyRoute.title}</h2>
-		<div class="accent-rule mt-6"></div>
-		<p class="mt-6 max-w-2xl text-[color:var(--color-muted)]">{joinOurJourneyRoute.intro}</p>
-
-		<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-			{joinOurJourneyRoute.stages.map((stage) => (
-				<article class="surface-card p-5 sm:p-6">
-					<div class="flex items-start justify-between gap-3">
-						<h3 class="text-lg font-semibold text-[color:var(--color-accent-strong)]">{stage.title}</h3>
-						<span class="eyebrow shrink-0 text-[0.65rem]">{stage.month}</span>
-					</div>
-				</article>
-			))}
-		</div>
-
-		<p class="mt-8 text-sm text-[color:var(--color-muted)]">{joinOurJourneyRoute.note}</p>
-		<p class="mt-6">
-			<a href={joinOurJourneyRoute.plannedRoute.href} class="inline-flex items-center gap-2 font-medium">
-				{joinOurJourneyRoute.plannedRoute.label}
+	<section class="divider mt-16 pt-16 sm:mt-20 sm:pt-20">
+		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			Read more about the routes and passages
+			<a href="/plannedroute/" class="inline-flex items-center gap-2 font-medium">
+				here
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>

@@ -5,7 +5,7 @@ import passage4Route from './routes/passage-4.json';
 import passage5Route from './routes/passage-5.json';
 import passage6Route from './routes/passage-6.json';
 import passage7Route from './routes/passage-7.json';
-import { plannedPassages } from './planned-passages';
+import { plannedPassages, type GuestSignup } from './planned-passages';
 import { routeLabelFromStops } from './journey-utils';
 
 /** GeoJSON order: [longitude, latitude] */
@@ -26,6 +26,7 @@ export type JourneyLeg = {
 	title: string;
 	routeLabel: string;
 	color: string;
+	guestSignup: GuestSignup;
 	/** Full sailed line, including shaping points without a stop. */
 	route: RouteCoordinate[];
 	/** Named places only: departure, intermediate stops, and arrival. */
@@ -68,6 +69,7 @@ export const journeyLegs: JourneyLeg[] = plannedPassages.map((passage) => {
 		number: passage.number,
 		title: `Passage ${passage.number}`,
 		color: passage.color,
+		guestSignup: passage.guestSignup,
 		stops,
 		route: routeFromFeature(routeBySlug[passage.slug]),
 		routeLabel: routeLabelFromStops(stops),

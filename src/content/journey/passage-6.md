@@ -5,7 +5,7 @@ routeLabel: "the Azores → Gran Canaria"
 description: "Island hopping south through the Atlantic toward the Canary Islands."
 facts:
   - label: "Planned period"
-    value: "September 2027"
+    value: "18 September – 16 October 2027"
   - label: "Estimated distance"
     value: "1,000–1,300 nautical miles"
   - label: "Longest offshore passage"

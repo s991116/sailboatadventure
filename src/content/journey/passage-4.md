@@ -5,7 +5,7 @@ routeLabel: "Dublin → Isles of Scilly"
 description: "From Ireland south to the Isles of Scilly, the gateway to the Atlantic."
 facts:
   - label: "Planned period"
-    value: "July 2027"
+    value: "17 July – 4 September 2027"
   - label: "Estimated distance"
     value: "220–280 nautical miles"
   - label: "Longest offshore passage"

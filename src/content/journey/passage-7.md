@@ -5,7 +5,7 @@ routeLabel: "Gran Canaria → Barbados"
 description: "The trade-wind crossing toward the Caribbean."
 facts:
   - label: "Planned period"
-    value: "November 2027"
+    value: "6 November – 12 December 2027"
   - label: "Estimated distance"
     value: "2,700–3,000 nautical miles"
   - label: "Longest offshore passage"

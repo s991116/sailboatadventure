@@ -2,7 +2,7 @@
 	"type": "Feature",
 	"properties": {
 		"passage": "passage-1",
-		"note": "Frederiksværk → Arendal"
+		"note": "Frederiksværk → Kristiansand"
 	},
 	"geometry": {
 		"type": "LineString",
