@@ -29,6 +29,8 @@ const portraits: {
 	alt: string;
 	title: string;
 	panX: string;
+	position: string;
+	layout: 'banner' | 'image-start' | 'image-end';
 	paragraphs: string[];
 }[] = [
 	{
@@ -36,6 +38,8 @@ const portraits: {
 		alt: t(locale, ui.about.coupleAlt),
 		title: t(locale, ui.about.coupleTitle),
 		panX: '50%',
+		position: '50% calc(30% - 20px)',
+		layout: 'banner',
 		paragraphs: ui.about.intro.map((paragraph) => t(locale, paragraph)),
 	},
 	{
@@ -43,6 +47,8 @@ const portraits: {
 		alt: t(locale, ui.about.philipAlt),
 		title: 'Philip',
 		panX: '55%',
+		position: '55% 42%',
+		layout: 'image-start',
 		paragraphs: ui.about.philip.map((paragraph) => t(locale, paragraph)),
 	},
 	{
@@ -50,6 +56,8 @@ const portraits: {
 		alt: t(locale, ui.about.louiseAlt),
 		title: 'Louise',
 		panX: '42%',
+		position: '36% 48%',
+		layout: 'image-end',
 		paragraphs: ui.about.louise.map((paragraph) => t(locale, paragraph)),
 	},
 	{
@@ -57,6 +65,8 @@ const portraits: {
 		alt: t(locale, ui.about.boatAlt),
 		title: t(locale, ui.about.boatTitle),
 		panX: '50%',
+		position: '50% calc(30% - 20px)',
+		layout: 'banner',
 		paragraphs: ui.about.boat.map((paragraph) => t(locale, paragraph)),
 	},
 ];
@@ -64,33 +74,56 @@ const portraits: {
 
 <section id="about" class="home-about py-6 sm:py-10">
 	{
-		portraits.map((portrait, index) => (
-			<div>
-				<div class:list={['home-bleed', index === 0 ? null : 'mt-10']} data-home-pan data-pan-x={portrait.panX}>
-					<OptimizedPhoto
-						src={portrait.src}
-						alt={portrait.alt}
-						preset="center"
-						aspectRatio="35/11"
-						position={`${portrait.panX} calc(30% - 20px)`}
-						plain
-						sizes="100vw"
-					/>
-					<h2 class="home-photo-title home-photo-title--light display-title">{portrait.title}</h2>
+		portraits.map((portrait, index) =>
+			portrait.layout === 'banner' ? (
+				<div>
+					<div class:list={['home-bleed', index === 0 ? null : 'mt-10']} data-home-pan data-pan-x={portrait.panX}>
+						<OptimizedPhoto
+							src={portrait.src}
+							alt={portrait.alt}
+							preset="center"
+							aspectRatio="35/11"
+							position={portrait.position}
+							plain
+							sizes="100vw"
+						/>
+						<h2 class="home-photo-title home-photo-title--light display-title">{portrait.title}</h2>
+					</div>
+					{index === 0 && (
+						<>
+							<div class="accent-rule mt-6"></div>
+							<p class="lede">{t(locale, ui.about.lede)}</p>
+						</>
+					)}
+					<div class="page-prose mt-6">
+						{portrait.paragraphs.map((paragraph) => (
+							<p>{paragraph}</p>
+						))}
+					</div>
 				</div>
-				{index === 0 && (
-					<>
-						<div class="accent-rule mt-6"></div>
-						<p class="lede">{t(locale, ui.about.lede)}</p>
-					</>
-				)}
-				<div class="page-prose mt-6">
-					{portrait.paragraphs.map((paragraph) => (
-						<p>{paragraph}</p>
-					))}
+			) : (
+				<div class:list={['about-portrait', portrait.layout === 'image-end' && 'about-portrait--end']}>
+					<div class:list={['page-prose about-portrait__title', portrait.layout === 'image-end' && 'about-portrait__title--side']}>
+						<h2>{portrait.title}</h2>
+					</div>
+					<div class="about-portrait__photo">
+						<OptimizedPhoto
+							src={portrait.src}
+							alt={portrait.alt}
+							preset="center"
+							aspectRatio="4/3"
+							position={portrait.position}
+							sizes="(min-width: 40rem) 22rem, calc(100vw - 4rem)"
+						/>
+					</div>
+					<div class="page-prose about-portrait__copy">
+						{portrait.paragraphs.map((paragraph) => (
+							<p>{paragraph}</p>
+						))}
+					</div>
 				</div>
-			</div>
-		))
+			),
+		)
 	}
 
 	<div class="page-prose mt-10">
@@ -106,3 +139,45 @@ const portraits: {
 		/>
 	</div>
 </section>
+
+<style>
+	.about-portrait {
+		display: grid;
+		align-items: start;
+		gap: 1.25rem;
+		margin-top: 2.5rem;
+	}
+
+	.about-portrait__photo {
+		padding: 0 0.85rem 0.85rem;
+	}
+
+	.about-portrait__title {
+		grid-column: 1 / -1;
+	}
+
+	.about-portrait__title--side {
+		grid-column: 1;
+	}
+
+	@media (min-width: 640px) {
+		.about-portrait {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+			gap: 1.5rem 1.25rem;
+		}
+
+		.about-portrait--end {
+			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+		}
+
+		.about-portrait--end .about-portrait__copy {
+			grid-column: 1;
+			grid-row: 2;
+		}
+
+		.about-portrait--end .about-portrait__photo {
+			grid-column: 2;
+			grid-row: 2;
+		}
+	}
+</style>

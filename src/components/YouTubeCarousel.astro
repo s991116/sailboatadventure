@@ -86,13 +86,14 @@ if (!channelId) {
       throw new Error('Missing YOUTUBE_API_KEY. Set it in the build environment (GitHub Environment secret).');
     }
 
-    // We may filter out Shorts after the initial fetch, so grab a buffer of candidates.
+    // search.list burns the daily Search quota (100 units) and has been failing with 429.
+    // The channel uploads playlist is the same videos, newest first, at 1 unit per request.
+    const uploadsPlaylistId = channelId.startsWith('UC') ? `UU${channelId.slice(2)}` : channelId;
     const maxResults = Math.min(50, Math.max(1, Math.max(limit * 3, 25)));
     const apiUrl =
-      'https://www.googleapis.com/youtube/v3/search' +
-      `?part=snippet&channelId=${encodeURIComponent(channelId)}` +
+      'https://www.googleapis.com/youtube/v3/playlistItems' +
+      `?part=snippet&playlistId=${encodeURIComponent(uploadsPlaylistId)}` +
       `&maxResults=${maxResults}` +
-      `&order=date&type=video` +
       `&key=${encodeURIComponent(apiKey)}`;
 
     const res = await fetch(apiUrl, { headers: { accept: 'application/json' } });
@@ -103,7 +104,7 @@ if (!channelId) {
 
     const candidates = items
       .map((item: any) => {
-        const id = item?.id?.videoId;
+        const id = item?.snippet?.resourceId?.videoId ?? item?.id?.videoId;
         const snippet = item?.snippet;
         const rawTitle = String(snippet?.title ?? 'YouTube video');
         const title = decodeHtmlEntities(rawTitle);
