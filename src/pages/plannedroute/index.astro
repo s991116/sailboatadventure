@@ -8,6 +8,7 @@ import { formatGuestDateRange, joinOurJourneyContactHref } from '../../data/plan
 import { resolveLocale, t, type Locale } from '../../i18n/locale';
 import { ui } from '../../i18n/messages';
 import { placeName } from '../../i18n/places';
+import routeHero from '../../assets/photos/join-our-journey/anchor_sunset_reflection.jpg';
 
 type LocaleProps = { locale?: Locale };
 const locale = resolveLocale((Astro.props as LocaleProps).locale, Astro.url.pathname);
@@ -56,7 +57,20 @@ const mobilePassages = journeyLegs.map((leg) => {
 <Layout locale={locale} title={t(locale, ui.route.title)}>
 	<div class="journey-page" data-journey-page>
 		<section class="journey-intro" data-journey-intro>
-			<h1 class="display-title">{t(locale, ui.route.title)}</h1>
+			<div class="journey-hero home-bleed" data-home-hero>
+				<div class="journey-hero__frame">
+					<OptimizedPhoto
+						src={routeHero}
+						alt={t(locale, ui.route.heroAlt)}
+						preset="center"
+						aspectRatio="700/143"
+						position="50% calc(30% - 20px)"
+						plain
+						sizes="100vw"
+					/>
+					<h1 class="home-photo-title home-photo-title--light display-title">{t(locale, ui.route.title)}</h1>
+				</div>
+			</div>
 			<div class="accent-rule mt-6"></div>
 			<p class="lede journey-intro__map-hint">{t(locale, ui.route.mapHint)}</p>
 			<p class="lede journey-intro__list-hint">{t(locale, ui.route.listHint)}</p>
@@ -293,12 +307,24 @@ const mobilePassages = journeyLegs.map((leg) => {
 </script>
 
 <style>
+	.journey-hero {
+		margin-top: -3rem;
+	}
+
+	.journey-hero__frame {
+		position: relative;
+	}
+
 	.journey-intro,
 	.journey-passage-title {
 		margin-bottom: 1.5rem;
 	}
 
 	@media (min-width: 640px) {
+		.journey-hero {
+			margin-top: -4rem;
+		}
+
 		.journey-intro,
 		.journey-passage-title {
 			margin-bottom: 2rem;

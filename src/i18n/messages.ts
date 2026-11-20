@@ -126,8 +126,8 @@ export const ui = {
 		boatAlt: tx('Blue Heaven sejler forbi en klippekyst.', 'Blue Heaven sailing past a rocky cliff coast.'),
 		boat: [
 			tx(
-				'Vores sejlbåd, Blue Heaven, er vores Bavaria 39 Cruiser, som vi har gjort klar til langtur.',
-				'Our sailboat, Blue Heaven, is our Bavaria 39 Cruiser, which we have prepared for long-distance sailing.',
+				'Vores sejlbåd, Blue Heaven, er en Bavaria 39 Cruiser, som vi har gjort klar til langtur.',
+				'Our sailboat, Blue Heaven, is a Bavaria 39 Cruiser, which we have prepared for long-distance sailing.',
 			),
 			tx(
 				'Vi har sat sikkerhedsudstyr op, blandt andet redningsflåde, AIS og radar, og gjort det rarere at bo ombord med solceller, cockpit-telt og opladere til elektronik.',
@@ -164,6 +164,10 @@ export const ui = {
 	},
 	route: {
 		title: tx('Planlagt rute', 'Planned Route'),
+		heroAlt: tx(
+			'Solnedgang set fra dækket, med stille vand og det danske flag.',
+			'Sunset seen from the deck, with still water and the Danish flag.',
+		),
 		mapHint: tx(
 			'Klik på en rute på kortet for at zoome ind og læse mere om etaperne, fra Danmark til Caribien.',
 			'Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.',
@@ -201,9 +205,9 @@ export const ui = {
 			'Praktiske noter fra klargøring af båden og turen.',
 			'Practical notes from preparing the boat and the passage.',
 		),
-		courtesyTitle: tx('Print dine egne høflighedsflag', 'Print your own courtesy flags'),
+		courtesyTitle: tx('Print dine egne gæsteflag', 'Print your own courtesy flags'),
 		courtesyBefore: tx(
-			'Du kan printe dine egne høflighedsflag, der passer til de lande, du vil sejle til. Det her er vores udgave af guiden fra',
+			'Du kan printe dine egne gæsteflag, der passer til de lande, du vil sejle til. Det her er vores udgave af guiden fra',
 			'You can print your own courtesy flags that match the countries you plan to sail to. This is our version of the guide from',
 		),
 		stepsIntro: tx('Det består af tre enkle trin:', 'It consists of three simple steps:'),
@@ -215,8 +219,8 @@ export const ui = {
 		makeTitle: tx('Lav arket', 'Make the sheet'),
 		makeBefore: tx('Åbn', 'Open'),
 		makeAfter: tx(
-			'og vælg stederne på din rute. Nationalflaget er høflighedsflaget. Hvor en ø har sit eget flag, kan du tilføje det regionale flag ved siden af. Hvert færdigt flag er 45 × 30 cm.',
-			'and select the places on your route. The national flag is the courtesy flag. Where an island has its own flag, you can add that regional flag beside it. Each finished flag is 45 × 30 cm.',
+			'og vælg stederne på din rute. Nationalflaget er gæsteflaget. Hvis en ø har sit eget regionale flag, kan du også tilføje og printe det regionale flag.',
+			'and select the places on your route. The national flag is the courtesy flag. If an island has its own regional flag, you can also add and print that regional flag.',
 		),
 		printTitle: tx('Få det trykt', 'Have it printed'),
 		printBefore: tx(
@@ -236,15 +240,15 @@ export const ui = {
 			tx('Tilbehør: ingen', 'Accessories: none'),
 		],
 		sheetNote: tx(
-			'Arket har allerede den ekstra dug til folden og de streger, du følger, når du klipper og syr.',
-			'The sheet already includes the fold cloth and the lines you follow when you cut and sew.',
+			'PDF\'en har allerede det ekstra stof til folden og de streger, du følger, når du klipper og syr.',
+			'The PDF already includes the extra fabric for the fold and the lines you follow when you cut and sew.',
 		),
 		readTitle: tx('Læs arket', 'Read the sheet'),
 		read: [
 			tx('Den yderste stiplede linje er der, hvor du klipper.', 'The outer dashed line is where you cut.'),
 			tx(
-				'Den inderste stiplede linje er folden. Der er 2 cm dug uden for det færdige flag på alle sider. Motivet er spejlet over folden, så farven fortsætter ind i sømmen.',
-				'The inner dashed line is the fold. There is 2 cm of cloth outside the finished flag on every side. The picture is mirrored across that fold, so the colour continues into the hem.',
+				'Den inderste stiplede linje er folden. Der er 2 cm stof uden for det færdige flag på alle sider. Motivet er spejlet over folden, så farven fortsætter ind i sømmen.',
+				'The inner dashed line is the fold. There is 2 cm of fabric outside the finished flag on every side. The picture is mirrored across that fold, so the colour continues into the hem.',
 			),
 			tx(
 				'Landets navn er trykt i venstre fold. Den kant er halsen, den side du sætter i faldet, og navnet viser, hvad der er op.',
