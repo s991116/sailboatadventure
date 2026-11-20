@@ -1,0 +1,108 @@
+---
+import OptimizedPhoto from './OptimizedPhoto.astro';
+import Web3FormsContactForm from './Web3FormsContactForm.astro';
+import { t, type Locale } from '../i18n/locale';
+import { ui } from '../i18n/messages';
+import type { ImageMetadata } from 'astro';
+import louisePhoto from '../assets/photos/home/louise-on-deck.png';
+import philipPhoto from '../assets/photos/join-our-journey/philip_beanie.jpg';
+import couplePhoto from '../assets/photos/join-our-journey/louise-philip-sailboat.jpg';
+import blueHeavenPhoto from '../assets/photos/join-our-journey/Sailboat_cliff.jpg';
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+
+const formLabels = {
+	name: t(locale, ui.form.name),
+	email: t(locale, ui.form.email),
+	message: t(locale, ui.form.message),
+	submit: t(locale, ui.form.submit),
+	success: t(locale, ui.form.success),
+	error: t(locale, ui.form.error),
+	sending: t(locale, ui.form.sending),
+	notConfiguredBefore: t(locale, ui.form.notConfiguredBefore),
+	notConfiguredAfter: t(locale, ui.form.notConfiguredAfter),
+};
+
+const portraits: {
+	src: ImageMetadata;
+	alt: string;
+	title: string;
+	panX: string;
+	paragraphs: string[];
+}[] = [
+	{
+		src: couplePhoto,
+		alt: t(locale, ui.about.coupleAlt),
+		title: t(locale, ui.about.coupleTitle),
+		panX: '50%',
+		paragraphs: ui.about.intro.map((paragraph) => t(locale, paragraph)),
+	},
+	{
+		src: philipPhoto,
+		alt: t(locale, ui.about.philipAlt),
+		title: 'Philip',
+		panX: '55%',
+		paragraphs: ui.about.philip.map((paragraph) => t(locale, paragraph)),
+	},
+	{
+		src: louisePhoto,
+		alt: t(locale, ui.about.louiseAlt),
+		title: 'Louise',
+		panX: '42%',
+		paragraphs: ui.about.louise.map((paragraph) => t(locale, paragraph)),
+	},
+	{
+		src: blueHeavenPhoto,
+		alt: t(locale, ui.about.boatAlt),
+		title: t(locale, ui.about.boatTitle),
+		panX: '50%',
+		paragraphs: ui.about.boat.map((paragraph) => t(locale, paragraph)),
+	},
+];
+---
+
+<section id="about" class="home-about py-6 sm:py-10">
+	{
+		portraits.map((portrait, index) => (
+			<div>
+				<div class:list={['home-bleed', index === 0 ? null : 'mt-10']} data-home-pan data-pan-x={portrait.panX}>
+					<OptimizedPhoto
+						src={portrait.src}
+						alt={portrait.alt}
+						preset="center"
+						aspectRatio="35/11"
+						position={`${portrait.panX} calc(30% - 20px)`}
+						plain
+						sizes="100vw"
+					/>
+					<h2 class="home-photo-title home-photo-title--light display-title">{portrait.title}</h2>
+				</div>
+				{index === 0 && (
+					<>
+						<div class="accent-rule mt-6"></div>
+						<p class="lede">{t(locale, ui.about.lede)}</p>
+					</>
+				)}
+				<div class="page-prose mt-6">
+					{portrait.paragraphs.map((paragraph) => (
+						<p>{paragraph}</p>
+					))}
+				</div>
+			</div>
+		))
+	}
+
+	<div class="page-prose mt-10">
+		<h2 id="contact">{t(locale, ui.about.contactTitle)}</h2>
+		<p>{t(locale, ui.about.contactBody)}</p>
+	</div>
+
+	<div class="mt-10">
+		<Web3FormsContactForm
+			formId="about-contact"
+			subject={t(locale, ui.about.contactSubject)}
+			labels={formLabels}
+		/>
+	</div>
+</section>

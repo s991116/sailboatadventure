@@ -32,18 +32,21 @@ const formLabels = {
 ---
 
 <Layout locale={locale} title={t(locale, joinOurJourneyMeta.title)}>
-	<section class="mb-6 sm:mb-10">
-		<h1 class="display-title">{t(locale, joinOurJourneyHero.title)}</h1>
-		<div class="accent-rule mt-6"></div>
-		<div class="mt-6 sm:mt-8">
+	<section class="join-hero home-bleed" data-home-hero>
+		<div class="join-hero__frame">
 			<OptimizedPhoto
 				src={joinOurJourneyImages.hero}
 				alt={t(locale, joinOurJourneyHero.alt)}
 				preset="center"
-				aspectRatio="16/9"
+				aspectRatio="350/143"
+				position="50% calc(30% - 20px)"
+				plain
+				sizes="100vw"
 			/>
+			<h1 class="home-photo-title home-photo-title--light display-title">{t(locale, joinOurJourneyHero.title)}</h1>
 		</div>
 	</section>
+	<div class="accent-rule mt-6"></div>
 
 	<section class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-benefits-title">
 		<h2 id="join-our-journey-benefits-title" class="section-title">{t(locale, joinOurJourneyBenefits.title)}</h2>
@@ -127,3 +130,21 @@ const formLabels = {
 		</div>
 	</section>
 </Layout>
+
+<style>
+	.join-hero {
+		margin-top: -3rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.join-hero__frame {
+		position: relative;
+	}
+
+	@media (min-width: 640px) {
+		.join-hero {
+			margin-top: -4rem;
+			margin-bottom: 2.5rem;
+		}
+	}
+</style>

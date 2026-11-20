@@ -26,6 +26,8 @@ export default defineConfig({
   redirects: {
     '/gaster': '/join-our-journey/',
     '/gaster/': '/join-our-journey/',
+    '/about': '/#about',
+    '/da/about': '/da/#about',
   },
 
   vite: {

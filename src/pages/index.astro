@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
+import AboutSection from '../components/AboutSection.astro';
 import { localePath, resolveLocale, t, type Locale } from '../i18n/locale';
 import { ui } from '../i18n/messages';
 import headerImage from '../assets/photos/join-our-journey/louise-philip-sunset-denmark.jpg';
@@ -12,21 +13,26 @@ const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 ---
 
 <Layout locale={locale} title="Sailboat Adventure">
-	<section class="mb-6 sm:mb-10">
-		<OptimizedPhoto
-			src={headerImage}
-			alt={t(locale, ui.home.heroAlt)}
-			preset="center"
-			aspectRatio="21/9"
-		/>
+	<section class="home-hero home-bleed" data-home-hero>
+		<div class="home-hero__frame">
+			<OptimizedPhoto
+				src={headerImage}
+				alt={t(locale, ui.home.heroAlt)}
+				preset="center"
+				aspectRatio="350/143"
+				position="50% calc(30% - 20px)"
+				plain
+				sizes="100vw"
+			/>
+			<h1 class="home-photo-title home-photo-title--light display-title">{t(locale, ui.home.title)}</h1>
+		</div>
 	</section>
 
 	<section class="py-6 sm:py-10">
-		<h1 class="display-title">{t(locale, ui.home.title)}</h1>
-		<div class="accent-rule mt-6"></div>
+		<div class="accent-rule"></div>
 		<p class="lede">
 			{t(locale, ui.home.welcome)}
-			<a href={localePath(locale, '/about/')} class="text-link">
+			<a href="#about" class="text-link">
 				{t(locale, ui.nav.about)}
 				<span aria-hidden="true">→</span>
 			</a>
@@ -50,7 +56,18 @@ const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 	</section>
 
 	<section class="py-6 sm:py-10">
-		<h2 class="display-title">{t(locale, ui.home.preparingTitle)}</h2>
+		<div class="home-bleed" data-home-pan>
+			<OptimizedPhoto
+				src={boatworkPhoto}
+				alt={t(locale, ui.home.boatAlt)}
+				preset="center"
+				aspectRatio="35/11"
+				position="50% calc(30% - 20px)"
+				plain
+				sizes="100vw"
+			/>
+			<h2 class="home-photo-title home-photo-title--dark display-title">{t(locale, ui.home.preparingTitle)}</h2>
+		</div>
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">
 			{t(locale, ui.home.preparing)}
@@ -59,11 +76,25 @@ const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>
-		<OptimizedPhoto
-			class="mt-6"
-			src={boatworkPhoto}
-			alt={t(locale, ui.home.boatAlt)}
-			aspectRatio="16/9"
-		/>
 	</section>
+
+	<AboutSection locale={locale} />
 </Layout>
+
+<style>
+	.home-hero {
+		margin-top: -3rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.home-hero__frame {
+		position: relative;
+	}
+
+	@media (min-width: 640px) {
+		.home-hero {
+			margin-top: -4rem;
+			margin-bottom: 2.5rem;
+		}
+	}
+</style>

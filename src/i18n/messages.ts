@@ -7,7 +7,7 @@ import { tx } from './locale';
  */
 export const ui = {
 	nav: {
-		home: tx('Hjem', 'Home'),
+		home: tx('Vores Eventyr', 'Our Adventure'),
 		plannedRoute: tx('Planlagt rute', 'Planned Route'),
 		join: tx('Sejl med os', 'Join Our Journey'),
 		history: tx('Historie', 'History'),
@@ -35,7 +35,7 @@ export const ui = {
 		stagePlaceholder: tx('Vælg en etape', 'Select a passage'),
 	},
 	home: {
-		title: tx('Vores historie på havet', 'Our story at sea'),
+		title: tx('Vores Sejler Eventyr', 'Our Sailing adventure'),
 		welcome: tx(
 			'Velkommen til vores sejleventyr. Her samler vi historier, billeder og små noter fra livet ombord.',
 			'Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard.',
@@ -44,7 +44,7 @@ export const ui = {
 			'Vi sejler med gæstebesætning på de længere etaper. Du kan læse mere om at sejle med her:',
 			'We sail with guest crew on the longer passages. You can read more about joining us here:',
 		),
-		youtube: tx('Følg os på youtube', 'Follow us on our Danish YouTube channel'),
+		youtube: tx('Følg os på YouTube', 'Follow us on our Danish YouTube channel'),
 		viewChannel: tx('Se kanalen', 'View channel'),
 		videosError: tx('Videoerne kunne ikke hentes.', 'Failed to load YouTube videos.'),
 		carousel: tx('karrusel', 'carousel'),

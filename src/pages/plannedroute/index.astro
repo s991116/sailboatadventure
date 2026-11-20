@@ -320,6 +320,11 @@ const mobilePassages = journeyLegs.map((leg) => {
 	}
 
 	.journey-passage-list {
+		display: block;
+	}
+
+	.journey-passage-list.hidden,
+	.journey-page.is-passage-view .journey-passage-list {
 		display: none;
 	}
 
@@ -353,20 +358,8 @@ const mobilePassages = journeyLegs.map((leg) => {
 			display: block;
 		}
 
-		.journey-passage-list {
-			display: block;
-		}
-
-		.journey-passage-list.hidden {
-			display: none;
-		}
-
 		.journey-mobile-back {
 			display: inline-flex;
-		}
-
-		.journey-page.is-passage-view .journey-passage-list {
-			display: none;
 		}
 	}
 

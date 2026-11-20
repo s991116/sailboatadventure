@@ -286,3 +286,43 @@
 		list-style: decimal;
 	}
 }
+
+.home-bleed {
+	position: relative;
+	left: 50%;
+	width: 100vw;
+	margin-left: -50vw;
+	margin-right: -50vw;
+}
+
+.home-photo-title.display-title {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+	margin: 0;
+	padding: 10px;
+	font-size: 3.45rem;
+	line-height: 1;
+	text-align: center;
+}
+
+.home-photo-title--light.display-title {
+	color: #fbf7ef;
+	text-shadow: 0 1px 2px rgba(20, 20, 20, 0.45), 0 10px 28px rgba(20, 20, 20, 0.45);
+}
+
+.home-photo-title--dark.display-title {
+	color: #000;
+}
+
+.home-about {
+	scroll-margin-top: 5.5rem;
+}
+
+@media (min-width: 640px) {
+	.home-photo-title.display-title {
+		font-size: 4.3125rem;
+	}
+}

@@ -20,7 +20,6 @@ const navItems = [
 	{ path: '/join-our-journey/', label: ui.nav.join },
 	{ path: '/history/', label: ui.nav.history },
 	{ path: '/tips/', label: ui.nav.tips },
-	{ path: '/about/', label: ui.nav.about },
 ] as const;
 
 const alternateBase = Astro.site ?? Astro.url;
@@ -334,6 +333,42 @@ const enUrl = new URL(localePath('en', pathname), alternateBase).href;
 		<main class="site-container py-12 sm:py-16">
 			<slot />
 		</main>
+		<script>
+			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			const panFrame = (frame: HTMLElement, scrolled: number, travel: number) => {
+				const image = frame.querySelector<HTMLImageElement>('img');
+				if (!image) return;
+				const x = frame.dataset.panX || '50%';
+				if (reduceMotion) {
+					image.style.objectPosition = `${x} calc(40% - 20px)`;
+					return;
+				}
+				const distance = Math.max(travel, 1);
+				const progress = Math.min(Math.max(scrolled, 0), distance) / distance;
+				const y = 30 + progress * 55;
+				image.style.objectPosition = `${x} calc(${y}% - 20px)`;
+			};
+
+			const pan = () => {
+				const hero = document.querySelector<HTMLElement>('[data-home-hero]');
+				if (hero) panFrame(hero, window.scrollY, hero.offsetHeight);
+
+				document.querySelectorAll<HTMLElement>('[data-home-pan]').forEach((frame) => {
+					const rect = frame.getBoundingClientRect();
+					const docTop = rect.top + window.scrollY;
+					const view = window.innerHeight;
+					const start = docTop - view * 0.9;
+					const pageEnd = document.documentElement.scrollHeight - view;
+					const finish = Math.min(docTop - view * 0.2, pageEnd);
+					panFrame(frame, window.scrollY - start, finish - start);
+				});
+			};
+
+			pan();
+			window.addEventListener('scroll', pan, { passive: true });
+			window.addEventListener('resize', pan);
+		</script>
 	</body>
 </html>
 

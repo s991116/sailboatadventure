@@ -34,11 +34,13 @@ export function stripLocale(pathname: string): string {
 
 /** Build a path in the given language. English stays unprefixed; Danish lives under /da/. */
 export function localePath(locale: Locale, path: string): string {
-	let bare = stripLocale(path.split('#')[0] ?? path);
+	const hashAt = path.indexOf('#');
+	const hash = hashAt >= 0 ? path.slice(hashAt) : '';
+	let bare = stripLocale(hashAt >= 0 ? path.slice(0, hashAt) : path);
 	if (!bare.startsWith('/')) bare = `/${bare}`;
 	if (bare.length > 1 && !bare.endsWith('/')) bare = `${bare}/`;
-	if (locale === 'da') return bare === '/' ? '/da/' : `/da${bare}`;
-	return bare === '' ? '/' : bare;
+	const localized = locale === 'da' ? (bare === '/' ? '/da/' : `/da${bare}`) : bare === '' ? '/' : bare;
+	return `${localized}${hash}`;
 }
 
 export function isActivePath(pathname: string, href: string): boolean {

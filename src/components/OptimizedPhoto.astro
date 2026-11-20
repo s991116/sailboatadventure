@@ -23,6 +23,9 @@ type Props = Omit<LocalImageProps, 'alt'> & {
 	position?: string;
 	/** Override preset zoom, e.g. `1.1`. */
 	zoom?: number;
+	/** Drop the rounded frame and border. */
+	plain?: boolean;
+	sizes?: string;
 };
 
 const {
@@ -31,6 +34,8 @@ const {
 	aspectRatio = '21/9',
 	position,
 	zoom,
+	plain = false,
+	sizes = '(min-width: 64rem) 56rem, (min-width: 40rem) calc(100vw - 2.5rem), calc(100vw - 2.5rem)',
 	class: className,
 	...imageProps
 } = Astro.props as Props;
@@ -43,8 +48,8 @@ const resolvedZoom = zoom ?? resolvedPreset.zoom;
 <div
 	class:list={[
 		'optimized-photo',
-		'overflow-hidden rounded-2xl',
-		'[border:1px_solid_var(--color-border)] bg-[var(--color-surface)]',
+		'overflow-hidden',
+		plain ? null : 'rounded-2xl [border:1px_solid_var(--color-border)] bg-[var(--color-surface)]',
 		className,
 	]}
 	style={`--photo-aspect:${aspectRatio};--photo-pos:${resolvedPosition};--photo-zoom:${resolvedZoom};`}
@@ -55,7 +60,7 @@ const resolvedZoom = zoom ?? resolvedPreset.zoom;
 		layout="none"
 		formats={['avif', 'webp']}
 		fallbackFormat="jpg"
-		sizes="(min-width: 64rem) 56rem, (min-width: 40rem) calc(100vw - 2.5rem), calc(100vw - 2.5rem)"
+		sizes={sizes}
 		widths={[480, 768, 1024, 1280, 1536, 1792]}
 		class="optimized-photo__img"
 	/>
