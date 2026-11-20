@@ -1,29 +1,35 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { localePath, resolveLocale, t, type Locale } from '../../i18n/locale';
+import { ui } from '../../i18n/messages';
 
-const posts = await getCollection('posts', ({ data }) => !data.draft);
+type Props = { locale?: Locale };
+const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
+
+const posts = await getCollection('posts', ({ data }) => !data.draft && data.locale === locale);
 const sortedPosts = posts.toSorted((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const dateLocale = locale === 'da' ? 'da-DK' : 'en-GB';
 ---
 
-<Layout title="Blog">
+<Layout locale={locale} title={t(locale, ui.blog.title)}>
 	<section>
 		<header>
-			<h1 class="display-title">Blog</h1>
+			<h1 class="display-title">{t(locale, ui.blog.title)}</h1>
 			<div class="accent-rule mt-6"></div>
-			<p class="lede">Seneste poster fra logbogen.</p>
+			<p class="lede">{t(locale, ui.blog.lede)}</p>
 		</header>
 
 		<ul class="mt-10 space-y-8">
 			{sortedPosts.map((post) => (
 				<li>
-					<a class="text-link" href={`/blog/${post.slug}/`}>
+					<a class="text-link" href={localePath(locale, `/blog/${post.data.entrySlug}/`)}>
 						{post.data.title}
 						<span aria-hidden="true">→</span>
 					</a>
 					<p class="eyebrow mt-3">
 						<time datetime={post.data.pubDate.toISOString()}>
-							{post.data.pubDate.toLocaleDateString('da-DK', { year: 'numeric', month: 'long', day: 'numeric' })}
+							{post.data.pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}
 						</time>
 					</p>
 					{post.data.description ? <p class="body mt-3">{post.data.description}</p> : null}

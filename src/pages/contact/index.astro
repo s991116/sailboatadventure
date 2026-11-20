@@ -1,22 +1,36 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
+import { resolveLocale, t, type Locale } from '../../i18n/locale';
+import { ui } from '../../i18n/messages';
+
+type Props = { locale?: Locale };
+const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
+const formLabels = {
+	name: t(locale, ui.form.name),
+	email: t(locale, ui.form.email),
+	message: t(locale, ui.form.message),
+	submit: t(locale, ui.form.submit),
+	success: t(locale, ui.form.success),
+	error: t(locale, ui.form.error),
+	sending: t(locale, ui.form.sending),
+	notConfiguredBefore: t(locale, ui.form.notConfiguredBefore),
+	notConfiguredAfter: t(locale, ui.form.notConfiguredAfter),
+};
 ---
 
-<Layout title="Contact us — Sailboat Adventure">
+<Layout locale={locale} title={t(locale, ui.contact.documentTitle)}>
 	<section>
-		<h1 class="display-title">Contact us</h1>
+		<h1 class="display-title">{t(locale, ui.contact.title)}</h1>
 		<div class="accent-rule mt-6"></div>
-		<p class="lede">
-			Write to us with the form below. Your message is delivered privately to our inbox — we do not publish an
-			email address or phone number on this site.
-		</p>
+		<p class="lede">{t(locale, ui.contact.body)}</p>
 	</section>
 
 	<section class="mt-10">
 		<Web3FormsContactForm
 			formId="contact-us"
-			subject="Contact us — Sailboat Adventure"
+			subject={t(locale, ui.contact.subject)}
+			labels={formLabels}
 		/>
 	</section>
 </Layout>

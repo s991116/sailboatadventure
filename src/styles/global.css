@@ -87,9 +87,16 @@
 		cursor: pointer;
 	}
 
+	.nav-tools {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-shrink: 0;
+	}
+
 	.site-header.is-collapsed .nav-menu-button {
 		display: inline-flex;
-		margin-left: auto;
 	}
 
 	/* Width is measured before this class is applied, then cached in the nav script. */
@@ -103,7 +110,66 @@
 	}
 
 	.site-header.is-collapsed {
-		overflow-x: clip;
+		overflow: visible;
+	}
+
+	.lang-switch {
+		position: relative;
+	}
+
+	.lang-switch__button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		height: 2.5rem;
+		padding: 0 0.55rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.75rem;
+		background: rgba(255, 255, 255, 0.65);
+		color: var(--color-text);
+		cursor: pointer;
+	}
+
+	.lang-switch__button:focus-visible,
+	.lang-switch__option:focus-visible {
+		outline: 2px solid rgba(184, 132, 58, 0.55);
+		outline-offset: 2px;
+	}
+
+	.lang-switch__chevron {
+		width: 0.7rem;
+		height: 0.45rem;
+	}
+
+	.lang-switch__menu {
+		position: absolute;
+		top: calc(100% + 0.4rem);
+		right: 0;
+		z-index: 70;
+		min-width: 9.5rem;
+		margin: 0;
+		padding: 0.35rem;
+		list-style: none;
+		border: 1px solid var(--color-border);
+		border-radius: 0.85rem;
+		background: rgba(251, 247, 239, 0.98);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.lang-switch__option {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.55rem 0.65rem;
+		border-radius: 0.6rem;
+		color: var(--color-text);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.lang-switch__option:hover,
+	.lang-switch__option.is-current {
+		background: rgba(184, 132, 58, 0.12);
 	}
 
 	.site-header:not(.is-collapsed) .nav-panel {

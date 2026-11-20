@@ -2,56 +2,67 @@
 import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
+import { localePath, resolveLocale, t, type Locale } from '../i18n/locale';
+import { ui } from '../i18n/messages';
 import headerImage from '../assets/photos/join-our-journey/louise-philip-sunset-denmark.jpg';
 import boatworkPhoto from '../assets/photos/join-our-journey/philip_louise_boatwork.jpg';
+
+type Props = { locale?: Locale };
+const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 ---
 
-<Layout title="Sailboat Adventure">
+<Layout locale={locale} title="Sailboat Adventure">
 	<section class="mb-6 sm:mb-10">
 		<OptimizedPhoto
 			src={headerImage}
-			alt="Louise and Philip on a beach in Denmark at sunset."
+			alt={t(locale, ui.home.heroAlt)}
 			preset="center"
 			aspectRatio="21/9"
 		/>
 	</section>
 
 	<section class="py-6 sm:py-10">
-		<h1 class="display-title">Our story at sea</h1>
+		<h1 class="display-title">{t(locale, ui.home.title)}</h1>
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">
-			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard.
-			<a href="/about/" class="text-link">
-				About us
+			{t(locale, ui.home.welcome)}
+			<a href={localePath(locale, '/about/')} class="text-link">
+				{t(locale, ui.nav.about)}
 				<span aria-hidden="true">→</span>
 			</a>
 			<br />
-			We sail with guest crew on the longer passages. You can read more about joining us here:
-			<a href="/join-our-journey/" class="text-link">
-				Join Our Journey
+			{t(locale, ui.home.guest)}
+			<a href={localePath(locale, '/join-our-journey/')} class="text-link">
+				{t(locale, ui.nav.join)}
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>
 	</section>
 
 	<section class="mt-10">
-		<YouTubeCarousel heading="Follow us on our Danish YouTube channel" limit={12} />
+		<YouTubeCarousel
+			heading={t(locale, ui.home.youtube)}
+			viewChannel={t(locale, ui.home.viewChannel)}
+			loadError={t(locale, ui.home.videosError)}
+			trackLabel={`${t(locale, ui.home.youtube)} ${t(locale, ui.home.carousel)}`}
+			limit={12}
+		/>
 	</section>
 
 	<section class="py-6 sm:py-10">
-		<h2 class="display-title">Preparing for our adventure</h2>
+		<h2 class="display-title">{t(locale, ui.home.preparingTitle)}</h2>
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">
-			We are building the adventure from the work on the boat, getting Blue Heaven ready for the passages ahead.
-			<a href="/plannedroute/" class="text-link">
-				Read more about our passages here
+			{t(locale, ui.home.preparing)}
+			<a href={localePath(locale, '/plannedroute/')} class="text-link">
+				{t(locale, ui.home.passagesLink)}
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>
 		<OptimizedPhoto
 			class="mt-6"
 			src={boatworkPhoto}
-			alt="Philip and Louise in protective suits while working on their sailboat."
+			alt={t(locale, ui.home.boatAlt)}
 			aspectRatio="16/9"
 		/>
 	</section>

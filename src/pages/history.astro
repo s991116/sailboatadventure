@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
+import { resolveLocale, t, type Locale } from '../i18n/locale';
+import { ui } from '../i18n/messages';
+
+type LocaleProps = { locale?: Locale };
+const locale = resolveLocale((Astro.props as LocaleProps).locale, Astro.url.pathname);
 
 type HistoryMoment = {
 	id: string;
@@ -38,7 +43,8 @@ const parseFolder = (folderName: string) => {
 	const match = folderName.match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);
 	if (!match) return { date: folderName, title: folderName };
 	const danishTitle = nfc(cleanTitle(match[2] ?? '') || match[1]);
-	return { date: match[1], title: titleEnNfc[danishTitle] ?? danishTitle };
+	const englishTitle = titleEnNfc[danishTitle] ?? danishTitle;
+	return { date: match[1], title: locale === 'da' ? danishTitle : englishTitle };
 };
 
 const chooseCover = (paths: string[]) => {
@@ -74,7 +80,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 	.sort((a, b) => b.id.localeCompare(a.id));
 ---
 
-<Layout title="History">
+<Layout locale={locale} title={t(locale, ui.history.title)}>
 	<div class="history-timeline -mt-12 sm:-mt-16" data-history-timeline>
 		<div class="history-timeline__inner">
 			<div class="history-track">
@@ -82,7 +88,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 				<div class="history-track__progress" data-history-progress aria-hidden="true"></div>
 				<div class="history-track__marker" data-history-marker aria-hidden="true"></div>
 
-				<div class="history-track__ticks" role="navigation" aria-label="Jump in the timeline">
+				<div class="history-track__ticks" role="navigation" aria-label={t(locale, ui.history.jump)}>
 					{moments.map((moment, index) => (
 						<button
 							type="button"
@@ -101,12 +107,9 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 	</div>
 
 	<section class="mt-10 sm:mt-12">
-		<h1 class="display-title">Back through the logbook</h1>
+		<h1 class="display-title">{t(locale, ui.history.title)}</h1>
 		<div class="accent-rule mt-6"></div>
-		<p class="lede">
-			Scroll down to move back in time. Each moment grows as it nears the middle of the screen, then fades away as it
-			leaves.
-		</p>
+		<p class="lede">{t(locale, ui.history.lede)}</p>
 	</section>
 
 	<div class="mt-10 sm:mt-14">

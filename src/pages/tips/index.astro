@@ -1,88 +1,59 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { resolveLocale, t, type Locale } from '../../i18n/locale';
+import { ui } from '../../i18n/messages';
+
+type Props = { locale?: Locale };
+const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 ---
 
-<Layout title="Tips">
+<Layout locale={locale} title={t(locale, ui.tips.title)}>
 	<article>
 		<header>
-			<h1 class="display-title">Tips</h1>
+			<h1 class="display-title">{t(locale, ui.tips.title)}</h1>
 			<div class="accent-rule mt-6"></div>
-			<p class="lede">Practical notes from preparing the boat and the passage.</p>
+			<p class="lede">{t(locale, ui.tips.lede)}</p>
 		</header>
 
 		<div class="page-prose mt-10 max-w-none">
-			<h2>Print your own courtesy flags</h2>
+			<h2>{t(locale, ui.tips.courtesyTitle)}</h2>
 			<p>
-				You can print your own courtesy flags that match the countries you plan to sail to. This is our version of the
-				guide from
+				{t(locale, ui.tips.courtesyBefore)}{' '}
 				<a href="https://blog.noforeignland.com/make-your-own-courtesy-flags/" target="_blank" rel="noreferrer"
 					>NoForeignLand</a
 				>.
 			</p>
-			<p>It consists of three simple steps:</p>
+			<p>{t(locale, ui.tips.stepsIntro)}</p>
 			<ol>
-				<li>Create your own PDF file with the flags you need.</li>
-				<li>Send the PDF to a print service that offers fabric printing.</li>
-				<li>Cut and sew along the edges of the flags.</li>
+				{ui.tips.steps.map((step) => <li>{t(locale, step)}</li>)}
 			</ol>
 
-			<h3>Make the sheet</h3>
+			<h3>{t(locale, ui.tips.makeTitle)}</h3>
 			<p>
-				Open
-				<a href="https://flag.sailboatadventure.dk">flag.sailboatadventure.dk</a>
-				and select the places on your route. The national flag is the courtesy flag. Where an island has its own flag,
-				you can add that regional flag beside it. Each finished flag is 45&nbsp;×&nbsp;30&nbsp;cm.
+				{t(locale, ui.tips.makeBefore)}{' '}
+				<a href="https://flag.sailboatadventure.dk">flag.sailboatadventure.dk</a>{' '}
+				{t(locale, ui.tips.makeAfter)}
 			</p>
-			<h3>Have it printed</h3>
+			<h3>{t(locale, ui.tips.printTitle)}</h3>
 			<p>
-				Send the PDF to a print service that prints on outdoor fabric. One option is
-				<a href="https://www.pixartprinting.co.uk/" target="_blank" rel="noreferrer">PixartPrinting</a>
-				— for example with these settings (same approach as described by
-				<a href="https://www.noforeignland.com/help/courtesy-flags" target="_blank" rel="noreferrer"
-					>noforeignland</a
-				>):
+				{t(locale, ui.tips.printBefore)}{' '}
+				<a href="https://www.pixartprinting.co.uk/" target="_blank" rel="noreferrer">PixartPrinting</a>{' '}
+				{t(locale, ui.tips.printMiddle)}{' '}
+				<a href="https://www.noforeignland.com/help/courtesy-flags" target="_blank" rel="noreferrer">noforeignland</a>):
 			</p>
 			<ul>
-				<li>Material: windproof outdoor fabric, about 115&nbsp;gsm</li>
-				<li>Cutting method: square-cut edges</li>
-				<li>Reinforced stitching: none</li>
-				<li>Reinforced hem: none</li>
-				<li>Pole pocket: none</li>
-				<li>Accessories: none</li>
+				{ui.tips.settings.map((item) => <li>{t(locale, item)}</li>)}
 			</ul>
-			<p>
-				The sheet already includes the fold cloth and the lines you follow when you cut and sew.
-			</p>
+			<p>{t(locale, ui.tips.sheetNote)}</p>
 
-			<h3>Read the sheet</h3>
+			<h3>{t(locale, ui.tips.readTitle)}</h3>
 			<ul>
-				<li>The outer dashed line is where you cut.</li>
-				<li>
-					The inner dashed line is the fold. There is 2&nbsp;cm of cloth outside the finished flag on every side. The
-					picture is mirrored across that fold, so the colour continues into the hem.
-				</li>
-				<li>
-					The country name is printed in the left fold. That edge is the hoist, the side you attach to the halyard, and
-					the name shows which way is up.
-				</li>
+				{ui.tips.read.map((item) => <li>{t(locale, item)}</li>)}
 			</ul>
 
-			<h3>Sew the flag</h3>
+			<h3>{t(locale, ui.tips.sewTitle)}</h3>
 			<ol>
-				<li>Cut along the outer dashed line.</li>
-				<li>
-					Fold the top and the bottom in along the inner dashed line, and stitch twice along each edge.
-				</li>
-				<li>
-					Fold the fly in along the inner dashed line — the fly is the free end, away from the halyard — and stitch a
-					triple edge.
-				</li>
-				<li>
-					On the hoist, fold a short piece of webbing over about 50&nbsp;cm of 3&nbsp;mm braided polyester line, and
-					stitch the webbing to the flag so the line is held inside it. A small loop at the top makes it easy to see
-					which way is up when you change flags on deck.
-				</li>
-				<li>Write the country name on the webbing with a permanent pen, so you can grab the right flag in a hurry.</li>
+				{ui.tips.sew.map((item) => <li>{t(locale, item)}</li>)}
 			</ol>
 		</div>
 	</article>

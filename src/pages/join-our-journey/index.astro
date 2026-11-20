@@ -2,27 +2,43 @@
 import Layout from '../../layouts/Layout.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
+import FlagIcon from '../../components/FlagIcon.astro';
+import { getOpenGuestTrips } from '../../data/planned-passages';
+import { localePath, resolveLocale, t, type Locale } from '../../i18n/locale';
+import { ui } from '../../i18n/messages';
 import {
 	joinOurJourneyBenefits,
 	joinOurJourneyContact,
 	joinOurJourneyHero,
 	joinOurJourneyImages,
 	joinOurJourneyMeta,
-	joinOurJourneyOpenTrips,
 	joinOurJourneyWho,
 } from '../../data/join-our-journey-content';
 
-const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
+type Props = { locale?: Locale };
+const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
+const stageOptions = getOpenGuestTrips(locale).map((trip) => trip.formOption);
+const formLabels = {
+	name: t(locale, ui.form.name),
+	email: t(locale, ui.form.email),
+	message: t(locale, ui.form.message),
+	submit: t(locale, ui.form.submit),
+	success: t(locale, ui.form.success),
+	error: t(locale, ui.form.error),
+	sending: t(locale, ui.form.sending),
+	notConfiguredBefore: t(locale, ui.form.notConfiguredBefore),
+	notConfiguredAfter: t(locale, ui.form.notConfiguredAfter),
+};
 ---
 
-<Layout title={joinOurJourneyMeta.title}>
+<Layout locale={locale} title={t(locale, joinOurJourneyMeta.title)}>
 	<section class="mb-6 sm:mb-10">
-		<h1 class="display-title">{joinOurJourneyHero.title}</h1>
+		<h1 class="display-title">{t(locale, joinOurJourneyHero.title)}</h1>
 		<div class="accent-rule mt-6"></div>
 		<div class="mt-6 sm:mt-8">
 			<OptimizedPhoto
 				src={joinOurJourneyImages.hero}
-				alt="Louise and Philip in Egypt."
+				alt={t(locale, joinOurJourneyHero.alt)}
 				preset="center"
 				aspectRatio="16/9"
 			/>
@@ -30,49 +46,49 @@ const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 	</section>
 
 	<section class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-benefits-title">
-		<h2 id="join-our-journey-benefits-title" class="section-title">{joinOurJourneyBenefits.title}</h2>
+		<h2 id="join-our-journey-benefits-title" class="section-title">{t(locale, joinOurJourneyBenefits.title)}</h2>
 		<div class="accent-rule mt-6"></div>
 
 		<div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10">
 			{joinOurJourneyBenefits.items.map((item) => (
 				<article>
-					<h3 class="subheading">{item.title}</h3>
-					<p class="body mt-3">{item.description}</p>
+					<h3 class="subheading">{t(locale, item.title)}</h3>
+					<p class="body mt-3">{t(locale, item.description)}</p>
 				</article>
 			))}
 		</div>
 
 		<p class="lede mt-8">
-			Read more about the routes and passages
-			<a href="/plannedroute/" class="text-link">
-				here
+			{t(locale, ui.join.routes)}
+			<a href={localePath(locale, '/plannedroute/')} class="text-link">
+				{t(locale, ui.join.here)}
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>
 	</section>
 
 	<section class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-who-title">
-		<h2 id="join-our-journey-who-title" class="section-title">{joinOurJourneyWho.title}</h2>
+		<h2 id="join-our-journey-who-title" class="section-title">{t(locale, joinOurJourneyWho.title)}</h2>
 		<div class="accent-rule mt-6"></div>
 
 		<ul class="body mt-10 list-disc space-y-3 pl-5">
 			{joinOurJourneyWho.principles.map((principle) => (
 				<li>
-					<strong class="font-semibold">{principle.lead}</strong>
-					<span> {principle.text}</span>
+					<strong class="font-semibold">{t(locale, principle.lead)}</strong>
+					<span> {t(locale, principle.text)}</span>
 				</li>
 			))}
 		</ul>
 
 		<p class="body mt-8">
-			<strong class="font-semibold">{joinOurJourneyWho.sharedRule.lead}</strong>
-			<span> {joinOurJourneyWho.sharedRule.text}</span>
+			<strong class="font-semibold">{t(locale, joinOurJourneyWho.sharedRule.lead)}</strong>
+			<span> {t(locale, joinOurJourneyWho.sharedRule.text)}</span>
 		</p>
 
 		<div class="mt-16 max-w-2xl sm:mt-20">
-			<h2 class="section-title">{joinOurJourneyWho.guestAgreement.label}</h2>
+			<h2 class="section-title">{t(locale, joinOurJourneyWho.guestAgreement.label)}</h2>
 			<div class="accent-rule mt-6"></div>
-			<p class="lede">{joinOurJourneyWho.guestAgreement.intro}</p>
+			<p class="lede">{t(locale, joinOurJourneyWho.guestAgreement.intro)}</p>
 			<ul class="mt-5 flex flex-wrap gap-4">
 				{joinOurJourneyWho.guestAgreement.downloads.map((file) => (
 					<li>
@@ -80,29 +96,10 @@ const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 							href={file.href}
 							class="text-link"
 							download
-							aria-label={file.ariaLabel}
+							aria-label={t(locale, file.ariaLabel)}
 						>
-							<span
-								class="inline-flex h-5 w-7 overflow-hidden rounded-sm border border-[color:var(--color-border)] shadow-sm"
-								aria-hidden="true"
-							>
-								{file.flag === 'dk' ? (
-									<svg viewBox="0 0 37 28" class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-										<rect width="37" height="28" fill="#c8102e" />
-										<rect x="12" width="4" height="28" fill="#fff" />
-										<rect y="12" width="37" height="4" fill="#fff" />
-									</svg>
-								) : (
-									<svg viewBox="0 0 60 30" class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-										<rect width="60" height="30" fill="#012169" />
-										<path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6" />
-										<path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2" />
-										<path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10" />
-										<path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6" />
-									</svg>
-								)}
-							</span>
-							{file.label}
+							<FlagIcon code={file.flag} />
+							{t(locale, file.label)}
 							<span aria-hidden="true">PDF</span>
 						</a>
 					</li>
@@ -114,17 +111,18 @@ const stageOptions = joinOurJourneyOpenTrips.map((trip) => trip.formOption);
 	<section id="contact" class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-contact-title">
 		<div class="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
 			<div>
-				<h2 id="join-our-journey-contact-title" class="section-title">{joinOurJourneyContact.title}</h2>
+				<h2 id="join-our-journey-contact-title" class="section-title">{t(locale, joinOurJourneyContact.title)}</h2>
 				<div class="accent-rule mt-6"></div>
-				<p class="lede">{joinOurJourneyContact.intro}</p>
+				<p class="lede">{t(locale, joinOurJourneyContact.intro)}</p>
 			</div>
 
 			<Web3FormsContactForm
 				formId="join-our-journey"
-				subject="Join Our Journey enquiry — Sailboat Adventure"
+				subject={t(locale, ui.join.subject)}
 				stageOptions={stageOptions}
-				stageLabel={joinOurJourneyContact.form.stageLabel}
-				stagePlaceholder={joinOurJourneyContact.form.stagePlaceholder}
+				stageLabel={t(locale, ui.form.stageLabel)}
+				stagePlaceholder={t(locale, ui.form.stagePlaceholder)}
+				labels={formLabels}
 			/>
 		</div>
 	</section>

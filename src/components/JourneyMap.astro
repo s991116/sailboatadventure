@@ -1,15 +1,30 @@
 ---
 import type { JourneyLeg } from '../data/journey-legs';
+import { t, type Locale } from '../i18n/locale';
+import { ui } from '../i18n/messages';
+import { placeName } from '../i18n/places';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 type Props = {
 	legs: JourneyLeg[];
+	locale: Locale;
 };
 
-const { legs } = Astro.props as Props;
+const { legs, locale } = Astro.props as Props;
 const mapTilerKey = import.meta.env.PUBLIC_MAPTILER_API_KEY ?? '';
 const mapId = `journey-map-${Math.random().toString(36).slice(2, 9)}`;
-const mapConfig = JSON.stringify({ legs, mapTilerKey });
+const localizedLegs = legs.map((leg) => ({
+	...leg,
+	stops: leg.stops.map((stop) => ({ ...stop, name: placeName(locale, stop.name) })),
+}));
+const mapConfig = JSON.stringify({
+	legs: localizedLegs,
+	mapTilerKey,
+	labels: {
+		passage: t(locale, ui.route.passageWord),
+		connector: t(locale, ui.route.connector),
+	},
+});
 ---
 
 <div class="journey-map-wrap" data-journey-map-wrap>
@@ -18,13 +33,13 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		<div class="journey-map__overlays" data-journey-map-overlays hidden>
 			<p class="journey-map__passage-label" data-journey-map-passage></p>
 			<button type="button" class="journey-map__full-route" data-journey-back>
-				Full route
+				{t(locale, ui.route.mapFullRoute)}
 			</button>
 		</div>
 	</div>
 	{!mapTilerKey ? (
 		<p class="journey-map__notice">
-			Map preview requires a MapTiler API key. Set <code>PUBLIC_MAPTILER_API_KEY</code> in your environment.
+			{t(locale, ui.route.mapNotice)}
 		</p>
 	) : null}
 </div>
@@ -51,6 +66,10 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 	type MapConfig = {
 		legs: MapLeg[];
 		mapTilerKey: string;
+		labels: {
+			passage: string;
+			connector: string;
+		};
 	};
 
 	const initJourneyMap = (container: HTMLElement) => {
@@ -60,7 +79,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		const config = JSON.parse(raw) as MapConfig;
 		if (!config.mapTilerKey) return;
 
-		const { legs } = config;
+		const { legs, labels } = config;
 		const sourceId = 'journey-routes';
 		const layerPrefix = 'journey-leg';
 
@@ -84,7 +103,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 		const getLegTooltip = (leg: MapLeg) => {
 			const start = leg.stops.find((stop) => stop.role === 'start') ?? leg.stops[0];
 			const end = leg.stops.find((stop) => stop.role === 'end') ?? leg.stops[leg.stops.length - 1];
-			return `${formatPlaceName(start.name)} to ${formatPlaceName(end.name)}`;
+			return `${formatPlaceName(start.name)} ${labels.connector} ${formatPlaceName(end.name)}`;
 		};
 
 		const map = new maplibregl.Map({
@@ -187,7 +206,7 @@ const mapConfig = JSON.stringify({ legs, mapTilerKey });
 			}
 
 			const leg = legs.find((item) => item.slug === slug);
-			passageLabel.textContent = leg ? `Passage ${leg.number}` : '';
+			passageLabel.textContent = leg ? `${labels.passage} ${leg.number}` : '';
 			overlays.hidden = !leg;
 		};
 

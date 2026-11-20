@@ -1,31 +1,145 @@
 ---
 import '../styles/global.css';
 import '../styles/typography.css';
+import LanguageSwitch from '../components/LanguageSwitch.astro';
+import { isActivePath, localePath, resolveLocale, t, type Locale } from '../i18n/locale';
+import { ui } from '../i18n/messages';
 
 type Props = {
-  title?: string;
+	title?: string;
+	locale?: Locale;
 };
 
-const { title = 'Sailboat Adventure' } = Astro.props as Props;
 const pathname = Astro.url?.pathname ?? '/';
+const locale = resolveLocale((Astro.props as Props).locale, pathname);
+const { title = 'Sailboat Adventure' } = Astro.props as Props;
 
 const navItems = [
-	{ href: '/', label: 'Home' },
-	{ href: '/plannedroute/', label: 'Planned Route' },
-	{ href: '/join-our-journey/', label: 'Join Our Journey' },
-	{ href: '/history/', label: 'History' },
-	{ href: '/tips/', label: 'Tips' },
-	{ href: '/about/', label: 'About us' },
+	{ path: '/', label: ui.nav.home },
+	{ path: '/plannedroute/', label: ui.nav.plannedRoute },
+	{ path: '/join-our-journey/', label: ui.nav.join },
+	{ path: '/history/', label: ui.nav.history },
+	{ path: '/tips/', label: ui.nav.tips },
+	{ path: '/about/', label: ui.nav.about },
 ] as const;
+
+const alternateBase = Astro.site ?? Astro.url;
+const daUrl = new URL(localePath('da', pathname), alternateBase).href;
+const enUrl = new URL(localePath('en', pathname), alternateBase).href;
 ---
 
 <!doctype html>
-<html lang="da">
+<html lang={locale}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="alternate" hreflang="da" href={daUrl} />
+		<link rel="alternate" hreflang="en" href={enUrl} />
+		<link rel="alternate" hreflang="x-default" href={enUrl} />
+		<style is:inline>
+			html.lang-pending { visibility: hidden; }
+		</style>
+		<script is:inline>
+			(function () {
+				var YEAR = 60 * 60 * 24 * 365;
+
+				function cookieLang() {
+					var match = document.cookie.match(/(?:^|; )lang=(da|en)(?:;|$)/);
+					return match ? match[1] : null;
+				}
+
+				function setCookie(lang, persistent) {
+					var cookie = 'lang=' + lang + '; Path=/; SameSite=Lax';
+					if (persistent) cookie += '; Max-Age=' + YEAR;
+					document.cookie = cookie;
+				}
+
+				function isDanishPath(path) {
+					return path === '/da' || path.indexOf('/da/') === 0;
+				}
+
+				function barePath(path) {
+					var value = path || '/';
+					if (value === '/da' || value.indexOf('/da/') === 0) value = value.slice(3) || '/';
+					if (value.charAt(0) !== '/') value = '/' + value;
+					if (value.length > 1 && value.charAt(value.length - 1) !== '/') value += '/';
+					return value;
+				}
+
+				function targetFor(lang, path) {
+					var bare = barePath(path);
+					var suffix = location.search + location.hash;
+					if (lang === 'da') return (bare === '/' ? '/da/' : '/da' + bare) + suffix;
+					return bare + suffix;
+				}
+
+				function needsMove(lang, path) {
+					var danish = isDanishPath(path);
+					return (lang === 'da' && !danish) || (lang === 'en' && danish);
+				}
+
+				function showPage() {
+					document.documentElement.classList.remove('lang-pending');
+				}
+
+				function apply(lang) {
+					var path = location.pathname || '/';
+					if (!needsMove(lang, path)) {
+						showPage();
+						return;
+					}
+					location.replace(targetFor(lang, path));
+				}
+
+				document.addEventListener('click', function (event) {
+					var node = event.target;
+					if (!node || !node.closest) return;
+					var link = node.closest('[data-set-lang]');
+					if (!link) return;
+					var lang = link.getAttribute('data-set-lang');
+					if (lang === 'da' || lang === 'en') setCookie(lang, true);
+				});
+
+				var chosen = cookieLang();
+				if (chosen) {
+					apply(chosen);
+					return;
+				}
+
+				if (isDanishPath(location.pathname || '/')) {
+					setCookie('da', true);
+					return;
+				}
+
+				document.documentElement.classList.add('lang-pending');
+				var settled = false;
+				function settle(lang, persistent) {
+					if (settled) return;
+					settled = true;
+					setCookie(lang, persistent);
+					apply(lang);
+				}
+
+				var timer = setTimeout(function () {
+					settle('en', false);
+				}, 1800);
+
+				fetch('https://api.country.is/', { cache: 'no-store' })
+					.then(function (response) {
+						return response.json();
+					})
+					.then(function (data) {
+						clearTimeout(timer);
+						settle(data && data.country === 'DK' ? 'da' : 'en', true);
+					})
+					.catch(function () {
+						clearTimeout(timer);
+						settle('en', false);
+					});
+			})();
+		</script>
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -35,24 +149,39 @@ const navItems = [
 			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
 			rel="stylesheet"
 		/>
-		<script is:inline define:vars={{ navItems }}>
+		<script is:inline>
 			(function () {
 				var host = location.hostname;
 				if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return;
 				if (host.slice(0, 4) === 'www.') host = host.slice(4);
+
+				var sections = [
+					{ href: '/', label: 'Home' },
+					{ href: '/plannedroute/', label: 'Planned Route' },
+					{ href: '/join-our-journey/', label: 'Join Our Journey' },
+					{ href: '/history/', label: 'History' },
+					{ href: '/tips/', label: 'Tips' },
+					{ href: '/about/', label: 'About us' },
+				];
 
 				function trimSlash(value) {
 					if (value.length > 1 && value.charAt(value.length - 1) === '/') return value.slice(0, -1);
 					return value;
 				}
 
-				var page = trimSlash(location.pathname || '/');
+				function barePath(value) {
+					var path = value || '/';
+					if (path === '/da' || path.indexOf('/da/') === 0) path = path.slice(3) || '/';
+					return path;
+				}
+
+				var page = trimSlash(barePath(location.pathname || '/'));
 				var section = null;
-				for (var i = 0; i < navItems.length; i++) {
-					var href = trimSlash(navItems[i].href);
+				for (var i = 0; i < sections.length; i++) {
+					var href = trimSlash(sections[i].href);
 					var underSection = href === '/' ? page === '/' : page === href || page.indexOf(href + '/') === 0;
 					if (underSection) {
-						section = navItems[i];
+						section = sections[i];
 						break;
 					}
 				}
@@ -75,44 +204,51 @@ const navItems = [
 	</head>
 	<body class="min-h-dvh antialiased">
 		<header class="site-header sticky top-0 z-50 backdrop-blur">
-			<nav class="site-container relative flex flex-nowrap items-center gap-4 py-4" data-site-nav aria-label="Main">
-				<div class="nav-links flex items-center gap-6" data-nav-links>
+			<nav class="site-container relative flex flex-nowrap items-center gap-4 py-4" data-site-nav aria-label={t(locale, ui.nav.main)}>
+				<div class="nav-links flex shrink-0 items-center gap-6" data-nav-links>
 					{navItems.map((item) => {
-						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+						const href = localePath(locale, item.path);
+						const isActive = isActivePath(pathname, href);
 						return (
 							<a
-								href={item.href}
+								href={href}
 								aria-current={isActive ? 'page' : undefined}
 								class="nav-link"
 							>
-								{item.label}
+								{t(locale, item.label)}
 							</a>
 						);
 					})}
 				</div>
-				<button
-					type="button"
-					class="nav-menu-button ml-auto"
-					aria-expanded="false"
-					aria-controls="mobile-nav-panel"
-					aria-label="Open menu"
-				>
-					<span class="nav-menu-button__bar" aria-hidden="true"></span>
-					<span class="nav-menu-button__bar" aria-hidden="true"></span>
-					<span class="nav-menu-button__bar" aria-hidden="true"></span>
-				</button>
+				<div class="nav-tools" data-nav-tools>
+					<button
+						type="button"
+						class="nav-menu-button"
+						aria-expanded="false"
+						aria-controls="mobile-nav-panel"
+						aria-label={t(locale, ui.nav.openMenu)}
+						data-label-open={t(locale, ui.nav.openMenu)}
+						data-label-close={t(locale, ui.nav.closeMenu)}
+					>
+						<span class="nav-menu-button__bar" aria-hidden="true"></span>
+						<span class="nav-menu-button__bar" aria-hidden="true"></span>
+						<span class="nav-menu-button__bar" aria-hidden="true"></span>
+					</button>
+					<LanguageSwitch locale={locale} />
+				</div>
 			</nav>
 			<div id="mobile-nav-panel" class="nav-panel hidden" hidden>
 				<div class="site-container pb-4">
 					{navItems.map((item) => {
-						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+						const href = localePath(locale, item.path);
+						const isActive = isActivePath(pathname, href);
 						return (
 							<a
-								href={item.href}
+								href={href}
 								aria-current={isActive ? 'page' : undefined}
 								class="nav-panel__link"
 							>
-								{item.label}
+								{t(locale, item.label)}
 							</a>
 						);
 					})}
@@ -130,11 +266,15 @@ const navItems = [
 
 				function setMenuOpen(open) {
 					menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
-					menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+					menuButton.setAttribute(
+						'aria-label',
+						open ? menuButton.getAttribute('data-label-close') : menuButton.getAttribute('data-label-open'),
+					);
 					mobilePanel.hidden = !open;
 					mobilePanel.classList.toggle('hidden', !open);
 				}
 
+				var tools = document.querySelector('[data-nav-tools]');
 				var cachedLinksWidth = 0;
 
 				function linksWidth() {
@@ -151,7 +291,8 @@ const navItems = [
 					var navStyle = getComputedStyle(nav);
 					var gap = parseFloat(navStyle.columnGap) || 0;
 					var padding = (parseFloat(navStyle.paddingLeft) || 0) + (parseFloat(navStyle.paddingRight) || 0);
-					var available = nav.clientWidth - padding;
+					var toolsWidth = tools ? tools.getBoundingClientRect().width : 0;
+					var available = nav.clientWidth - padding - toolsWidth - (toolsWidth ? gap : 0);
 					var needed = linksWidth();
 					var collapsed = header.classList.contains('is-collapsed');
 					// A few pixels of slack so the bar does not flicker at the boundary.

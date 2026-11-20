@@ -5,35 +5,32 @@ type Props = {
 	stageOptions?: string[];
 	stageLabel?: string;
 	stagePlaceholder?: string;
+	labels: {
+		name: string;
+		email: string;
+		message: string;
+		submit: string;
+		success: string;
+		error: string;
+		sending: string;
+		notConfiguredBefore: string;
+		notConfiguredAfter: string;
+	};
 };
 
-const {
-	formId,
-	subject,
-	stageOptions,
-	stageLabel = 'Preferred passage',
-	stagePlaceholder = 'Select a passage',
-} = Astro.props as Props;
+const { formId, subject, stageOptions, stageLabel, stagePlaceholder, labels } = Astro.props as Props;
 
 const web3formsAccessKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ?? '';
 const isConfigured = Boolean(web3formsAccessKey);
-
-const labels = {
-	name: 'Name',
-	email: 'Email',
-	message: 'Message',
-	submit: 'Send message',
-	success: 'Thanks for reaching out — we will reply soon.',
-	error: 'Could not send your message. Please try again.',
-	sending: 'Sending…',
-};
 ---
 
 <div class="max-w-xl">
 	{
 		isConfigured ? null : (
 			<p class="mb-5 text-sm text-[color:var(--color-muted)]" role="status">
-				Contact form is not configured yet. Add <code>PUBLIC_WEB3FORMS_ACCESS_KEY</code> from{' '}
+				{labels.notConfiguredBefore}
+				<code>PUBLIC_WEB3FORMS_ACCESS_KEY</code>
+				{labels.notConfiguredAfter}
 				<a href="https://web3forms.com/" target="_blank" rel="noreferrer">
 					web3forms.com
 				</a>
@@ -117,6 +114,7 @@ const labels = {
 			type="submit"
 			class="inline-flex items-center gap-2 font-medium disabled:cursor-not-allowed disabled:opacity-55"
 			data-web3forms-contact-submit
+			data-sending-label={labels.sending}
 			disabled={!isConfigured}
 		>
 			{labels.submit}
@@ -138,7 +136,7 @@ const labels = {
 		const error = form.querySelector<HTMLElement>('[data-web3forms-contact-error]');
 		const submitBtn = form.querySelector<HTMLButtonElement>('[data-web3forms-contact-submit]');
 		const defaultSubmitLabel = submitBtn?.innerHTML ?? '';
-		const sendingLabel = 'Sending…';
+		const sendingLabel = submitBtn?.dataset.sendingLabel || 'Sending…';
 
 		form.addEventListener('submit', async (event) => {
 			event.preventDefault();

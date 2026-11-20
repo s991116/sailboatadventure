@@ -4,20 +4,19 @@ import JourneyMap from '../../components/JourneyMap.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
 import { getCollection } from 'astro:content';
 import { journeyLegs } from '../../data/journey-legs';
-import {
-	formatGuestDateRange,
-	joinOurJourneyContactHref,
-} from '../../data/planned-passages';
+import { formatGuestDateRange, joinOurJourneyContactHref } from '../../data/planned-passages';
+import { resolveLocale, t, type Locale } from '../../i18n/locale';
+import { ui } from '../../i18n/messages';
+import { placeName } from '../../i18n/places';
+
+type LocaleProps = { locale?: Locale };
+const locale = resolveLocale((Astro.props as LocaleProps).locale, Astro.url.pathname);
+const contactHref = joinOurJourneyContactHref(locale);
 
 const legs = await getCollection('journey', ({ data }) => !data.draft);
 const sortedLegs = legs.sort((a, b) => a.data.legNumber - b.data.legNumber);
 
-const legPanels = await Promise.all(
-	sortedLegs.map(async (leg) => {
-		const { Content } = await leg.render();
-		return { leg, Content };
-	}),
-);
+const legPanels = sortedLegs.map((leg) => ({ leg }));
 
 const guestBySlug = Object.fromEntries(
 	journeyLegs.map((leg) => [
@@ -25,8 +24,8 @@ const guestBySlug = Object.fromEntries(
 		leg.guestSignup.status === 'open'
 			? {
 					status: 'open' as const,
-					dateRange: formatGuestDateRange(leg.guestSignup.startDate, leg.guestSignup.endDate),
-					href: joinOurJourneyContactHref,
+					dateRange: formatGuestDateRange(leg.guestSignup.startDate, leg.guestSignup.endDate, locale),
+					href: contactHref,
 				}
 			: { status: 'fully-booked' as const },
 	]),
@@ -34,14 +33,15 @@ const guestBySlug = Object.fromEntries(
 
 const periodBySlug = Object.fromEntries(
 	sortedLegs.map((leg) => {
-		const period = leg.data.facts.find((fact) => fact.label === 'Planned period')?.value ?? '';
+		const periodFact = leg.data.facts.find((fact) => fact.label.en === 'Planned period');
+		const period = periodFact ? t(locale, periodFact.value) : '';
 		return [leg.slug, period];
 	}),
 );
 
 const mobilePassages = journeyLegs.map((leg) => {
-	const start = leg.stops.find((stop) => stop.role === 'start')?.name ?? '';
-	const end = leg.stops.find((stop) => stop.role === 'end')?.name ?? '';
+	const start = placeName(locale, leg.stops.find((stop) => stop.role === 'start')?.name ?? '');
+	const end = placeName(locale, leg.stops.find((stop) => stop.role === 'end')?.name ?? '');
 	return {
 		slug: leg.slug,
 		from: start,
@@ -53,36 +53,32 @@ const mobilePassages = journeyLegs.map((leg) => {
 });
 ---
 
-<Layout title="Planned Route">
+<Layout locale={locale} title={t(locale, ui.route.title)}>
 	<div class="journey-page" data-journey-page>
 		<section class="journey-intro" data-journey-intro>
-			<h1 class="display-title">Planned Route</h1>
+			<h1 class="display-title">{t(locale, ui.route.title)}</h1>
 			<div class="accent-rule mt-6"></div>
-			<p class="lede journey-intro__map-hint">
-				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
-			</p>
-			<p class="lede journey-intro__list-hint">
-				Choose a passage below to read more, from Denmark to the Caribbean.
-			</p>
+			<p class="lede journey-intro__map-hint">{t(locale, ui.route.mapHint)}</p>
+			<p class="lede journey-intro__list-hint">{t(locale, ui.route.listHint)}</p>
 		</section>
 
 		{
 			legPanels.map(({ leg }) => (
 				<header class="journey-passage-title hidden" data-journey-passage-title data-leg={leg.slug}>
 					<button type="button" class="journey-mobile-back" data-journey-back>
-						← Full route
+						{t(locale, ui.route.fullRoute)}
 					</button>
-					<h1 class="display-title mt-4">{leg.data.title}</h1>
+					<h1 class="display-title mt-4">{t(locale, leg.data.title)}</h1>
 					<div class="accent-rule mt-6"></div>
 				</header>
 			))
 		}
 
 		<div class="journey-breakout" data-journey-map-breakout>
-			<JourneyMap legs={journeyLegs} />
+			<JourneyMap legs={journeyLegs} locale={locale} />
 		</div>
 
-		<nav class="journey-passage-list mt-8" data-journey-passage-list aria-label="Planned passages">
+		<nav class="journey-passage-list mt-8" data-journey-passage-list aria-label={t(locale, ui.route.passagesLabel)}>
 			<ul class="journey-passage-list__items">
 				{mobilePassages.map((passage) => (
 					<li class="journey-passage-list__row">
@@ -105,7 +101,7 @@ const mobilePassages = journeyLegs.map((leg) => {
 									{passage.period ? <span>{passage.period}</span> : null}
 									<span class="journey-passage-list__sep" aria-hidden="true"></span>
 									<span>
-										{passage.guest?.status === 'open' ? 'Open to join' : 'Fully booked'}
+										{passage.guest?.status === 'open' ? t(locale, ui.route.openToJoin) : t(locale, ui.route.fullyBooked)}
 									</span>
 								</span>
 							</span>
@@ -116,23 +112,23 @@ const mobilePassages = journeyLegs.map((leg) => {
 		</nav>
 
 		<p class="lede mt-8 sm:mt-10" data-journey-join-cta>
-			Want to join us for one or more passages in 2027?
-			<a href={joinOurJourneyContactHref} class="text-link">
-				Join our journey
+			{t(locale, ui.route.joinCta)}
+			<a href={contactHref} class="text-link">
+				{t(locale, ui.route.joinLink)}
 				<span aria-hidden="true">→</span>
 			</a>
 		</p>
 
 		<div class="journey-panels mt-10 sm:mt-12">
-			{legPanels.map(({ leg, Content }) => {
+			{legPanels.map(({ leg }) => {
 				return (
 					<article class="journey-panel hidden space-y-8" data-journey-panel data-leg={leg.slug}>
 						{(leg.data.facts.length > 0 || guestBySlug[leg.slug]) ? (
 							<dl class="passage-facts">
 								{leg.data.facts.map((fact) => (
 									<div class="passage-fact">
-										<dt class="eyebrow">{fact.label}</dt>
-										<dd>{fact.value}</dd>
+										<dt class="eyebrow">{t(locale, fact.label)}</dt>
+										<dd>{t(locale, fact.value)}</dd>
 									</div>
 								))}
 								{(() => {
@@ -140,15 +136,15 @@ const mobilePassages = journeyLegs.map((leg) => {
 									if (!guest) return null;
 									return (
 										<div class="passage-fact">
-											<dt class="eyebrow">Guest crew</dt>
+											<dt class="eyebrow">{t(locale, ui.route.guestCrew)}</dt>
 											<dd>
 												{guest.status === 'open' ? (
 													<a href={guest.href} class="text-link">
-														Join this passage
+														{t(locale, ui.route.joinPassage)}
 														<span aria-hidden="true">→</span>
 													</a>
 												) : (
-													'Fully booked'
+													t(locale, ui.route.fullyBooked)
 												)}
 											</dd>
 										</div>
@@ -160,7 +156,7 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{leg.data.gallery.length > 0 ? (
 							<div class="passage-gallery">
 								{leg.data.gallery.map((photo) => (
-									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
+									<OptimizedPhoto src={photo.src} alt={t(locale, photo.alt)} aspectRatio="4/3" />
 								))}
 							</div>
 						) : null}
@@ -168,21 +164,21 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{(leg.data.sectionHeading || leg.data.intro) ? (
 							<div class="passage-intro">
 								{leg.data.sectionHeading ? (
-									<h2 class="section-title">{leg.data.sectionHeading}</h2>
+									<h2 class="section-title">{t(locale, leg.data.sectionHeading)}</h2>
 								) : null}
 								{leg.data.sectionHeading ? <div class="accent-rule mt-6"></div> : null}
 								{leg.data.intro ? (
-									<p class="body mt-5">{leg.data.intro}</p>
+									<p class="body mt-5">{t(locale, leg.data.intro)}</p>
 								) : null}
 							</div>
 						) : null}
 
 						{leg.data.highlights.length > 0 ? (
 							<section class="passage-section space-y-3">
-								<p class="eyebrow">What we hope to experience</p>
+								<p class="eyebrow">{t(locale, ui.route.hope)}</p>
 								<ul class="passage-highlights body list-disc space-y-2 pl-5">
 									{leg.data.highlights.map((item) => (
-										<li>{item}</li>
+										<li>{t(locale, item)}</li>
 									))}
 								</ul>
 							</section>
@@ -191,7 +187,7 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{leg.data.secondaryGallery.length > 0 ? (
 							<div class="passage-gallery">
 								{leg.data.secondaryGallery.map((photo) => (
-									<OptimizedPhoto src={photo.src} alt={photo.alt} aspectRatio="4/3" />
+									<OptimizedPhoto src={photo.src} alt={t(locale, photo.alt)} aspectRatio="4/3" />
 								))}
 							</div>
 						) : null}
@@ -199,25 +195,27 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{(leg.data.outroHeading || leg.data.outro) ? (
 							<div class="passage-intro">
 								{leg.data.outroHeading ? (
-									<h2 class="section-title">{leg.data.outroHeading}</h2>
+									<h2 class="section-title">{t(locale, leg.data.outroHeading)}</h2>
 								) : null}
 								{leg.data.outroHeading ? <div class="accent-rule mt-6"></div> : null}
 								{leg.data.outro ? (
-									<p class="body mt-5">{leg.data.outro}</p>
+									<p class="body mt-5">{t(locale, leg.data.outro)}</p>
 								) : null}
 							</div>
 						) : null}
 
 						{leg.data.alternativeRoute ? (
 							<section class="passage-section space-y-3">
-								<p class="eyebrow">Alternative route</p>
-								<p class="body">{leg.data.alternativeRoute}</p>
+								<p class="eyebrow">{t(locale, ui.route.alternative)}</p>
+								<p class="body">{t(locale, leg.data.alternativeRoute)}</p>
 							</section>
 						) : null}
 
-						<div class="page-prose">
-							<Content />
-						</div>
+						{leg.data.closing ? (
+							<div class="page-prose">
+								<p>{t(locale, leg.data.closing)}</p>
+							</div>
+						) : null}
 					</article>
 				);
 			})}
