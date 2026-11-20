@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
+import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
 import louisePhoto from '../../assets/photos/home/louise-on-deck.png';
 import philipPhoto from '../../assets/photos/join-our-journey/philip_beanie.jpg';
 import couplePhoto from '../../assets/photos/join-our-journey/louise-philip-sailboat.jpg';
@@ -9,9 +10,10 @@ import blueHeavenPhoto from '../../assets/photos/join-our-journey/Sailboat_cliff
 
 <Layout title="About us">
 	<article>
-		<header class="space-y-4">
+		<header>
 			<h1 class="display-title">About us</h1>
-			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">Who we are and why we are sailing.</p>
+			<div class="accent-rule mt-6"></div>
+			<p class="lede">Who we are and why we are sailing.</p>
 		</header>
 
 		<div class="page-prose mt-10 max-w-none">
@@ -88,6 +90,16 @@ import blueHeavenPhoto from '../../assets/photos/join-our-journey/Sailboat_cliff
 				We have installed safety equipment such as a life raft, AIS and radar, and made it more comfortable to live
 				on, with solar panels, a cockpit tent, and chargers for electronics.
 			</p>
+
+			<h2 id="contact">Contact Us</h2>
+			<p>
+				Write to us with the form below. Your message is delivered privately to our inbox. We do not publish an
+				email address or phone number on this site.
+			</p>
+		</div>
+
+		<div class="mt-10">
+			<Web3FormsContactForm formId="about-contact" subject="Contact us — Sailboat Adventure" />
 		</div>
 	</article>
 </Layout>

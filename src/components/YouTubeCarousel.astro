@@ -159,7 +159,7 @@ if (!channelId) {
 
 <section class:list={["ytc", className].filter(Boolean)} aria-label={heading}>
   <div class="ytc__header">
-    <h2 class="ytc__title">{heading}</h2>
+    <h2 class="ytc__title display-title">{heading}</h2>
     {channelId && (
       <a class="ytc__more" href={`https://www.youtube.com/channel/${channelId}`} target="_blank" rel="noreferrer">
         <svg class="ytc__youtube" viewBox="0 0 24 24" aria-hidden="true">
@@ -210,7 +210,7 @@ if (!channelId) {
 <style>
   .ytc__header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
@@ -219,13 +219,26 @@ if (!channelId) {
   .ytc__title {
     margin: 0;
     min-width: 0;
-    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+    max-width: 100%;
+  }
+
+  .ytc__title::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 64px;
+    margin-top: 1.5rem;
+    background: linear-gradient(90deg, var(--color-accent), transparent);
   }
 
   @media (max-width: 40rem) {
     .ytc__header {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+    }
+
+    .ytc__title {
+      width: 100%;
     }
   }
 
@@ -234,8 +247,9 @@ if (!channelId) {
     align-items: center;
     flex-shrink: 0;
     gap: 0.4rem;
-    font-size: 0.95rem;
-    color: var(--color-muted);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-accent-strong);
   }
 
   .ytc__youtube {
@@ -246,7 +260,7 @@ if (!channelId) {
   }
 
   .ytc__more:hover {
-    color: var(--color-text);
+    color: var(--color-accent);
   }
 
   .ytc__error {

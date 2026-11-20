@@ -21,13 +21,13 @@ import boatworkPhoto from '../assets/photos/join-our-journey/philip_louise_boatw
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">
 			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard.
-			<a href="/about/" class="inline-flex items-center gap-2 font-medium">
+			<a href="/about/" class="text-link">
 				About us
 				<span aria-hidden="true">→</span>
 			</a>
 			<br />
 			We sail with guest crew on the longer passages. You can read more about joining us here:
-			<a href="/join-our-journey/" class="inline-flex items-center gap-2 font-medium">
+			<a href="/join-our-journey/" class="text-link">
 				Join Our Journey
 				<span aria-hidden="true">→</span>
 			</a>
@@ -35,13 +35,18 @@ import boatworkPhoto from '../assets/photos/join-our-journey/philip_louise_boatw
 	</section>
 
 	<section class="mt-10">
-		<YouTubeCarousel heading="From our Danish YouTube channel" limit={12} />
+		<YouTubeCarousel heading="Follow us on our Danish YouTube channel" limit={12} />
 	</section>
 
-	<section class="surface-card mt-10 p-7 sm:p-10">
-		<h2 class="text-3xl sm:text-4xl">Preparing for our adventure</h2>
-		<p class="mt-4 text-[color:var(--color-muted)]">
+	<section class="py-6 sm:py-10">
+		<h2 class="display-title">Preparing for our adventure</h2>
+		<div class="accent-rule mt-6"></div>
+		<p class="lede">
 			We are building the adventure from the work on the boat, getting Blue Heaven ready for the passages ahead.
+			<a href="/plannedroute/" class="text-link">
+				Read more about our passages here
+				<span aria-hidden="true">→</span>
+			</a>
 		</p>
 		<OptimizedPhoto
 			class="mt-6"
@@ -49,11 +54,5 @@ import boatworkPhoto from '../assets/photos/join-our-journey/philip_louise_boatw
 			alt="Philip and Louise in protective suits while working on their sailboat."
 			aspectRatio="16/9"
 		/>
-		<div class="divider mt-7 pt-7">
-			<a href="/plannedroute/" class="inline-flex items-center gap-2 font-medium">
-				Read more about our passages here
-				<span aria-hidden="true">→</span>
-			</a>
-		</div>
 	</section>
 </Layout>

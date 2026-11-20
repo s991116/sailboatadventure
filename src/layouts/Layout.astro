@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/typography.css';
 
 type Props = {
   title?: string;
@@ -15,7 +16,6 @@ const navItems = [
 	{ href: '/history/', label: 'History' },
 	{ href: '/tips/', label: 'Tips' },
 	{ href: '/about/', label: 'About us' },
-	{ href: '/contact/', label: 'Contact us' },
 ] as const;
 ---
 
@@ -76,8 +76,7 @@ const navItems = [
 	<body class="min-h-dvh antialiased">
 		<header class="site-header sticky top-0 z-50 backdrop-blur">
 			<nav class="site-container relative flex flex-nowrap items-center gap-4 py-4" data-site-nav aria-label="Main">
-				<a href="/" class="site-brand shrink-0">Sailboat Adventure</a>
-				<div class="nav-links ml-auto flex items-center gap-6" data-nav-links>
+				<div class="nav-links flex items-center gap-6" data-nav-links>
 					{navItems.map((item) => {
 						const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
 						return (
@@ -125,10 +124,9 @@ const navItems = [
 				var header = document.querySelector('.site-header');
 				var nav = document.querySelector('[data-site-nav]');
 				var links = document.querySelector('[data-nav-links]');
-				var brand = document.querySelector('.site-brand');
 				var menuButton = document.querySelector('.nav-menu-button');
 				var mobilePanel = document.getElementById('mobile-nav-panel');
-				if (!header || !nav || !links || !brand || !menuButton || !mobilePanel) return;
+				if (!header || !nav || !links || !menuButton || !mobilePanel) return;
 
 				function setMenuOpen(open) {
 					menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -154,7 +152,7 @@ const navItems = [
 					var gap = parseFloat(navStyle.columnGap) || 0;
 					var padding = (parseFloat(navStyle.paddingLeft) || 0) + (parseFloat(navStyle.paddingRight) || 0);
 					var available = nav.clientWidth - padding;
-					var needed = brand.offsetWidth + gap + linksWidth();
+					var needed = linksWidth();
 					var collapsed = header.classList.contains('is-collapsed');
 					// A few pixels of slack so the bar does not flicker at the boundary.
 					var collapse = collapsed ? needed > available - 8 : needed > available + 1;
@@ -197,3 +195,4 @@ const navItems = [
 		</main>
 	</body>
 </html>
+

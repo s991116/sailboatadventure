@@ -57,14 +57,8 @@
 		border-bottom: 1px solid var(--color-border);
 	}
 
-	.site-brand {
-		@apply text-sm font-semibold tracking-[0.18em] uppercase;
-		color: var(--color-text);
-		white-space: nowrap;
-	}
-
 	.nav-link {
-		@apply text-sm font-medium tracking-wide;
+		@apply text-base font-semibold tracking-wide;
 		color: var(--color-muted);
 		white-space: nowrap;
 	}
@@ -95,12 +89,15 @@
 
 	.site-header.is-collapsed .nav-menu-button {
 		display: inline-flex;
+		margin-left: auto;
 	}
 
-	/* Kept in the DOM so its natural one-line width can be measured. */
+	/* Width is measured before this class is applied, then cached in the nav script. */
 	.site-header.is-collapsed .nav-links {
 		position: absolute;
-		width: max-content;
+		width: 0;
+		height: 0;
+		overflow: hidden;
 		visibility: hidden;
 		pointer-events: none;
 	}
@@ -134,9 +131,9 @@
 	.nav-panel__link {
 		display: block;
 		padding: 0.75rem 0;
-		font-size: 0.875rem;
-		font-weight: 500;
-		letter-spacing: 0.04em;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.025em;
 		color: var(--color-muted);
 		border-bottom: 1px solid var(--color-border);
 	}

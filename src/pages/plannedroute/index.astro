@@ -55,23 +55,25 @@ const mobilePassages = journeyLegs.map((leg) => {
 
 <Layout title="Planned Route">
 	<div class="journey-page" data-journey-page>
-		<section class="journey-intro space-y-4" data-journey-intro>
-			<h1 class="text-5xl leading-[0.95] sm:text-6xl">Planned Route</h1>
-			<p class="journey-intro__map-hint max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+		<section class="journey-intro" data-journey-intro>
+			<h1 class="display-title">Planned Route</h1>
+			<div class="accent-rule mt-6"></div>
+			<p class="lede journey-intro__map-hint">
 				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
 			</p>
-			<p class="journey-intro__list-hint max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			<p class="lede journey-intro__list-hint">
 				Choose a passage below to read more, from Denmark to the Caribbean.
 			</p>
 		</section>
 
 		{
 			legPanels.map(({ leg }) => (
-				<header class="journey-passage-title hidden space-y-3" data-journey-passage-title data-leg={leg.slug}>
+				<header class="journey-passage-title hidden" data-journey-passage-title data-leg={leg.slug}>
 					<button type="button" class="journey-mobile-back" data-journey-back>
 						← Full route
 					</button>
-					<h1 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h1>
+					<h1 class="display-title mt-4">{leg.data.title}</h1>
+					<div class="accent-rule mt-6"></div>
 				</header>
 			))
 		}
@@ -113,9 +115,9 @@ const mobilePassages = journeyLegs.map((leg) => {
 			</ul>
 		</nav>
 
-		<p class="mt-8 max-w-2xl text-lg text-[color:var(--color-muted)] sm:mt-10 sm:text-xl" data-journey-join-cta>
+		<p class="lede mt-8 sm:mt-10" data-journey-join-cta>
 			Want to join us for one or more passages in 2027?
-			<a href={joinOurJourneyContactHref} class="inline-flex items-center gap-2 font-medium">
+			<a href={joinOurJourneyContactHref} class="text-link">
 				Join our journey
 				<span aria-hidden="true">→</span>
 			</a>
@@ -141,7 +143,7 @@ const mobilePassages = journeyLegs.map((leg) => {
 											<dt class="eyebrow">Guest crew</dt>
 											<dd>
 												{guest.status === 'open' ? (
-													<a href={guest.href} class="inline-flex items-center gap-2 font-medium">
+													<a href={guest.href} class="text-link">
 														Join this passage
 														<span aria-hidden="true">→</span>
 													</a>
@@ -164,14 +166,13 @@ const mobilePassages = journeyLegs.map((leg) => {
 						) : null}
 
 						{(leg.data.sectionHeading || leg.data.intro) ? (
-							<div class="passage-intro space-y-3">
+							<div class="passage-intro">
 								{leg.data.sectionHeading ? (
-									<h2 class="text-3xl leading-tight sm:text-4xl">{leg.data.sectionHeading}</h2>
+									<h2 class="section-title">{leg.data.sectionHeading}</h2>
 								) : null}
+								{leg.data.sectionHeading ? <div class="accent-rule mt-6"></div> : null}
 								{leg.data.intro ? (
-									<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
-										{leg.data.intro}
-									</p>
+									<p class="body mt-5">{leg.data.intro}</p>
 								) : null}
 							</div>
 						) : null}
@@ -179,7 +180,7 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{leg.data.highlights.length > 0 ? (
 							<section class="passage-section space-y-3">
 								<p class="eyebrow">What we hope to experience</p>
-								<ul class="passage-highlights">
+								<ul class="passage-highlights body list-disc space-y-2 pl-5">
 									{leg.data.highlights.map((item) => (
 										<li>{item}</li>
 									))}
@@ -196,14 +197,13 @@ const mobilePassages = journeyLegs.map((leg) => {
 						) : null}
 
 						{(leg.data.outroHeading || leg.data.outro) ? (
-							<div class="passage-intro space-y-3">
+							<div class="passage-intro">
 								{leg.data.outroHeading ? (
-									<h2 class="text-3xl leading-tight sm:text-4xl">{leg.data.outroHeading}</h2>
+									<h2 class="section-title">{leg.data.outroHeading}</h2>
 								) : null}
+								{leg.data.outroHeading ? <div class="accent-rule mt-6"></div> : null}
 								{leg.data.outro ? (
-									<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
-										{leg.data.outro}
-									</p>
+									<p class="body mt-5">{leg.data.outro}</p>
 								) : null}
 							</div>
 						) : null}
@@ -211,13 +211,11 @@ const mobilePassages = journeyLegs.map((leg) => {
 						{leg.data.alternativeRoute ? (
 							<section class="passage-section space-y-3">
 								<p class="eyebrow">Alternative route</p>
-								<p class="max-w-3xl text-base leading-relaxed text-[color:var(--color-text)] sm:text-lg">
-									{leg.data.alternativeRoute}
-								</p>
+								<p class="body">{leg.data.alternativeRoute}</p>
 							</section>
 						) : null}
 
-						<div class="prose prose-slate max-w-none text-[color:var(--color-text)]">
+						<div class="page-prose">
 							<Content />
 						</div>
 					</article>
@@ -471,13 +469,8 @@ const mobilePassages = journeyLegs.map((leg) => {
 
 	.passage-highlights {
 		margin: 0;
-		padding-left: 1.25rem;
-		max-width: 42rem;
 		display: grid;
 		gap: 0.45rem;
-		font-size: 1.05rem;
-		line-height: 1.55;
-		color: var(--color-text);
 	}
 
 	.passage-gallery {

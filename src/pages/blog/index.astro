@@ -7,24 +7,26 @@ const sortedPosts = posts.toSorted((a, b) => b.data.pubDate.getTime() - a.data.p
 ---
 
 <Layout title="Blog">
-	<section class="space-y-6">
-		<header class="space-y-2">
-			<h1 class="text-4xl font-bold tracking-tight">Blog</h1>
-			<p class="text-lg text-slate-300">Seneste poster fra logbogen.</p>
+	<section>
+		<header>
+			<h1 class="display-title">Blog</h1>
+			<div class="accent-rule mt-6"></div>
+			<p class="lede">Seneste poster fra logbogen.</p>
 		</header>
 
-		<ul class="space-y-4">
+		<ul class="mt-10 space-y-8">
 			{sortedPosts.map((post) => (
 				<li>
-					<a class="underline underline-offset-4" href={`/blog/${post.slug}/`}>
+					<a class="text-link" href={`/blog/${post.slug}/`}>
 						{post.data.title}
+						<span aria-hidden="true">→</span>
 					</a>
-					<div class="text-sm text-slate-400">
+					<p class="eyebrow mt-3">
 						<time datetime={post.data.pubDate.toISOString()}>
 							{post.data.pubDate.toLocaleDateString('da-DK', { year: 'numeric', month: 'long', day: 'numeric' })}
 						</time>
-					</div>
-					{post.data.description ? <p class="text-slate-300">{post.data.description}</p> : null}
+					</p>
+					{post.data.description ? <p class="body mt-3">{post.data.description}</p> : null}
 				</li>
 			))}
 		</ul>

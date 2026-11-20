@@ -100,10 +100,10 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 		</div>
 	</div>
 
-	<section class="mt-10 space-y-4 sm:mt-12">
-		<p class="eyebrow">Timeline</p>
-		<h1 class="text-5xl leading-[0.95] sm:text-6xl">Back through the logbook</h1>
-		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+	<section class="mt-10 sm:mt-12">
+		<h1 class="display-title">Back through the logbook</h1>
+		<div class="accent-rule mt-6"></div>
+		<p class="lede">
 			Scroll down to move back in time. Each moment grows as it nears the middle of the screen, then fades away as it
 			leaves.
 		</p>
@@ -125,7 +125,7 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 						</div>
 						<div class="history-item__content surface-card p-7 sm:p-9" data-history-content>
 							<p class="eyebrow">{moment.label}</p>
-							<h2 class="mt-3 text-3xl sm:text-4xl">{moment.title}</h2>
+							<h2 class="section-title mt-3">{moment.title}</h2>
 							<div class="accent-rule mt-6"></div>
 							{moment.body ? <p class="mt-6 text-[color:var(--color-muted)]">{moment.body}</p> : null}
 						</div>

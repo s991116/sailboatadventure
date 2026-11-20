@@ -1,0 +1,92 @@
+/* One type scale for titles, section headings, body text, and text links. */
+
+h1,
+h2,
+h3 {
+	font-weight: 600;
+}
+
+.section-title {
+	font-size: 1.875rem;
+	line-height: 1.05;
+}
+
+.subheading {
+	font-size: 1.25rem;
+	line-height: 1.375;
+}
+
+.lede {
+	line-height: 1.625;
+}
+
+.body {
+	max-width: 48rem;
+	font-size: 1rem;
+	line-height: 1.625;
+	color: var(--color-text);
+}
+
+.text-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 500;
+}
+
+.page-prose h2 {
+	line-height: 1.05;
+}
+
+.page-prose h2::after,
+.ytc__title::after {
+	content: "";
+	display: block;
+	height: 2px;
+	width: 64px;
+	margin-top: 1.5rem;
+	background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+.page-prose h3 {
+	line-height: 1.375;
+}
+
+.page-prose p,
+.page-prose li {
+	max-width: 48rem;
+	font-size: 1rem;
+	line-height: 1.625;
+	color: var(--color-text);
+}
+
+.page-prose ul,
+.page-prose ol {
+	max-width: 48rem;
+}
+
+.ytc__more {
+	font-weight: 500;
+	color: var(--color-accent-strong);
+}
+
+.ytc__more:hover {
+	color: var(--color-accent);
+}
+
+@media (min-width: 40rem) {
+	.section-title {
+		font-size: 2.25rem;
+	}
+
+	.subheading,
+	.page-prose h3 {
+		font-size: 1.5rem;
+	}
+
+	.body,
+	.page-prose p,
+	.page-prose li {
+		font-size: 1.125rem;
+	}
+}

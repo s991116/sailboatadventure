@@ -20,18 +20,19 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title}>
-	<article class="space-y-6">
-		<header class="space-y-2">
-			<h1 class="text-4xl font-bold tracking-tight">{post.data.title}</h1>
-			{post.data.description ? <p class="text-lg text-slate-300">{post.data.description}</p> : null}
-			<p class="text-sm text-slate-400">
+	<article>
+		<header>
+			<h1 class="display-title">{post.data.title}</h1>
+			<div class="accent-rule mt-6"></div>
+			{post.data.description ? <p class="lede">{post.data.description}</p> : null}
+			<p class="eyebrow mt-5">
 				<time datetime={post.data.pubDate.toISOString()}>
 					{post.data.pubDate.toLocaleDateString('da-DK', { year: 'numeric', month: 'long', day: 'numeric' })}
 				</time>
 			</p>
 		</header>
 
-		<div class="prose prose-invert max-w-none">
+		<div class="page-prose mt-10">
 			<Content />
 		</div>
 	</article>
