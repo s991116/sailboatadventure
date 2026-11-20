@@ -1,8 +1,8 @@
 ---
-title: "From Isles of Scilly to the Azores"
-legNumber: 5
-routeLabel: "Isles of Scilly → the Azores"
-description: "The first long offshore passage across the Atlantic to the Azores."
+title: "From Dublin to the Azores"
+legNumber: 4
+routeLabel: "Dublin → The Azores"
+description: "From Ireland across the Atlantic to the Azores — our first long ocean passage."
 facts:
   - label: "Planned period"
     value: "17 July – 4 September 2027"
@@ -11,7 +11,7 @@ facts:
   - label: "Longest offshore passage"
     value: "10–14 days at sea"
 sectionHeading: "Across the Atlantic"
-intro: "Leaving the Isles of Scilly behind, we set course for our first true ocean passage. For nearly two weeks, the Atlantic becomes our home, where life is shaped by the rhythm of the sea, changing weather and endless horizons."
+intro: "Leaving Dublin behind, we set course for our first true ocean passage toward the Azores. For nearly two weeks, the Atlantic becomes our home, where life is shaped by the rhythm of the sea, changing weather and endless horizons."
 gallery:
   - src: ../../assets/photos/journey/dolphins.jpg
     alt: "Dolphins swimming alongside the boat"

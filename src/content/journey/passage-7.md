@@ -1,6 +1,6 @@
 ---
 title: "From Gran Canaria to Barbados"
-legNumber: 7
+legNumber: 6
 routeLabel: "Gran Canaria → Barbados"
 description: "The trade-wind crossing toward the Caribbean."
 facts:

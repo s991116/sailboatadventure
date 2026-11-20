@@ -31,20 +31,46 @@ const guestBySlug = Object.fromEntries(
 			: { status: 'fully-booked' as const },
 	]),
 );
+
+const periodBySlug = Object.fromEntries(
+	sortedLegs.map((leg) => {
+		const period = leg.data.facts.find((fact) => fact.label === 'Planned period')?.value ?? '';
+		return [leg.slug, period];
+	}),
+);
+
+const mobilePassages = journeyLegs.map((leg) => {
+	const start = leg.stops.find((stop) => stop.role === 'start')?.name ?? '';
+	const end = leg.stops.find((stop) => stop.role === 'end')?.name ?? '';
+	return {
+		slug: leg.slug,
+		from: start,
+		to: end,
+		period: periodBySlug[leg.slug] ?? '',
+		color: leg.color,
+		guest: guestBySlug[leg.slug],
+	};
+});
 ---
 
 <Layout title="Planned Route">
 	<div class="journey-page" data-journey-page>
 		<section class="journey-intro space-y-4" data-journey-intro>
 			<h1 class="text-5xl leading-[0.95] sm:text-6xl">Planned Route</h1>
-			<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			<p class="journey-intro__map-hint max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
 				Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.
+			</p>
+			<p class="journey-intro__list-hint max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+				Choose a passage below to read more, from Denmark to the Caribbean.
 			</p>
 		</section>
 
 		{
 			legPanels.map(({ leg }) => (
 				<header class="journey-passage-title hidden space-y-3" data-journey-passage-title data-leg={leg.slug}>
+					<button type="button" class="journey-mobile-back" data-journey-back>
+						← Full route
+					</button>
 					<h1 class="text-5xl leading-[0.95] sm:text-6xl">{leg.data.title}</h1>
 				</header>
 			))
@@ -53,6 +79,39 @@ const guestBySlug = Object.fromEntries(
 		<div class="journey-breakout" data-journey-map-breakout>
 			<JourneyMap legs={journeyLegs} />
 		</div>
+
+		<nav class="journey-passage-list mt-8" data-journey-passage-list aria-label="Planned passages">
+			<ul class="journey-passage-list__items">
+				{mobilePassages.map((passage) => (
+					<li class="journey-passage-list__row">
+						<button
+							type="button"
+							class="journey-passage-list__item"
+							data-journey-passage-link
+							data-leg={passage.slug}
+						>
+							<span
+								class="journey-passage-list__swatch"
+								style={`background:${passage.color}`}
+								aria-hidden="true"
+							/>
+							<span class="journey-passage-list__text">
+								<span class="journey-passage-list__route">
+									{passage.from} → {passage.to}
+								</span>
+								<span class="journey-passage-list__meta">
+									{passage.period ? <span>{passage.period}</span> : null}
+									<span class="journey-passage-list__sep" aria-hidden="true"></span>
+									<span>
+										{passage.guest?.status === 'open' ? 'Open to join' : 'Fully booked'}
+									</span>
+								</span>
+							</span>
+						</button>
+					</li>
+				))}
+			</ul>
+		</nav>
 
 		<p class="mt-8 max-w-2xl text-lg text-[color:var(--color-muted)] sm:mt-10 sm:text-xl" data-journey-join-cta>
 			Want to join us for one or more passages in 2027?
@@ -172,6 +231,7 @@ const guestBySlug = Object.fromEntries(
 	const page = document.querySelector<HTMLElement>('[data-journey-page]');
 	const intro = document.querySelector('[data-journey-intro]');
 	const joinCta = document.querySelector<HTMLElement>('[data-journey-join-cta]');
+	const passageList = document.querySelector<HTMLElement>('[data-journey-passage-list]');
 	const titles = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-passage-title]'));
 	const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-journey-panel]'));
 	const mapEl = document.querySelector<HTMLElement>('[data-journey-map]');
@@ -180,6 +240,7 @@ const guestBySlug = Object.fromEntries(
 		page?.classList.add('is-passage-view');
 		intro?.classList.add('hidden');
 		joinCta?.classList.add('hidden');
+		passageList?.classList.add('hidden');
 		for (const title of titles) {
 			title.classList.toggle('hidden', title.dataset.leg !== slug);
 		}
@@ -195,6 +256,7 @@ const guestBySlug = Object.fromEntries(
 		page?.classList.remove('is-passage-view');
 		intro?.classList.remove('hidden');
 		joinCta?.classList.remove('hidden');
+		passageList?.classList.remove('hidden');
 		for (const title of titles) {
 			title.classList.add('hidden');
 		}
@@ -217,6 +279,14 @@ const guestBySlug = Object.fromEntries(
 	for (const button of document.querySelectorAll('[data-journey-back]')) {
 		button.addEventListener('click', () => {
 			window.dispatchEvent(new CustomEvent('journey-leg-clear'));
+		});
+	}
+
+	for (const button of document.querySelectorAll<HTMLElement>('[data-journey-passage-link]')) {
+		button.addEventListener('click', () => {
+			const slug = button.dataset.leg;
+			if (!slug) return;
+			window.dispatchEvent(new CustomEvent('journey-leg-select', { detail: { slug } }));
 		});
 	}
 
@@ -247,6 +317,128 @@ const guestBySlug = Object.fromEntries(
 		margin-right: -50vw;
 		width: 100vw;
 		padding-inline: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
+	}
+
+	.journey-intro__list-hint {
+		display: none;
+	}
+
+	.journey-passage-list {
+		display: none;
+	}
+
+	.journey-mobile-back {
+		display: none;
+		appearance: none;
+		border: 0;
+		background: transparent;
+		padding: 0;
+		font: inherit;
+		font-weight: 500;
+		color: var(--color-accent-strong);
+		cursor: pointer;
+		text-align: left;
+	}
+
+	.journey-mobile-back:hover {
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 48rem) and (orientation: portrait) {
+		.journey-breakout {
+			display: none;
+		}
+
+		.journey-intro__map-hint {
+			display: none;
+		}
+
+		.journey-intro__list-hint {
+			display: block;
+		}
+
+		.journey-passage-list {
+			display: block;
+		}
+
+		.journey-passage-list.hidden {
+			display: none;
+		}
+
+		.journey-mobile-back {
+			display: inline-flex;
+		}
+
+		.journey-page.is-passage-view .journey-passage-list {
+			display: none;
+		}
+	}
+
+	.journey-passage-list__items {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.65rem;
+	}
+
+	.journey-passage-list__row {
+		display: block;
+	}
+
+	.journey-passage-list__item {
+		appearance: none;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		border-radius: 1rem;
+		padding: 0.9rem 1rem;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		width: 100%;
+		text-align: left;
+		cursor: pointer;
+		color: inherit;
+	}
+
+	.journey-passage-list__item:hover {
+		border-color: rgba(184, 132, 58, 0.45);
+	}
+
+	.journey-passage-list__swatch {
+		width: 0.75rem;
+		height: 0.75rem;
+		border-radius: 999px;
+		margin-top: 0.35rem;
+		flex-shrink: 0;
+	}
+
+	.journey-passage-list__text {
+		display: grid;
+		gap: 0.25rem;
+		min-width: 0;
+	}
+
+	.journey-passage-list__route {
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	.journey-passage-list__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.45rem;
+		font-size: 0.9rem;
+		color: var(--color-muted);
+	}
+
+	.journey-passage-list__sep {
+		width: 1px;
+		height: 0.9em;
+		flex-shrink: 0;
+		background: currentColor;
+		opacity: 0.45;
 	}
 
 	.passage-facts {

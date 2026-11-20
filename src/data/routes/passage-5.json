@@ -2,31 +2,20 @@
 	"type": "Feature",
 	"properties": {
 		"passage": "passage-5",
-		"note": "Isles of Scilly → the Azores"
+		"note": "Dublin → Isles of Scilly → The Azores"
 	},
 	"geometry": {
 		"type": "LineString",
 		"coordinates": [
-			[
-				-6.313,
-				49.914
-			],
-			[
-				-10,
-				47
-			],
-			[
-				-15,
-				43
-			],
-			[
-				-20,
-				40
-			],
-			[
-				-25.676,
-				37.741
-			]
+			[-6.26, 53.35],
+			[-6.1, 52.2],
+			[-5.8, 51.2],
+			[-6, 50.4],
+			[-6.313, 49.914],
+			[-10, 47],
+			[-15, 43],
+			[-20, 40],
+			[-25.676, 37.741]
 		]
 	}
 }

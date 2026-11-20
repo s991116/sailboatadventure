@@ -16,7 +16,7 @@ export type GuestSignup =
 	| {
 			status: 'open';
 			tripId: string;
-			/** Display label for the signup form, e.g. "Dublin → the Azores". */
+			/** Display label for the signup form, e.g. "Dublin → The Azores". */
 			label: string;
 			/** Inclusive start date, YYYY-MM-DD (year 2027). */
 			startDate: string;
@@ -145,43 +145,27 @@ export const plannedPassages: PlannedPassage[] = [
 	},
 	{
 		number: 4,
-		slug: 'passage-4',
-		month: 'JULY',
+		slug: 'passage-5',
+		month: 'AUGUST',
 		from: 'Dublin',
-		to: 'Isles of Scilly',
+		to: 'The Azores',
 		fromCoordinates: [-6.26, 53.35],
-		toCoordinates: [-6.313, 49.914],
-		color: '#1a8f5c',
+		toCoordinates: [-25.676, 37.741],
+		via: [{ name: 'Isles of Scilly', coordinates: [-6.313, 49.914] }],
+		color: '#7a3ad1',
 		guestSignup: {
 			status: 'open',
 			tripId: 'dublin-azores',
-			label: 'Dublin → the Azores',
+			label: 'Dublin → The Azores',
 			startDate: '2027-07-17',
 			endDate: '2027-09-04',
 		},
 	},
 	{
 		number: 5,
-		slug: 'passage-5',
-		month: 'AUGUST',
-		from: 'Isles of Scilly',
-		to: 'the Azores',
-		fromCoordinates: [-6.313, 49.914],
-		toCoordinates: [-25.676, 37.741],
-		color: '#7a3ad1',
-		guestSignup: {
-			status: 'open',
-			tripId: 'dublin-azores',
-			label: 'Dublin → the Azores',
-			startDate: '2027-07-17',
-			endDate: '2027-09-04',
-		},
-	},
-	{
-		number: 6,
 		slug: 'passage-6',
 		month: 'SEPTEMBER',
-		from: 'the Azores',
+		from: 'The Azores',
 		to: 'Gran Canaria',
 		fromCoordinates: [-25.676, 37.741],
 		toCoordinates: [-15.415, 28.1],
@@ -189,13 +173,13 @@ export const plannedPassages: PlannedPassage[] = [
 		guestSignup: {
 			status: 'open',
 			tripId: 'azores-gran-canaria',
-			label: 'the Azores → Gran Canaria',
+			label: 'The Azores → Gran Canaria',
 			startDate: '2027-09-18',
 			endDate: '2027-10-16',
 		},
 	},
 	{
-		number: 7,
+		number: 6,
 		slug: 'passage-7',
 		month: 'NOVEMBER',
 		from: 'Gran Canaria',

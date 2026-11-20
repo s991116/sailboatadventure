@@ -26,4 +26,4 @@ coverImage: ../../assets/photos/journey/fort-Augustus.jpg
 draft: false
 ---
 
-Along the way, we hope to explore wild landscapes, experience dramatic coastline, and spend time in harbours that still feel closely tied to the sea. Arriving in Dublin marks the end of this chapter and the beginning of our route toward the Isles of Scilly.
+Along the way, we hope to explore wild landscapes, experience dramatic coastline, and spend time in harbours that still feel closely tied to the sea. Arriving in Dublin marks the end of this chapter and the beginning of our route toward the Azores.

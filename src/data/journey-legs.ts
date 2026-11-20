@@ -1,7 +1,6 @@
 import passage1Route from './routes/passage-1.json';
 import passage2Route from './routes/passage-2.json';
 import passage3Route from './routes/passage-3.json';
-import passage4Route from './routes/passage-4.json';
 import passage5Route from './routes/passage-5.json';
 import passage6Route from './routes/passage-6.json';
 import passage7Route from './routes/passage-7.json';
@@ -46,7 +45,6 @@ const routeBySlug: Record<string, RouteFeature> = {
 	'passage-1': passage1Route,
 	'passage-2': passage2Route,
 	'passage-3': passage3Route,
-	'passage-4': passage4Route,
 	'passage-5': passage5Route,
 	'passage-6': passage6Route,
 	'passage-7': passage7Route,

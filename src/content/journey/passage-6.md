@@ -1,7 +1,7 @@
 ---
 title: "From the Azores to Gran Canaria"
-legNumber: 6
-routeLabel: "the Azores → Gran Canaria"
+legNumber: 5
+routeLabel: "The Azores → Gran Canaria"
 description: "Island hopping south through the Atlantic toward the Canary Islands."
 facts:
   - label: "Planned period"

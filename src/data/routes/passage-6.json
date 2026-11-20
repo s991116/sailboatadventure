@@ -2,7 +2,7 @@
 	"type": "Feature",
 	"properties": {
 		"passage": "passage-6",
-		"note": "the Azores → Gran Canaria"
+		"note": "The Azores → Gran Canaria"
 	},
 	"geometry": {
 		"type": "LineString",

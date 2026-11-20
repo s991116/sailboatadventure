@@ -2,16 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import YouTubeCarousel from '../components/YouTubeCarousel.astro';
 import OptimizedPhoto from '../components/OptimizedPhoto.astro';
-import headerImage from '../assets/photos/home/header-image.png';
+import headerImage from '../assets/photos/join-our-journey/louise-philip-sunset-denmark.jpg';
+import boatworkPhoto from '../assets/photos/join-our-journey/philip_louise_boatwork.jpg';
 ---
 
 <Layout title="Sailboat Adventure">
 	<section class="mb-6 sm:mb-10">
 		<OptimizedPhoto
 			src={headerImage}
-			alt="Louise and Philip on the sailboat deck with the sea and blue sky behind them."
+			alt="Louise and Philip on a beach in Denmark at sunset."
 			preset="center"
-			aspectRatio="16/9"
+			aspectRatio="21/9"
 		/>
 	</section>
 
@@ -19,17 +20,12 @@ import headerImage from '../assets/photos/home/header-image.png';
 		<h1 class="display-title">Our story at sea</h1>
 		<div class="accent-rule mt-6"></div>
 		<p class="lede">
-			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard—calm colors,
-			plenty of breathing room, and a hint of saltwater.
+			Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard.
 			<a href="/about/" class="inline-flex items-center gap-2 font-medium">
 				About us
 				<span aria-hidden="true">→</span>
 			</a>
-		</p>
-	</section>
-
-	<section class="mt-2 sm:mt-4">
-		<p class="max-w-2xl text-lg text-[color:var(--color-muted)] sm:text-xl">
+			<br />
 			We sail with guest crew on the longer passages. You can read more about joining us here:
 			<a href="/join-our-journey/" class="inline-flex items-center gap-2 font-medium">
 				Join Our Journey
@@ -39,18 +35,23 @@ import headerImage from '../assets/photos/home/header-image.png';
 	</section>
 
 	<section class="mt-10">
-		<YouTubeCarousel heading="From our YouTube channel" limit={12} />
+		<YouTubeCarousel heading="From our Danish YouTube channel" limit={12} />
 	</section>
 
 	<section class="surface-card mt-10 p-7 sm:p-10">
-		<h2 class="text-3xl sm:text-4xl">From dream to everyday life</h2>
+		<h2 class="text-3xl sm:text-4xl">Preparing for our adventure</h2>
 		<p class="mt-4 text-[color:var(--color-muted)]">
-			We built this site to write the journey down as it happens—a mix of adventure, practical lessons, and the
-			small moments between gusts of wind and sunsets.
+			We are building the adventure from the work on the boat, getting Blue Heaven ready for the passages ahead.
 		</p>
+		<OptimizedPhoto
+			class="mt-6"
+			src={boatworkPhoto}
+			alt="Philip and Louise in protective suits while working on their sailboat."
+			aspectRatio="16/9"
+		/>
 		<div class="divider mt-7 pt-7">
-			<a href="/about/" class="inline-flex items-center gap-2 font-medium">
-				Read more about us
+			<a href="/plannedroute/" class="inline-flex items-center gap-2 font-medium">
+				Read more about our passages here
 				<span aria-hidden="true">→</span>
 			</a>
 		</div>
