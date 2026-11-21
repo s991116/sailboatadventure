@@ -89,12 +89,7 @@ const portraits: {
 						/>
 						<h2 class="home-photo-title home-photo-title--light display-title">{portrait.title}</h2>
 					</div>
-					{index === 0 && (
-						<>
-							<div class="accent-rule mt-6"></div>
-							<p class="lede">{t(locale, ui.about.lede)}</p>
-						</>
-					)}
+					{index === 0 && <div class="accent-rule mt-6"></div>}
 					<div class="page-prose mt-6">
 						{portrait.paragraphs.map((paragraph) => (
 							<p>{paragraph}</p>

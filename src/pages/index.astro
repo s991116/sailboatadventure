@@ -37,6 +37,12 @@ const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 				<span aria-hidden="true">→</span>
 			</a>
 			<br />
+			{t(locale, ui.home.route)}
+			<a href={localePath(locale, '/plannedroute/')} class="text-link">
+				{t(locale, ui.nav.plannedRoute)}
+				<span aria-hidden="true">→</span>
+			</a>
+			<br />
 			{t(locale, ui.home.guest)}
 			<a href={localePath(locale, '/join-our-journey/')} class="text-link">
 				{t(locale, ui.nav.join)}
@@ -69,8 +75,11 @@ const locale = resolveLocale((Astro.props as Props).locale, Astro.url.pathname);
 			<h2 class="home-photo-title home-photo-title--dark display-title">{t(locale, ui.home.preparingTitle)}</h2>
 		</div>
 		<div class="accent-rule mt-6"></div>
+		<p class="lede">{t(locale, ui.home.preparing)}</p>
+		<p class="lede">{t(locale, ui.home.preparingSafety)}</p>
+		<p class="lede">{t(locale, ui.home.preparingCourses)}</p>
 		<p class="lede">
-			{t(locale, ui.home.preparing)}
+			{t(locale, ui.home.preparingTrips)}
 			<a href={localePath(locale, '/plannedroute/')} class="text-link">
 				{t(locale, ui.home.passagesLink)}
 				<span aria-hidden="true">→</span>

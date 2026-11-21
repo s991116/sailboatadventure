@@ -30,7 +30,7 @@ sectionHeading:
   da: "Via Stavanger og over Nordsøen"
   en: "Via Stavanger and across the North Sea"
 intro:
-  da: "Vi forlader Kristiansand og sejler vest langs Norges kyst til Stavanger, før vi sætter kursen over Nordsøen mod Inverness. Etapen tager os fra Norges rå kyst til indgangen til det skotske højland, hvor dramatiske landskaber og maritim historie venter."
+  da: "Vi forlader Kristiansand og sejler vest langs Norges kyst til Stavanger, før vi sætter kursen over Nordsøen mod Inverness. Togtet tager os fra Norges rå kyst til indgangen til det skotske højland, hvor dramatiske landskaber og maritim historie venter."
   en: "Leaving Kristiansand behind, we sail west along Norway's coast to Stavanger before setting course across the North Sea toward Inverness. This passage takes us from Norway's rugged coastline to the gateway of the Scottish Highlands, where dramatic landscapes and maritime history await."
 gallery:
   - src: ../../assets/photos/journey/Preikestolen_norway.jpg

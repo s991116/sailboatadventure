@@ -61,7 +61,7 @@ outroHeading:
   da: "Et strejf af Marokko"
   en: "A Taste of Morocco"
 outro:
-  da: "Hvis vejret og tiden tillader det, kan vi også lægge vejen forbi Madeira eller Tanger, hvor atlantiske traditioner møder nye kulturer. Uanset om vi når de stop, markerer etapen overgangen til passatvindene og bringer os tættere på det næste store havkryds."
+  da: "Hvis vejret og tiden tillader det, kan vi også lægge vejen forbi Madeira eller Tanger, hvor atlantiske traditioner møder nye kulturer. Uanset om vi når de stop, markerer togtet overgangen til passatvindene og bringer os tættere på det næste store havkryds."
   en: "If weather and time allow, we may also make a detour via Madeira or Tangier, where Atlantic traditions meet new cultures. Whether or not we make these stops, this chapter marks our transition into the trade winds and brings us one step closer to the next great ocean crossing."
 coverImage: ../../assets/photos/journey/Madeira.jpeg
 draft: false

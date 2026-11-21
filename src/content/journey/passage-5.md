@@ -30,8 +30,8 @@ sectionHeading:
   da: "Over Atlanten"
   en: "Across the Atlantic"
 intro:
-  da: "Vi forlader Dublin og sætter kursen mod Azorerne på vores første rigtige havsejlads. I næsten to uger er Atlanten vores hjem, og livet følger havets rytme, vejret og horisonten."
-  en: "Leaving Dublin behind, we set course for our first true ocean passage toward the Azores. For nearly two weeks, the Atlantic becomes our home, where life is shaped by the rhythm of the sea, changing weather and endless horizons."
+  da: "Vi starter i Dublin og gør os klar til turens første rigtige havsejlads mod Azorerne. I næsten to uger er Atlanten vores hjem, og livet følger havets rytme, vejret og horisonten."
+  en: "We start in Dublin and prepare for the voyage's first real ocean passage toward the Azores. For nearly two weeks, the Atlantic becomes our home, where life is shaped by the rhythm of the sea, changing weather and endless horizons."
 gallery:
   - src: ../../assets/photos/journey/dolphins.jpg
     alt:

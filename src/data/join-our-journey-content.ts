@@ -65,7 +65,7 @@ export const joinOurJourneyWho = {
 		{
 			lead: tx('Vi respekterer hvile.', 'We respect rest.'),
 			text: tx(
-				'Søvn og ro er en del af sikkerheden, især på længere etaper.',
+				'Søvn og ro er en del af sikkerheden, især på længere togter.',
 				'Sleep and quiet are part of safety, especially on longer passages.',
 			),
 		},
@@ -85,20 +85,20 @@ export const joinOurJourneyWho = {
 		),
 	},
 	guestAgreement: {
-		label: tx('Gæsteaftale', 'Guest agreement'),
-		intro: tx('Læs gæsteaftalen, så du kan se, hvad det indebærer at sejle med.', 'Read our guest agreement to see what joining involves.'),
+		label: tx('Gasteaftale', 'Crew agreement'),
+		intro: tx('Læs gasteaftalen, så du kan se, hvad det indebærer at sejle med.', 'Read the crew agreement to see what joining involves.'),
 		downloads: [
 			{
 				href: '/docs/Guest-agreement-DK.pdf',
 				label: tx('Dansk', 'Danish'),
 				flag: 'dk' as const,
-				ariaLabel: tx('Hent gæsteaftalen på dansk (PDF)', 'Download guest agreement in Danish (PDF)'),
+				ariaLabel: tx('Hent gasteaftalen på dansk (PDF)', 'Download the crew agreement in Danish (PDF)'),
 			},
 			{
 				href: '/docs/Guest-agreement-GB.pdf',
 				label: tx('Engelsk', 'English'),
 				flag: 'gb' as const,
-				ariaLabel: tx('Hent gæsteaftalen på engelsk (PDF)', 'Download guest agreement in English (PDF)'),
+				ariaLabel: tx('Hent gasteaftalen på engelsk (PDF)', 'Download the crew agreement in English (PDF)'),
 			},
 		],
 	},
@@ -108,7 +108,7 @@ export const joinOurJourneyBenefits = {
 	title: tx('Det venter ombord', 'What awaits you onboard'),
 	items: [
 		{
-			title: tx('Erfaring fra åbent hav', 'Open-ocean experience'),
+			title: tx('Åbent hav, stjerner og solopgange', 'Open ocean, stars and sunrises'),
 			description: tx(
 				'Nattevagter, navigation og sejlads i skiftende vejr — fra skærgård til havsejlads.',
 				'Night watches, navigation, and sailing in changing weather — from archipelago to ocean passage.',
@@ -127,7 +127,7 @@ export const joinOurJourneyBenefits = {
 export const joinOurJourneyContact = {
 	title: tx('Vil du ombord?', 'Want to come aboard?'),
 	intro: tx(
-		'Skriv til os med dit navn, din e-mail, den etape du helst vil med på, og en kort note om dig selv. Din besked bliver leveret privat til vores indbakke — vi viser ikke en e-mailadresse eller et telefonnummer på siden.',
+		'Skriv til os med dit navn, din e-mail, det togt du helst vil med på, og en kort note om dig selv. Din besked bliver leveret privat til vores indbakke — vi viser ikke en e-mailadresse eller et telefonnummer på siden.',
 		'Write to us with your name, email, preferred passage, and a short note about yourself. Your message is delivered privately to our inbox — we do not publish an email address or phone number on this page.',
 	),
 };

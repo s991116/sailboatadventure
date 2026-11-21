@@ -30,7 +30,7 @@ sectionHeading:
   da: "Over Skagerrak"
   en: "Across the Skagerrak"
 intro:
-  da: "Denne etape tager os fra Danmark over Skagerrak til Kristiansand på Norges sydkyst. Undervejs håber vi at finde rolige ankerpladser, hyggelige fiskerlejer og en flot kyst, før vi senere på sæsonen fortsætter mod vest og nord."
+  da: "Dette togt tager os fra Danmark over Skagerrak til Kristiansand på Norges sydkyst. Undervejs håber vi at finde rolige ankerpladser, hyggelige fiskerlejer og en flot kyst, før vi senere på sæsonen fortsætter mod vest og nord."
   en: "This chapter takes us from Denmark across the Skagerrak to Kristiansand on Norway's southern coast. Along the way, we hope to discover peaceful anchorages, charming fishing villages and spectacular coastal scenery before continuing west and north later in the season."
 gallery:
   - src: ../../assets/photos/journey/Helleren_Jossinge_fjord.jpg

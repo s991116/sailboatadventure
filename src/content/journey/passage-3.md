@@ -30,7 +30,7 @@ sectionHeading:
   da: "Fra højlandet til Irland"
   en: "From the Highlands to Ireland"
 intro:
-  da: "Fra Inverness fortsætter vi sydpå mod Dublin langs nogle af Skotlands og Irlands smukkeste kyster. Etapen blander kystsejlads med tid i land i historiske byer og vilde landskaber."
+  da: "Fra Inverness fortsætter vi sydpå mod Dublin langs nogle af Skotlands og Irlands smukkeste kyster. Togtet blander kystsejlads med tid i land i historiske byer og vilde landskaber."
   en: "From Inverness we continue south toward Dublin, following some of the most beautiful coastlines of Scotland and Ireland. This chapter blends coastal sailing with time ashore in historic towns and wild landscapes."
 gallery:
   - src: ../../assets/photos/journey/fort-Augustus.jpg
@@ -51,7 +51,7 @@ highlights:
   - da: "Et naturligt trin på vejen mod Atlanten."
     en: "A natural stepping stone toward the Atlantic."
 closing:
-  da: "Undervejs håber vi at udforske vilde landskaber, opleve en dramatisk kyst og opholde os i havne, der stadig hænger tæt sammen med havet. Ankomsten til Dublin afslutter denne etape og er starten på ruten mod Azorerne."
+  da: "Undervejs håber vi at udforske vilde landskaber, opleve en dramatisk kyst og opholde os i havne, der stadig hænger tæt sammen med havet. Ankomsten til Dublin afslutter dette togt og er starten på ruten mod Azorerne."
   en: "Along the way, we hope to explore wild landscapes, experience dramatic coastline, and spend time in harbours that still feel closely tied to the sea. Arriving in Dublin marks the end of this chapter and the beginning of our route toward the Azores."
 coverImage: ../../assets/photos/journey/fort-Augustus.jpg
 draft: false

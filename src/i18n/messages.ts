@@ -31,8 +31,8 @@ export const ui = {
 			'Contact form is not configured yet. Add ',
 		),
 		notConfiguredAfter: tx(' fra ', ' from '),
-		stageLabel: tx('Foretrukken etape', 'Preferred passage'),
-		stagePlaceholder: tx('Vælg en etape', 'Select a passage'),
+		stageLabel: tx('Foretrukket togt', 'Preferred passage'),
+		stagePlaceholder: tx('Vælg et togt', 'Select a passage'),
 	},
 	home: {
 		title: tx('Vores Sejler Eventyr', 'Our Sailing adventure'),
@@ -40,9 +40,13 @@ export const ui = {
 			'Velkommen til vores sejleventyr. Her samler vi historier, billeder og små noter fra livet ombord.',
 			'Welcome to our sailing adventure. Here we collect stories, photos, and small notes from life onboard.',
 		),
+		route: tx(
+			'Vi planlægger at sejle fra Danmark til Caribien i 2027. Du kan læse mere om vores rute her:',
+			'We are planning to sail from Denmark to the Caribbean in 2027. You can read more about our route here:',
+		),
 		guest: tx(
-			'Vi sejler med gæstebesætning på de længere etaper. Du kan læse mere om at sejle med her:',
-			'We sail with guest crew on the longer passages. You can read more about joining us here:',
+			'På de længere togter planlægger vi at sejle med gaster, for at dele oplevelsen og for at være sammen om at nå nye destinationer. Du kan læse mere om at sejle med her:',
+			'On the longer passages we plan to sail with crew, to share the experience and to reach new destinations together. You can read more about joining us here:',
 		),
 		youtube: tx('Følg os på YouTube', 'Follow us on our Danish YouTube channel'),
 		viewChannel: tx('Se kanalen', 'View channel'),
@@ -50,10 +54,22 @@ export const ui = {
 		carousel: tx('karrusel', 'carousel'),
 		preparingTitle: tx('Vi forbereder eventyret', 'Preparing for our adventure'),
 		preparing: tx(
-			'Vi bygger eventyret op gennem arbejdet på båden og gør Blue Heaven klar til etaperne forude.',
+			'Vi bygger eventyret op gennem arbejdet på båden og gør Blue Heaven klar til togterne forude.',
 			'We are building the adventure from the work on the boat, getting Blue Heaven ready for the passages ahead.',
 		),
-		passagesLink: tx('Læs mere om vores etaper her', 'Read more about our passages here'),
+		preparingSafety: tx(
+			'Vi har sat sikkerhedsudstyr op, blandt andet redningsflåde, AIS og radar, og gjort det rarere at bo ombord med solceller, cockpit-telt og opladere til elektronik.',
+			'We have fitted safety equipment, including a life raft, AIS and radar, and made it more comfortable to live onboard with solar panels, a cockpit tent and chargers for electronics.',
+		),
+		preparingCourses: tx(
+			'Vi har sammen taget en række kurser i alt fra tidevand til offshore sikkerhedskursus. Vi har desuden begge duelighedsbevis, og Philip har derudover Yachtskipper 3.',
+			'Together we have taken a range of courses, from tides to an offshore safety course. We both hold a Danish certificate of competency (duelighedsbevis), and Philip also holds Yachtskipper 3.',
+		),
+		preparingTrips: tx(
+			'Vi har også sejlet længere ture i Danmark, Sverige og Norge, for at prøve båden, udstyret og os selv af.',
+			'We have also sailed longer trips in Denmark, Sweden and Norway, to try out the boat, the gear and ourselves.',
+		),
+		passagesLink: tx('Læs mere om vores togter her', 'Read more about our passages here'),
 		heroAlt: tx(
 			'Louise og Philip på en strand i Danmark ved solnedgang.',
 			'Louise and Philip on a beach in Denmark at sunset.',
@@ -65,28 +81,27 @@ export const ui = {
 	},
 	about: {
 		title: tx('Om os', 'About us'),
-		lede: tx('Hvem vi er, og hvorfor vi sejler.', 'Who we are and why we are sailing.'),
-		coupleTitle: tx('Louise og Philip', 'Louise and Philip'),
+		coupleTitle: tx('Hvem er vi', 'Who we are'),
 		coupleAlt: tx(
 			'Louise og Philip sammen i cockpittet på deres sejlbåd.',
 			'Louise and Philip together in the cockpit of their sailboat.',
 		),
 		intro: [
 			tx(
-				'Vi er et dansk par, der er på vej ud på vores langtur. Vi købte vores første sejlbåd i 2020 og har de seneste år sejlet rundt i Danmark, Norge og Sverige.',
-				'We are a Danish couple, who are setting out, for our long distance sailing. We bought our first sailboat in 2020 and have been sailing around Denmark, Norway and Sweden for the last couple of years.',
+				'Vi er et dansk par, der er på vej ud på vores langtur. Vi købte vores første sejlbåd i 2020 og har sejlet rundt i Danmark, Sverige og Norge.',
+				'We are a Danish couple setting out on our long voyage. We bought our first sailboat in 2020 and have sailed around Denmark, Sweden and Norway.',
 			),
 			tx(
-				'Vi kan begge lide at sejle. Det er vigtigt for os, fordi sejlads er noget, vi gør og nyder sammen.',
-				'We both like sailing, which is important for us, as sailing is something we do and enjoy together.',
+				'Vi har to drenge, Oliver og Mikkel, der begge har afsluttet gymnasiet i 2026. Drengene er ikke interesseret i langturssejlads, men vil komme og besøge os undervejs.',
+				'We have two boys, Oliver and Mikkel, who both finished gymnasium in 2026. The boys are not interested in long-distance sailing, but they will come and visit us along the way.',
 			),
 			tx(
-				'I 2024 begyndte vi at kigge på langtur, og langsomt gjorde vi os selv og båden klar.',
-				'In 2024 we started looking into long distance sailing, and slowly prepared our self and our sailboat.',
+				'Vi kan begge lide at sejle. Det er vigtigt for os, fordi sejlads er noget, vi gør og nyder sammen. Vi kan især godt lide at ligge for anker og nyde naturen.',
+				'We both like sailing. That matters to us, because sailing is something we do and enjoy together. We especially like lying at anchor and taking in the nature around us.',
 			),
 			tx(
-				'Sammen har vi to drenge, Oliver (20 år) og Mikkel (18 år). De har begge afsluttet gymnasiet og kommer og besøger os undervejs.',
-				'Together we have two boys, Oliver (20 years) and Mikkel (18 years). They have both finish High-school (Gymnasium) and will visit us, along our trip.',
+				'I 2023 begyndte vi at kigge på langtur, og solgte derfor vores første sejlbåd, for at købe noget der var mere egnet til langtur. Vi har siden gjort os selv og båden klar til langtur.',
+				'In 2023 we started looking at a long voyage, and so we sold our first sailboat to buy one better suited to it. Since then we have been getting ourselves and the boat ready.',
 			),
 		],
 		philipAlt: tx('Philip med stribet hue ombord.', 'Philip in a striped beanie, onboard.'),
@@ -100,12 +115,16 @@ export const ui = {
 				'Fun fact: I was scared of sailing as a kid. I even tried an Optimist dinghy once—my “career” lasted about 30 minutes.',
 			),
 			tx(
-				'Jeg er softwareingeniør og elsker små tekniske projekter, og både er fulde af gør-det-selv-problemer — mange af dem dejligt nørdede.',
-				'I’m a software engineer who loves small technical projects, and boats are full of DIY problems to solve—many of them delightfully nerdy.',
+				'Efter jeg mødte Louise, er jeg blevet rigtig glad for at sejle. I 2023 krydsede jeg Atlanten som gast, for at prøve hvordan det ville være, inden vi investerede alt vores tid på langturssejlads.',
+				'After I met Louise, I became really fond of sailing. In 2023 I crossed the Atlantic as crew, to find out what it would be like before we invested all our time in long-distance sailing.',
 			),
 			tx(
-				'Som skipper på båden har jeg hovedansvaret for sikkerheden og for, at motor og el virker.',
-				'As Skipper on the boat, my main responsibility is safety and make sure the engine and electrical is working.',
+				'Jeg er uddannet softwareingeniør og elsker tekniske projekter, og både er fulde af gør-det-selv-problemer — mange af dem dejligt nørdede.',
+				'I trained as a software engineer and I love technical projects, and boats are full of do-it-yourself problems — many of them delightfully nerdy.',
+			),
+			tx(
+				'Som skipper på båden har jeg hovedansvaret for sikkerheden og for, at motor og udstyret virker.',
+				'As skipper on the boat, I am responsible for safety, and for keeping the engine and the equipment working.',
 			),
 		],
 		louiseAlt: tx(
@@ -126,12 +145,12 @@ export const ui = {
 		boatAlt: tx('Blue Heaven sejler forbi en klippekyst.', 'Blue Heaven sailing past a rocky cliff coast.'),
 		boat: [
 			tx(
-				'Vores sejlbåd, Blue Heaven, er en Bavaria 39 Cruiser, som vi har gjort klar til langtur.',
-				'Our sailboat, Blue Heaven, is a Bavaria 39 Cruiser, which we have prepared for long-distance sailing.',
+				'Vores sejlbåd, Blue Heaven, er en Bavaria 39 Cruiser, som vi har gjort klar til langtur. Båden er fra 2005 og har været passet godt på. Vi købte den i Sverige i 2024, lidt nord for Stockholm.',
+				'Our sailboat, Blue Heaven, is a Bavaria 39 Cruiser, which we have prepared for a long voyage. She was built in 2005 and has been well looked after. We bought her in Sweden in 2024, a little north of Stockholm.',
 			),
 			tx(
-				'Vi har sat sikkerhedsudstyr op, blandt andet redningsflåde, AIS og radar, og gjort det rarere at bo ombord med solceller, cockpit-telt og opladere til elektronik.',
-				'We have installed safety equipment such as a life raft, AIS and radar, and made it more comfortable to live on, with solar panels, a cockpit tent, and chargers for electronics.',
+				'Vi har valgt en klassisk turbåd, som har en størrelse der passer til os. Vi har plads til at have gaster med, og har et rimeligt stort cockpit for en båd på 39 fod.',
+				'We chose a classic cruising boat, in a size that suits us. There is room to bring crew, and the cockpit is fairly large for a 39-foot boat.',
 			),
 		],
 		contactTitle: tx('Kontakt os', 'Contact Us'),
@@ -169,25 +188,25 @@ export const ui = {
 			'Sunset seen from the deck, with still water and the Danish flag.',
 		),
 		mapHint: tx(
-			'Klik på en rute på kortet for at zoome ind og læse mere om etaperne, fra Danmark til Caribien.',
+			'Klik på en rute på kortet for at zoome ind og læse mere om togterne, fra Danmark til Caribien.',
 			'Click a route on the map to zoom in and read more about the passages, from Denmark to the Caribbean.',
 		),
 		listHint: tx(
-			'Vælg en etape nedenfor for at læse mere, fra Danmark til Caribien.',
+			'Vælg et togt nedenfor for at læse mere, fra Danmark til Caribien.',
 			'Choose a passage below to read more, from Denmark to the Caribbean.',
 		),
 		fullRoute: tx('← Hele ruten', '← Full route'),
 		mapFullRoute: tx('Hele ruten', 'Full route'),
-		passagesLabel: tx('Planlagte etaper', 'Planned passages'),
+		passagesLabel: tx('Planlagte togter', 'Planned passages'),
 		openToJoin: tx('Ledige pladser', 'Open to join'),
 		fullyBooked: tx('Fuldt booket', 'Fully booked'),
-		joinCta: tx('Vil du sejle med på en eller flere etaper i 2027?', 'Want to join us for one or more passages in 2027?'),
+		joinCta: tx('Vil du sejle med på et eller flere togter i 2027?', 'Want to join us for one or more passages in 2027?'),
 		joinLink: tx('Sejl med os', 'Join our journey'),
-		guestCrew: tx('Gæstebesætning', 'Guest crew'),
-		joinPassage: tx('Sejl med på denne etape', 'Join this passage'),
+		guestCrew: tx('Gaste', 'Crew'),
+		joinPassage: tx('Sejl med på dette togt', 'Join this passage'),
 		hope: tx('Det vi håber at opleve', 'What we hope to experience'),
 		alternative: tx('Alternativ rute', 'Alternative route'),
-		passageWord: tx('Etape', 'Passage'),
+		passageWord: tx('Togt', 'Passage'),
 		connector: tx('til', 'to'),
 		mapNotice: tx(
 			'Kortet kræver en MapTiler-nøgle. Sæt PUBLIC_MAPTILER_API_KEY i miljøet.',
@@ -195,7 +214,7 @@ export const ui = {
 		),
 	},
 	join: {
-		routes: tx('Læs mere om ruterne og etaperne', 'Read more about the routes and passages'),
+		routes: tx('Læs mere om ruterne og togterne', 'Read more about the routes and passages'),
 		here: tx('her', 'here'),
 		subject: tx('Forespørgsel om at sejle med — Sailboat Adventure', 'Join Our Journey enquiry — Sailboat Adventure'),
 	},
