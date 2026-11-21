@@ -32,16 +32,17 @@ const titleDa: Record<string, string> = {
 	'Sailing with the genekar': 'Sejlads med gennaker',
 	'Safety course': 'Sikkerhedskursus',
 	'Blueaven frozen in harbour': 'Blue Heaven frosset inde i havnen',
-	'Installing Solar arch': 'Montering af solcellebuen',
+	'Installing Solar arch': 'Montering af solar arch',
 	'Painting the hull': 'Maling af skroget',
 	'Kristiand sand': 'Kristiansand',
 	'Kalvøya Norge': 'Kalvøya i Norge',
 	'Preparing the mast to be installed': 'Masten gøres klar til at komme op',
+	'Over Atlanten': 'Philip crossing the Atlantic as a crew.',
 };
 
 const titleEn: Record<string, string> = {
 	'Sommerferie i Bavaria': 'Summer holiday on our Bavaria 39',
-	'Over Atlanten': 'Across the Atlantic',
+	'Over Atlanten': 'Philip crossing the Atlantic as a crew.',
 	'Fyn rundt': 'Around Funen',
 	'Sjælland rundt': 'Around Zealand',
 	'Sejltur med Oliver og Mikkel': 'Sailing trip as a family',
@@ -116,18 +117,22 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 				<div class="history-track__marker" data-history-marker aria-hidden="true"></div>
 
 				<div class="history-track__ticks" role="navigation" aria-label={t(locale, ui.history.jump)}>
-					{moments.map((moment, index) => (
-						<button
-							type="button"
-							class="history-tick"
-							data-history-tick
-							data-history-index={index}
-							aria-label={moment.label}
-						>
-							<span class="history-tick__dot" aria-hidden="true"></span>
-							<span class="history-tick__label" aria-hidden="true">{moment.id.slice(0, 4)}</span>
-						</button>
-					))}
+					{moments.map((moment, index) => {
+						const year = moment.id.slice(0, 4);
+						const showYear = year !== moments[index - 1]?.id.slice(0, 4);
+						return (
+							<button
+								type="button"
+								class="history-tick"
+								data-history-tick
+								data-history-index={index}
+								aria-label={moment.label}
+							>
+								<span class:list={['history-tick__dot', !showYear && 'is-empty']} aria-hidden="true"></span>
+								<span class="history-tick__label" aria-hidden="true">{showYear ? year : ''}</span>
+							</button>
+						);
+					})}
 				</div>
 			</div>
 		</div>
@@ -484,6 +489,14 @@ const moments: HistoryMoment[] = Array.from(folderToPaths.entries())
 
 		.history-tick[data-active] {
 			color: var(--color-text);
+		}
+
+		.history-tick__dot.is-empty,
+		.history-tick[data-active] .history-tick__dot.is-empty {
+			background: transparent;
+			border-color: transparent;
+			box-shadow: none;
+			transform: none;
 		}
 
 		.history-tick[data-active] .history-tick__dot {
