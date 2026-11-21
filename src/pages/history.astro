@@ -16,13 +16,28 @@ type HistoryMoment = {
 	alt: string;
 };
 
-const historyImages = import.meta.glob('../assets/photos/history/**/*.{png,jpg,jpeg,webp,avif}', {
-	eager: true,
-	import: 'default',
-}) as Record<string, any>;
+const historyImages = import.meta.glob(
+	'../assets/photos/history/**/*.{png,jpg,jpeg,webp,avif,PNG,JPG,JPEG,WEBP,AVIF}',
+	{
+		eager: true,
+		import: 'default',
+	},
+) as Record<string, any>;
 
 const cleanTitle = (raw: string) => raw.replace(/^[-–—]\s*/, '').trim();
 const nfc = (value: string) => value.normalize('NFC');
+
+const titleDa: Record<string, string> = {
+	'Passing Lillebaelt bridge': 'Passage af Lillebæltsbroen',
+	'Sailing with the genekar': 'Sejlads med gennaker',
+	'Safety course': 'Sikkerhedskursus',
+	'Blueaven frozen in harbour': 'Blue Heaven frosset inde i havnen',
+	'Installing Solar arch': 'Montering af solcellebuen',
+	'Painting the hull': 'Maling af skroget',
+	'Kristiand sand': 'Kristiansand',
+	'Kalvøya Norge': 'Kalvøya i Norge',
+	'Preparing the mast to be installed': 'Masten gøres klar til at komme op',
+};
 
 const titleEn: Record<string, string> = {
 	'Sommerferie i Bavaria': 'Summer holiday on our Bavaria 39',
@@ -33,18 +48,28 @@ const titleEn: Record<string, string> = {
 	'Sejltur i Maxi': 'Sailing trip in our Maxi 87 sailboat',
 	'Tømmerflåde': 'Building and sailing on a raft, our first "boat"',
 	'Erlings sejlbåd': "Louise's dad's small sailboat named Puk",
+	'Passing Lillebaelt bridge': 'Passing the Little Belt Bridge',
+	'Sailing with the genekar': 'Sailing with the gennaker',
+	'Safety course': 'Safety course',
+	'Blueaven frozen in harbour': 'Blue Heaven frozen in the harbour',
+	'Installing Solar arch': 'Installing the solar arch',
+	'Painting the hull': 'Painting the hull',
+	'Kristiand sand': 'Kristiansand',
+	'Kalvøya Norge': 'Kalvøya, Norway',
+	'Preparing the mast to be installed': 'Preparing the mast to be installed',
 };
 
-const titleEnNfc = Object.fromEntries(
-	Object.entries(titleEn).map(([danish, english]) => [nfc(danish), english]),
-);
+const titleDaNfc = Object.fromEntries(Object.entries(titleDa).map(([raw, danish]) => [nfc(raw), danish]));
+const titleEnNfc = Object.fromEntries(Object.entries(titleEn).map(([raw, english]) => [nfc(raw), english]));
 
 const parseFolder = (folderName: string) => {
-	const match = folderName.match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/);
+	const match = folderName.match(/^(\d{4})-(\d{1,2})-(\d{1,2})\s*(.*)$/);
 	if (!match) return { date: folderName, title: folderName };
-	const danishTitle = nfc(cleanTitle(match[2] ?? '') || match[1]);
-	const englishTitle = titleEnNfc[danishTitle] ?? danishTitle;
-	return { date: match[1], title: locale === 'da' ? danishTitle : englishTitle };
+	const date = `${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
+	const rawTitle = nfc(cleanTitle(match[4] ?? '').replace(/\.(png|jpe?g|webp|avif)$/i, ''));
+	const danishTitle = titleDaNfc[rawTitle] ?? (rawTitle || date);
+	const englishTitle = titleEnNfc[rawTitle] ?? titleEnNfc[danishTitle] ?? danishTitle;
+	return { date, title: locale === 'da' ? danishTitle : englishTitle };
 };
 
 const chooseCover = (paths: string[]) => {
@@ -57,7 +82,9 @@ const folderToPaths = new Map<string, string[]>();
 
 for (const path of Object.keys(historyImages)) {
 	const after = path.split('/history/')[1];
-	const folder = after?.split('/')[0]?.trim();
+	if (!after) continue;
+	const parts = after.split('/');
+	const folder = (parts.length > 1 ? parts[0] : parts[0].replace(/\.[^.]+$/, '')).trim();
 	if (!folder) continue;
 	const list = folderToPaths.get(folder) ?? [];
 	list.push(path);
