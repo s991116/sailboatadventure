@@ -45,13 +45,11 @@ Blue Heaven er udstyret med følgende sikkerhedsudstyr:
 - Wirecutter og batteridrevet vinkelsliber til at kunne frigøre riggen, hvis masten eller stående rig går i stykker.
 - Søgelygte.
 - Tågehorn.
+- Medicinkiste.
 
 **Lænseudstyr**
 - To elektriske lænsepumper.
 - Én manuel lænsepumpe.
-
-**Medicinkiste**
-- Medicinkiste.
 
 ## 3. Sikkerhedsgennemgang inden offshore-sejlads
 

@@ -45,13 +45,11 @@ Blue Heaven carries the following safety equipment:
 - Wire cutters and a battery-powered angle grinder, so the rig can be freed if the mast or the standing rigging fails.
 - Searchlight.
 - Foghorn.
+- Medicine chest.
 
 **Bilge equipment**
 - Two electric bilge pumps.
 - One manual bilge pump.
-
-**Medicine chest**
-- Medicine chest.
 
 ## 3. Safety briefing before an offshore passage
 
