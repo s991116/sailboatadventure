@@ -102,6 +102,37 @@ export const joinOurJourneyWho = {
 			},
 		],
 	},
+	safety: {
+		label: tx('Sikkerhed ombord', 'Safety onboard'),
+		paragraphs: [
+			tx(
+				'En vigtig del af at have en god tur, er at sikkerheden er i orden.',
+				'An important part of a good passage is that safety is in order.',
+			),
+			tx(
+				'For os er sikkerheden det udstyr og den stand båden er i, de valg vi træffer før og under en sejlads samt den teoretiske og praktiske viden og kompetence vi har.',
+				'For us, safety is the equipment and the condition of the boat, the choices we make before and during a passage, and the theoretical and practical knowledge and skill we have.',
+			),
+		],
+		read: tx(
+			'Læs hvad sikkerhed er for os, så du kan vurdere om du er tryg ved at sejle med.',
+			'Read what safety means to us, so you can judge whether you feel comfortable sailing with us.',
+		),
+		downloads: [
+			{
+				href: '/docs/Safety-aboard-Blue-Heaven-DK.pdf',
+				label: tx('Dansk', 'Danish'),
+				flag: 'dk' as const,
+				ariaLabel: tx('Hent sikkerhed ombord på dansk (PDF)', 'Download safety onboard in Danish (PDF)'),
+			},
+			{
+				href: '/docs/Safety-aboard-Blue-Heaven-GB.pdf',
+				label: tx('Engelsk', 'English'),
+				flag: 'gb' as const,
+				ariaLabel: tx('Hent sikkerhed ombord på engelsk (PDF)', 'Download safety onboard in English (PDF)'),
+			},
+		],
+	},
 };
 
 export const joinOurJourneyBenefits = {

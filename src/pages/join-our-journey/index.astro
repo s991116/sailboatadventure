@@ -109,6 +109,31 @@ const formLabels = {
 				))}
 			</ul>
 		</div>
+
+		<div class="mt-16 max-w-2xl sm:mt-20">
+			<h2 class="section-title">{t(locale, joinOurJourneyWho.safety.label)}</h2>
+			<div class="accent-rule mt-6"></div>
+			{joinOurJourneyWho.safety.paragraphs.map((paragraph) => (
+				<p class="lede">{t(locale, paragraph)}</p>
+			))}
+			<p class="lede">{t(locale, joinOurJourneyWho.safety.read)}</p>
+			<ul class="mt-5 flex flex-wrap gap-4">
+				{joinOurJourneyWho.safety.downloads.map((file) => (
+					<li>
+						<a
+							href={file.href}
+							class="text-link"
+							download
+							aria-label={t(locale, file.ariaLabel)}
+						>
+							<FlagIcon code={file.flag} />
+							{t(locale, file.label)}
+							<span aria-hidden="true">PDF</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
 	</section>
 
 	<section id="contact" class="mt-16 sm:mt-20" aria-labelledby="join-our-journey-contact-title">
