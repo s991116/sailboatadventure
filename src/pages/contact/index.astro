@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
+import ContactForm from '../../components/ContactForm.astro';
 import { resolveLocale, t, type Locale } from '../../i18n/locale';
 import { ui } from '../../i18n/messages';
 
@@ -14,8 +14,6 @@ const formLabels = {
 	success: t(locale, ui.form.success),
 	error: t(locale, ui.form.error),
 	sending: t(locale, ui.form.sending),
-	notConfiguredBefore: t(locale, ui.form.notConfiguredBefore),
-	notConfiguredAfter: t(locale, ui.form.notConfiguredAfter),
 };
 ---
 
@@ -27,7 +25,7 @@ const formLabels = {
 	</section>
 
 	<section class="mt-10">
-		<Web3FormsContactForm
+		<ContactForm
 			formId="contact-us"
 			subject={t(locale, ui.contact.subject)}
 			labels={formLabels}

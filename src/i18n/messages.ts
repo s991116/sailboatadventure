@@ -26,11 +26,6 @@ export const ui = {
 		success: tx('Tak for din besked — vi svarer snart.', 'Thanks for reaching out — we will reply soon.'),
 		error: tx('Beskeden kunne ikke sendes. Prøv igen.', 'Could not send your message. Please try again.'),
 		sending: tx('Sender…', 'Sending…'),
-		notConfiguredBefore: tx(
-			'Kontaktformularen er ikke sat op endnu. Tilføj ',
-			'Contact form is not configured yet. Add ',
-		),
-		notConfiguredAfter: tx(' fra ', ' from '),
 		stageLabel: tx('Foretrukket togt', 'Preferred passage'),
 		stagePlaceholder: tx('Vælg et togt', 'Select a passage'),
 	},

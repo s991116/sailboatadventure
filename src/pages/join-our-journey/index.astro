@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import OptimizedPhoto from '../../components/OptimizedPhoto.astro';
-import Web3FormsContactForm from '../../components/Web3FormsContactForm.astro';
+import ContactForm from '../../components/ContactForm.astro';
 import FlagIcon from '../../components/FlagIcon.astro';
 import { getOpenGuestTrips } from '../../data/planned-passages';
 import { localePath, resolveLocale, t, type Locale } from '../../i18n/locale';
@@ -26,8 +26,6 @@ const formLabels = {
 	success: t(locale, ui.form.success),
 	error: t(locale, ui.form.error),
 	sending: t(locale, ui.form.sending),
-	notConfiguredBefore: t(locale, ui.form.notConfiguredBefore),
-	notConfiguredAfter: t(locale, ui.form.notConfiguredAfter),
 };
 ---
 
@@ -144,7 +142,7 @@ const formLabels = {
 				<p class="lede">{t(locale, joinOurJourneyContact.intro)}</p>
 			</div>
 
-			<Web3FormsContactForm
+			<ContactForm
 				formId="join-our-journey"
 				subject={t(locale, ui.join.subject)}
 				stageOptions={stageOptions}
