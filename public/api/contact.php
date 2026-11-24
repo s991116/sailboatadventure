@@ -9,6 +9,26 @@ declare(strict_types=1);
 
 ini_set('display_errors', '0');
 
+register_shutdown_function(static function (): void {
+    $error = error_get_last();
+    if (!is_array($error)) {
+        return;
+    }
+    $fatal = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR];
+    if (!in_array($error['type'], $fatal, true)) {
+        return;
+    }
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=UTF-8');
+    }
+    echo json_encode([
+        'success' => false,
+        'message' => $error['message'],
+        'line' => $error['line'],
+    ], JSON_UNESCAPED_UNICODE);
+});
+
 const RECIPIENT = 'blueheaven@sailboatadventure.dk';
 const MAX_NAME = 120;
 const MAX_EMAIL = 200;
@@ -171,13 +191,12 @@ if ($stage !== '') {
 }
 $lines[] = '';
 $lines[] = $message;
-$body = quoted_printable_encode(implode("\r\n", $lines));
+$body = implode("\r\n", $lines);
 
 $headers = implode("\r\n", [
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
-    'Content-Transfer-Encoding: quoted-printable',
-    'From: "Sailboat Adventure" <' . RECIPIENT . '>',
+    'From: ' . RECIPIENT,
     'Reply-To: ' . $email,
 ]);
 
@@ -186,10 +205,10 @@ if (is_string($sink) && $sink !== '') {
     $record = 'To: ' . RECIPIENT . "\nSubject: " . $subject . "\n" . $headers . "\n\n" . $body . "\n----\n";
     $sent = file_put_contents($sink, $record, FILE_APPEND | LOCK_EX) !== false;
 } else {
-    $encodedSubject = encodeSubject($subject);
-    $sent = @mail(RECIPIENT, $encodedSubject, $body, $headers, '-f' . RECIPIENT);
-    if (!$sent) {
-        $sent = @mail(RECIPIENT, $encodedSubject, $body, $headers);
+    try {
+        $sent = mail(RECIPIENT, encodeSubject($subject), $body, $headers);
+    } catch (Throwable $error) {
+        respond(500, false, $error->getMessage());
     }
 }
 
